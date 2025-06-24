@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id               String        @id @default(uuid())
+  nickname          String
+  description      String
+  imageUrl         String
+  tags             String[]
+  goalCount        Int
+  discordInviteUrl String
+  discordWebhook   String
+  ownerId          String
+  likeCount        Int           @default(0)
+  badges           String[] // Badge[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  participants     Participant[]
+  records          Record[]
+}
+
+model Participant {
+  id         String   @id @default(uuid())
+  nickname   String
+  password   String
+  groupId    String
+  group      Group    @relation(fields: [groupId], references: [id])
+  records    Record[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@unique([groupId, nickname])
+}
+
+model Record {
+  id            String         @id @default(uuid())
+  type          RecordType
+  description   String
+  time          Int            // 단위(분)
+  distance      Float          // 단위(km)
+  createdAt     DateTime       @default(now())
+  
+  groupId       String
+  group         Group          @relation(fields: [groupId], references: [id])
+
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  images        RecordImage[]
+}
+
+model RecordImage {
+  id       String @id @default(uuid())
+  imageUrl String
+
+  recordId String
+  record   Record @relation(fields: [recordId], references: [id])
+}
+
+enum RecordType {
+  RUNNING
+  BIKING
+  SWIMMING
+}
+
+/* model Badge {
+  id        String     @id @default(uuid())
+  type      BadgeType
+  createdAt DateTime   @default(now())
+
+  groupId   String
+  group     Group      @relation(fields: [groupId], references: [id])
+
+  @@unique([groupId, type])
+}
+
+enum BadgeType {
+  TEN_PARTICIPANTS
+  HUNDRED_RECORDS
+  HUNDRED_LIKES
+} */
