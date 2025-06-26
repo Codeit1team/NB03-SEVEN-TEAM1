@@ -1,5 +1,5 @@
 {
-  "name": "3-sprint-mission",
+  "name": "nb03-seven-team1",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
@@ -21,18 +21,29 @@
     "multer": "^2.0.1",
     "pg": "^8.16.2"
   },
+  "_moduleAliases": {
+    "@controllers": "src/controllers",
+    "@jobs": "src/jobs",
+    "@middlewares": "src/middlewares",
+    "@prisma": "src/prisma",
+    "@routes": "src/routes",
+    "@services": "src/services",
+    "@uploads": "uploads",
+    "@utils": "src/utils",
+    "@tasks": "src/tasks"
+  },
   "devDependencies": {
     "nodemon": "^3.1.10",
     "prisma": "^6.10.1"
   },
   "repository": {
-  "type": "git",
-  "url": "git+https://github.com/Codeit1team/NB03-SEVEN-TEAM1.git"
-},
+    "type": "git",
+    "url": "git+https://github.com/Codeit1team/NB03-SEVEN-TEAM1.git"
+  },
   "author": "Codeit1team",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Codeit1team/NB03-SEVEN-TEAM1/issues"
   },
- "homepage": "https://github.com/Codeit1team/NB03-SEVEN-TEAM1#readme"
+  "homepage": "https://github.com/Codeit1team/NB03-SEVEN-TEAM1#readme"
 }

@@ -3,12 +3,12 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 
 // 핸들러
-import errorHandler from './middlewares/errorHandler.js';
+import errorHandler from '@middlewares/errorHandler.js';
 
 /* 라우터
-import groupRoutes from './routes/groupRoutes.js';
-import recordRoutes from './routes/recordRoutes.js';
-import rankingRoutes from './routes/rankingRoutes.js';
+import groupRoutes from '@routes/groupRoutes.js';
+import recordRoutes from '@routes/recordRoutes.js';
+import rankingRoutes from '@routes/rankingRoutes.js';
 */
 
 // 환경 변수 로딩

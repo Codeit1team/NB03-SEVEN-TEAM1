@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@controllers/*": ["src/controllers/*"],
+      "@jobs/*": ["src/jobs/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@prisma/*": ["src/prisma/*"],
+      "@routes/*": ["src/routes/*"],
+      "@services/*": ["src/services/*"],
+      "@uploads/*": ["uploads/*"],
+      "@utils/*": ["src/utils/*"],
+      "@tasks/*": ["src/tasks/*"]
+    }
+  },
+  "include": ["src", "uploads/*"]
+}
