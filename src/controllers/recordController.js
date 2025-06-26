@@ -1,6 +1,5 @@
 import RecordService from "#services/RecordService";
 
-
 const createRecord = async (req, res, next) => {
   try {
     const { id } = req.params;
