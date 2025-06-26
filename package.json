@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/app.js",
     "dev:migrate": "prisma migrate dev --schema=src/prisma/schema.prisma",
@@ -11,7 +12,6 @@
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
-    "alias": "^0.0.5",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "dayjs": "^1.11.13",
@@ -21,16 +21,15 @@
     "multer": "^2.0.1",
     "pg": "^8.16.2"
   },
-  "_moduleAliases": {
-    "@controllers": "src/controllers",
-    "@jobs": "src/jobs",
-    "@middlewares": "src/middlewares",
-    "@prisma": "src/prisma",
-    "@routes": "src/routes",
-    "@services": "src/services",
-    "@uploads": "uploads",
-    "@utils": "src/utils",
-    "@tasks": "src/tasks"
+  "imports": {
+    "#controllers/*": "./src/controllers/*",
+    "#jobs/*": "./src/jobs/*",
+    "#middlewares/*": "./src/middlewares/*",
+    "#prisma/*": "./src/prisma/*",
+    "#routes/*": "./src/routes/*",
+    "#services/*": "./src/services/*",
+    "#utils/*": "./src/utils/*",
+    "#uploads/*": "./uploads/*"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
