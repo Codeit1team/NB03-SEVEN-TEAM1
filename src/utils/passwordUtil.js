@@ -20,7 +20,7 @@ export const hashPassword = async (plainPassword) => {
  * @param {string} hashedPassword - DB에 저장된 해시된 비밀번호
  * @returns {Promise<boolean>} - 일치하면 true, 불일치하면 false
  */
-export const comparePassword = async (plainPassword, hashedPassword) => {
+export const isPasswordValid = async (plainPassword, hashedPassword) => {
   try {
     return await bcrypt.compare(plainPassword, hashedPassword);
   } catch (err) {
@@ -32,8 +32,8 @@ export const comparePassword = async (plainPassword, hashedPassword) => {
 
 /* 
 사용 예시
-import { hashPassword, comparePassword } from './utils/passwordUtil.js';
+import { hashPassword, isPasswordValid } from './utils/passwordUtil.js';
 
 const hashed = await hashPassword('1234');
-const isValid = await comparePassword('입력', hashed);
+const isValid = await isPasswordValid('입력', hashed);
  */

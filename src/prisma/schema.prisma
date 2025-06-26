@@ -31,10 +31,11 @@ model Participant {
   nickname   String
   password   String
   groupId    String
-  group      Group    @relation(fields: [groupId], references: [id])
-  records    Record[]
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
+
+  records    Record[]
 
   @@unique([groupId, nickname])
 }
@@ -45,29 +46,25 @@ model Record {
   description   String
   time          Int            // 단위(분)
   distance      Float          // 단위(km)
+  groupId       String
+  participantId String
+  images        String[]
   createdAt     DateTime       @default(now())
   
-  groupId       String
-  group         Group          @relation(fields: [groupId], references: [id])
-
-  participantId String
-  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-
-  images        RecordImage[]
-}
-
-model RecordImage {
-  id       String @id @default(uuid())
-  imageUrl String
-
-  recordId String
-  record   Record @relation(fields: [recordId], references: [id])
+  group         Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  participant   Participant    @relation(fields: [participantId], references: [id], onDelete: Cascade)
 }
 
 enum RecordType {
   RUNNING
   BIKING
   SWIMMING
+}
+
+enum BadgeType {
+  TEN_PARTICIPANTS
+  HUNDRED_RECORDS
+  HUNDRED_LIKES
 }
 
 /* model Badge {
@@ -79,10 +76,4 @@ enum RecordType {
   group     Group      @relation(fields: [groupId], references: [id])
 
   @@unique([groupId, type])
-}
-
-enum BadgeType {
-  TEN_PARTICIPANTS
-  HUNDRED_RECORDS
-  HUNDRED_LIKES
-} */
+}*/

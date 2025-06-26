@@ -18,3 +18,4 @@ const storage = multer.diskStorage({
 })
 
 export const upload = multer({ storage });
+// TODO - 파일 크기 등 필터 반영(확장자 등)
