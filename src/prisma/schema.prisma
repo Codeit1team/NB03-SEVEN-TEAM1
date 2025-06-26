@@ -7,73 +7,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Group {
-  id               String        @id @default(uuid())
-  nickname          String
-  description      String
-  imageUrl         String
-  tags             String[]
-  goalCount        Int
-  discordInviteUrl String
-  discordWebhook   String
-  ownerId          String
-  likeCount        Int           @default(0)
-  badges           String[] // Badge[]
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+enum BadgeType {
+  PARTICIPATION_10
+  RECORD_100
+  LIKE_100
+}
 
-  participants     Participant[]
-  records          Record[]
+enum ExerciseType {
+  RUN
+  BIKE
+  SWIM
 }
 
 model Participant {
-  id         String   @id @default(uuid())
-  nickname   String
-  password   String
-  groupId    String
-  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  id          Int      @id @default(autoincrement()) // PK
+  nickname    String
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  records    Record[]
+  ownedGroup  Group?   @relation("GroupOwner")
+  records     Record[]
+}
 
-  @@unique([groupId, nickname])
+model Group {
+  id                Int      @id @default(autoincrement()) // PK
+  name              String
+  description       String?
+  photoUrl          String?
+  goalRep           Int
+  discordWebhookUrl String?
+  discordInviteUrl  String?
+  likeCount         Int
+  tags              String[]
+  ownerId           Int      @unique
+  recordCount       Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  owner  Participant @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  badges BadgeType[]
 }
 
 model Record {
-  id            String         @id @default(uuid())
-  type          RecordType
-  description   String
-  time          Int            // 단위(분)
-  distance      Float          // 단위(km)
-  groupId       String
-  participantId String
-  images        String[]
-  createdAt     DateTime       @default(now())
-  
-  group         Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  participant   Participant    @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  id           Int          @id @default(autoincrement()) // PK
+  exerciseType ExerciseType
+  description  String?
+  time         Int // ms 단위
+  distance     Float // km 단위
+  photos       String[]
+  authorId     Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  author Participant @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
-
-enum RecordType {
-  RUNNING
-  BIKING
-  SWIMMING
-}
-
-enum BadgeType {
-  TEN_PARTICIPANTS
-  HUNDRED_RECORDS
-  HUNDRED_LIKES
-}
-
-/* model Badge {
-  id        String     @id @default(uuid())
-  type      BadgeType
-  createdAt DateTime   @default(now())
-
-  groupId   String
-  group     Group      @relation(fields: [groupId], references: [id])
-
-  @@unique([groupId, type])
-}*/
