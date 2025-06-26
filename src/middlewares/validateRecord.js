@@ -3,8 +3,8 @@ import * as struct from 'superstruct'
 const createRecord = struct.object({
   exerciseType: struct.enums(['RUN', 'BIKE', 'SWIM']),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
-  time: struct.refine(interger(), 'timeLimit', (value) => {
-    return value > 0 && value <= (3600 * 10)
+  time: struct.refine(integer(), 'timeLimit', (value) => {
+    return value > 0 && value <= (3600 * 1000 * 10)
   }),
   distance: struct.refine(struct.number(), 'distanceLimit', (value) => {
     return value > 0 && value <= 1000
@@ -15,7 +15,7 @@ const createRecord = struct.object({
 const patchRecord = struct.partial(createRecord);
 
 export const validateCreateRecord = (req, res, next) => {
-  const [error] = validate(req.body, createRecord);
+  const [error] = struct.validate(req.body, createRecord);
 
   if (error) {
     const field = error.path[0];
