@@ -2,43 +2,51 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-const getGroupRecordDetail = async (req, res, next) => {
-  const { recordId, groupId } = req.params
-  if (!recordId || !groupId) {
-    return res.status(400).json({ message: 'Missing recordId or groupId' });
-  }
-  try {
-    const rec = await prisma.record.findFirst({
-      where: { id: recordId, groupId },
-      include: {
-        participant: {
-          select: {
-            id: true,
-            nickname: true,
-          }
+const createRecord = async (id, data) => {
+  return await prisma.record.create({
+    data: {
+      exerciseType,
+      description,
+      time,
+      distance,
+      photos,
+      authorId: id,
+    }
+  })
+};
+
+const getRecordDetail = async (id) => {
+  const recordId = Number(id)
+  const rec = await prisma.record.findFirst({
+    where: { id: recordId },
+    include: {
+      author: {
+        select: {
+          id: true,
+          nickname: true,
         }
       }
-    })
-
-    if (!rec) {
-      return res.status(404).json({ message: 'Record not found' })
     }
-    return res.status(200).json({
-      id: rec.id,
-      exerciseType: rec.type,
-      description: rec.description,
-      time: rec.time,       // ms 단위 그대로
-      distance: rec.distance,
-      photos: rec.images,
-      author: {
-        id: rec.participant.id,
-        nickname: rec.participant.nickname,
-      }
-    })
+  })
+
+  if (!rec) {
+    const error = new Error('Record not found')
+    error.status = 400
+    throw error 
   }
-  catch (error) {
-    next(error)
+  return {
+    id: rec.id,
+    exerciseType: rec.type,
+    description: rec.description,
+    time: rec.time,       // ms 단위 그대로
+    distance: rec.distance,
+    photos: rec.images,
+    author: {
+      id: rec.author.id,
+      nickname: rec.author.nickname,
+    }
   }
 }
 
-export default { getGroupRecordDetail }
+
+export default { createRecord, getRecordDetail }

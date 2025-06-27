@@ -1,9 +1,12 @@
-import express from 'express'
-import recordController from '#controllers/recordController.js'
+import { Router } from 'express';
+// import { validateCreateRecord, validatePatchRecord } from '#middlewares/validateRecord.js';
+import { uploadImages } from '#middlewares/upload.js';
+import RecordController from '#controllers/recordController.js';
 
-const recordRouter = express.Router()
+const RecordRouter = Router();
 
-recordRouter.route('/:recordId')
-  .get(recordController.getRecordDetail)
+RecordRouter.route('/:id')
+  // .post(uploadImages(),validateCreateRecord,RecordController.createRecord)
+  .get(RecordController.getRecordDetail)
 
-export default recordRouter
+export default RecordRouter
