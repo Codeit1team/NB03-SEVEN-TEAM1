@@ -10,7 +10,7 @@ export const createGroup = struct.object({
 
 export const patchGroup = struct.partial(createGroup);
 
-export const validateCreateRecord = (req, res, next) => {
+export const validateCreateGroup = (req, res, next) => {
   const [error] = struct.validate(req.body, createRecord);
 
   if (error) {
@@ -21,7 +21,7 @@ export const validateCreateRecord = (req, res, next) => {
   next();
 };
 
-export const validatePatchRecord = (req, res, next) => {
+export const validatePatchGroup = (req, res, next) => {
   const [error] = validate(req.body, patchRecord);
 
   if (error) {
