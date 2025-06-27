@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-export const getGroupRecordDetail = async (req, res, next) => {
+const getGroupRecordDetail = async (req, res, next) => {
   const { recordId, groupId } = req.params
   if (!recordId || !groupId) {
     return res.status(400).json({ message: 'Missing recordId or groupId' });
@@ -20,8 +20,8 @@ export const getGroupRecordDetail = async (req, res, next) => {
       }
     })
 
-    if(!rec) {
-      return res.status(404).json({message: 'Record not found'})
+    if (!rec) {
+      return res.status(404).json({ message: 'Record not found' })
     }
     return res.status(200).json({
       id: rec.id,
@@ -40,3 +40,5 @@ export const getGroupRecordDetail = async (req, res, next) => {
     next(error)
   }
 }
+
+export default { getGroupRecordDetail }

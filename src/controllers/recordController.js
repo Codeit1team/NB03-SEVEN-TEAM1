@@ -1,4 +1,4 @@
-import RecordService from "#services/RecordService";
+import RecordService from "#services/RecordService.js";
 
 const createRecord = async (req, res, next) => {
   try {
@@ -11,10 +11,6 @@ const createRecord = async (req, res, next) => {
     error.message = '기록 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
     next(error);
   }
-};
-
-export default recordController.js = {
-  createRecord
 };
 
 const getRecordDetail = async (req, res, next) => {
@@ -55,3 +51,8 @@ const getRecordDetail = async (req, res, next) => {
     next(error)
   }
 }
+
+export default {
+  createRecord,
+  getRecordDetail
+};
