@@ -11,7 +11,7 @@ export const createGroup = struct.object({
 export const patchGroup = struct.partial(createGroup);
 
 export const validateCreateGroup = (req, res, next) => {
-  const [error] = struct.validate(req.body, createRecord);
+  const [error] = struct.validate(req.body, createGroup);
 
   if (error) {
     const field = error.path[0];
@@ -22,7 +22,7 @@ export const validateCreateGroup = (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
-  const [error] = validate(req.body, patchRecord);
+  const [error] = validate(req.body, patchGroup);
 
   if (error) {
     const field = error.path[0];
