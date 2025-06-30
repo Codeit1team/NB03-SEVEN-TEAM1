@@ -18,6 +18,7 @@ const createRecord = async (req, res, next) => {
     }
     return res.status(201).json(record);
   } catch (error) {
+    await deleteUploadedFiles(req.files);
     error.status = 400;
     error.message = '기록 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
     next(error);

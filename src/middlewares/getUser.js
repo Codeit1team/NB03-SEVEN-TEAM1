@@ -3,7 +3,7 @@ import { isPasswordValid } from '#utils/passwordUtil.js';
 
 const prisma = new PrismaClient();
 
-export const getUser = async (req, res, next) => {
+const getUser = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
     const { authorNickname, authorPassword } = req.body;
@@ -17,17 +17,22 @@ export const getUser = async (req, res, next) => {
     });
 
     if (!user) {
+      await deleteUploadedFiles(req.files);
       return res.status(401).json({ message: '그룹에 존재하지않는 참여자 입니다' });
     }
     const isValid = await isPasswordValid(authorPassword, user.password);
     if (!isValid) {
+      await deleteUploadedFiles(req.files);
       return res.status(401).json({ message: '비밀번호가 일치하지 않습니다' });
     }
     req.body.authorId = id
     next();
   } catch (err) {
+    await deleteUploadedFiles(req.files);
     err.status = 500;
     err.message = '서버 통신에 문제가 생겼습니다';
     next(err);
   }
 };
+
+export default getUser;

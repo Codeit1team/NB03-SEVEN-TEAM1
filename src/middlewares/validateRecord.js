@@ -1,5 +1,5 @@
 import * as struct from 'superstruct'
-import fs from 'fs/promises';
+import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 
 const createRecord = struct.object({
   exerciseType: struct.enums(['RUN', 'BIKE', 'SWIM']),
@@ -36,17 +36,11 @@ const createRecord = struct.object({
   authorPassword: struct.string(),
 });*/
 
-export const validateCreateRecord = async (req, res, next) => {
+const validateCreateRecord = async (req, res, next) => {
   const [error] = struct.validate(req.body, createRecord);
 
   if (error) {
-    for (const file of req.files) {
-      try {
-        await fs.unlink(file.path);
-      } catch (unlinkError) {
-        console.error('파일 삭제 실패:', unlinkError);
-      }
-    }
+    await deleteUploadedFiles(req.files);
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
@@ -75,3 +69,5 @@ export const validateCreateRecord = async (req, res, next) => {
     return res.status(400).json({ message });
   }
 }; */
+
+export default validateCreateRecord;
