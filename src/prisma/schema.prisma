@@ -35,7 +35,7 @@ model Participant {
 }
 
 model Group {
-  id                Int      @id @default(autoincrement())
+  id                Int      @id @default(autoincrement()) // PK
   name              String
   description       String?
   photoUrl          String?
