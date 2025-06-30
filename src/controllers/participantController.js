@@ -11,6 +11,4 @@ const createParticipant = async (req, res, next) => {
   }
 };
 
-export default {
-  createParticipant
-};
+export default { createParticipant };
