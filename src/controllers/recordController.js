@@ -14,7 +14,7 @@ const createRecord = async (req, res, next) => {
       select: { webhookUrl: true },
     });
     if (group.webhookUrl) {
-      await sendDiscordWebhook(group.webhookUrl, `${req.body.authorNickname}운동기록 등록이 완료되었습니다`);
+      await sendDiscordWebhook(group.webhookUrl, `${req.body.authorNickname} 운동기록 등록이 완료되었습니다`);
     }
     return res.status(201).json(record);
   } catch (error) {
