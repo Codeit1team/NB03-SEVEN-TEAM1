@@ -28,6 +28,8 @@ model Participant {
 
   ownedGroup  Group?   @relation("GroupOwner")
   records     Record[]
+
+  @@unique([groupId, nickname])
 }
 
 model Group {
