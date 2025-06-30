@@ -17,7 +17,7 @@ export const getUser = async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: '그룹에 존재하지않는 참여자 입니다다' });
+      return res.status(401).json({ message: '그룹에 존재하지않는 참여자 입니다' });
     }
     const isValid = await isPasswordValid(authorPassword, user.password);
     if (!isValid) {
