@@ -72,7 +72,7 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
 
           return res.status(400).json({ success: false, message });
         }
-
+        
         if (err) {
           return res.status(500).json({
             success: false,

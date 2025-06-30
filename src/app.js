@@ -7,9 +7,9 @@ import errorHandler from '#middlewares/errorHandler.js';
 
 /* 라우터
 import groupRoutes from '#routes/groupRoutes.js';
-import recordRoutes from '#routes/recordRoutes.js';
 import rankingRoutes from '#routes/rankingRoutes.js';
 */
+import recordRoutes from '#routes/recordRoutes.js';
 
 // 환경 변수 로딩
 dotenv.config();
@@ -32,9 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 // /api 하위로 모든 경로 마운트. cors 생략 위함. fe-be
-app.use('/api/groups', groupRoutes);
+// app.use('/api/groups', groupRoutes);
 app.use('/api/records', recordRoutes);
-app.use('/api/rankings', rankingRoutes);
+// app.use('/api/rankings', rankingRoutes);
 
 // 공통 에러 핸들러
 app.use(errorHandler);
