@@ -9,7 +9,8 @@ const createRecord = struct.object({
   distance: struct.refine(struct.number(), 'distanceLimit', (value) => {
     return value > 0 && value <= 1000
   }),
-  authorId: struct.number(),
+  authorNickname: struct.string(),
+  authorPassword: struct.string(),
 });
 
 export const validateCreateRecord = (req, res, next) => {
@@ -22,3 +23,5 @@ export const validateCreateRecord = (req, res, next) => {
   }
   next();
 };
+
+///aaa

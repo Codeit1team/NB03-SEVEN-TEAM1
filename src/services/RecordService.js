@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const createRecord = async (id, data) => {
+const createRecord = async (authorId, data) => {
   return await prisma.record.create({
     data: {
       exerciseType,
@@ -10,13 +10,16 @@ const createRecord = async (id, data) => {
       time,
       distance,
       photos,
-      authorId: id,
+      authorId,
     }
   })
 };
 
-export default recordService = {
+const recordService = {
   createRecord
 };
+
+export default recordService;
+
 
 
