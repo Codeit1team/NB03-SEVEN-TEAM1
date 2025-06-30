@@ -127,6 +127,4 @@ const formatGroupResponse = (groupData) => {
   };
 }
 
-export default groupService = {
-  createGroup
-};
+export default { createGroup };

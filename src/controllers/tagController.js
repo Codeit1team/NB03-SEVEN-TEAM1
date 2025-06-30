@@ -11,6 +11,4 @@ const createTag = async (req, res, next) => {
   }
 };
 
-export default tagController = {
-  createTag
-};
+export default { createTag };

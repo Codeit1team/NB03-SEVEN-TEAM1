@@ -12,9 +12,7 @@ const createGroup = async (req, res, next) => {
   }
 };
 
-export default groupController = {
-  createGroup
-};
+export default { createGroup };
 
 // const {owner: { nickname, password }, tags, photoUrl, ...groupData} = req.body;
 //     const hashedPassword = await hashPassword(password);

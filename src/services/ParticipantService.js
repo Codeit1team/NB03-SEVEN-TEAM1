@@ -8,8 +8,6 @@ const createParticipant = async (data) => {
   })
 };
 
-export default participantService = {
-  createParticipant
-};
+export default { createParticipant };
 
 
