@@ -4,8 +4,8 @@ export const createGroup = struct.object({
   name: struct.size(struct.string(), 1, 20),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
-  tags: struct.array(struct.size(struct.string(), 1, 20)),
-  ownerId: struct.integer(),
+  discordWebhookUrl: struct.optional(struct.url()),
+  discordInviteUrl: struct.optional(struct.url()),
 });
 
 export const patchGroup = struct.partial(createGroup);

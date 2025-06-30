@@ -26,12 +26,16 @@ model Participant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  ownedGroup Group?   @relation("GroupOwner")
-  records    Record[]
+  ownedGroup Group? @relation("GroupOwner")
+
+  groupId Int?
+  group   Group? @relation("GroupMembers", fields: [groupId], references: [id], onDelete: Cascade)
+
+  records Record[]
 }
 
 model Group {
-  id                Int      @id @default(autoincrement()) // PK
+  id                Int      @id @default(autoincrement())
   name              String
   description       String?
   photoUrl          String?
@@ -39,13 +43,15 @@ model Group {
   discordWebhookUrl String?
   discordInviteUrl  String?
   likeCount         Int
-  tags              String[]
   ownerId           Int      @unique
   recordCount       Int
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  owner  Participant @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner   Participant   @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members Participant[] @relation("GroupMembers")
+
+  tags   Tag[]
   badges BadgeType[]
 }
 
@@ -61,4 +67,13 @@ model Record {
   updatedAt    DateTime     @updatedAt
 
   author Participant @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups Group[]
 }
