@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import RecordService from "#services/RecordService.js";
 import sendDiscordWebhook from "#utils/sendDiscordWebhook.js";
+import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 
 const prisma = new PrismaClient();
 

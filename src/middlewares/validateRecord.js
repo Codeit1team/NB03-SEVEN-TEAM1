@@ -68,6 +68,6 @@ const validateCreateRecord = async (req, res, next) => {
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다`: '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
   }
-}; */
+};*/ 
 
 export default validateCreateRecord;
