@@ -29,7 +29,7 @@ model Participant {
   ownedGroup  Group?   @relation("GroupOwner")
 
   groupId     Int?
-  group       Group?   @relation("GroupMembers", fields: [groupId], references: [id], onDelete: Cascade)
+  group       Group?   @relation("GroupParticipants", fields: [groupId], references: [id], onDelete: Cascade)
 
   records     Record[]
 }
@@ -49,7 +49,7 @@ model Group {
   updatedAt         DateTime @updatedAt
 
   owner    Participant @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  members  Participant[] @relation("GroupMembers")
+  Participants  Participant[] @relation("GroupParticipants")
 
   tags     Tag[]
   badges   BadgeType[]
