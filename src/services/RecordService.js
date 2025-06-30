@@ -54,12 +54,9 @@ const getRecordList = async (groupId, page, limit, orderBy = { id: 'desc' }) => 
   };
 };
 
-const recordService = {
-  createRecord,
-  getRecordList
-};
-
-export default recordService;
+export default {
+  createRecord
+}
 
 
 

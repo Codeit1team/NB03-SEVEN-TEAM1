@@ -24,8 +24,6 @@ const createRecord = async (req, res, next) => {
   }
 };
 
-const recordController = {
+export default {
   createRecord
-};
-
-export default recordController;
+}
