@@ -32,6 +32,8 @@ model Participant {
   group   Group? @relation("GroupMembers", fields: [groupId], references: [id], onDelete: Cascade)
 
   records Record[]
+
+  @@unique([groupId, nickname])
 }
 
 model Group {
@@ -49,7 +51,7 @@ model Group {
   updatedAt         DateTime @updatedAt
 
   owner   Participant   @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  members Participant[] @relation("GroupMembers")
+  participants Participant[] @relation("GroupMembers")
 
   tags   Tag[]
   badges BadgeType[]

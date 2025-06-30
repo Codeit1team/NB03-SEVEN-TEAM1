@@ -6,6 +6,11 @@ export const createGroup = struct.object({
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
   discordWebhookUrl: struct.optional(struct.url()),
   discordInviteUrl: struct.optional(struct.url()),
+
+  tags: struct.optional(struct.array(struct.size(struct.string(), 1, 20))),
+
+  ownerNickname: struct.size(struct.string(), 1, 20),
+  ownerPassword: struct.size(struct.string(), 4, 20),
 });
 
 export const patchGroup = struct.partial(createGroup);
