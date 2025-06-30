@@ -5,5 +5,5 @@ import GroupController from '#controllers/groupController.js';
 
 const GroupRouter = Router();
 
-GroupRouter.route(':id')
+GroupRouter.route('/')
   .post(uploadImages(),validateCreateGroup,GroupController.createGroup);
