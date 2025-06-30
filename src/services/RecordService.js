@@ -15,11 +15,9 @@ const createRecord = async (data) => {
   })
 };
 
-const recordService = {
+export default {
   createRecord
-};
-
-export default recordService;
+}
 
 
 
