@@ -2,10 +2,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const main = async () => {
-  // 1. Record 모두 삭제
   await prisma.record.deleteMany({})
 
-  // 2. Group의 tags N:N 관계 해제 (updateMany 불가 → 그룹별 update)
   const oldGroups = await prisma.group.findMany({ select: { id: true } })
   for (const group of oldGroups) {
     await prisma.group.update({
@@ -14,18 +12,15 @@ const main = async () => {
     })
   }
 
-  // 3. Tag, Participant, Group 삭제 (Tag 먼저, 그다음 Group, Participant)
   await prisma.tag.deleteMany({})
   await prisma.participant.deleteMany({})
   await prisma.group.deleteMany({})
 
-  // 4. 시퀀스 리셋
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Participant_id_seq" RESTART WITH 1;')
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Group_id_seq" RESTART WITH 1;')
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Record_id_seq" RESTART WITH 1;')
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Tag_id_seq" RESTART WITH 1;')
 
-  // 5. 그룹별 태그 선언
   const groupTags = [
     ['러닝', '건강', '아침'],
     ['자전거', '월루좋아'],
@@ -34,7 +29,6 @@ const main = async () => {
     ['태그1', '태그2', '러닝'],
   ]
 
-  // 6. 태그 집합 생성 및 태그 레코드 일괄 생성
   const tagSet = new Set(groupTags.flat())
   const tagMap = {}
   for (const name of tagSet) {
@@ -51,7 +45,6 @@ const main = async () => {
     '$2a$10$1ObpeVrqGQFTyWsIhQ3AGOjyLSbfM5AFFjV3.nZ8PFl22a6LShVka', // 슈퍼노바
   ]
 
-  // 8. 참가자 생성
   const [user1, user2, user3, user4, user5, user6] = await Promise.all([
     prisma.participant.create({ data: { nickname: '고양이좋아', password: hashExample[0] } }),
     prisma.participant.create({ data: { nickname: '김치찌개', password: hashExample[1] } }),
@@ -61,7 +54,6 @@ const main = async () => {
     prisma.participant.create({ data: { nickname: '슈퍼노바', password: hashExample[5] } }),
   ])
 
-  // 9. 그룹 생성 및 태그 연결
   const groupDatas = [
     {
       name: '얼리버드',
@@ -152,7 +144,6 @@ const main = async () => {
     groupList.push(group)
   }
 
-  // 10. 각 user의 ownedGroup 연결
   const ownedGroupPairs = [
     [user1, groupList[0]],
     [user3, groupList[1]],
@@ -167,7 +158,6 @@ const main = async () => {
     })
   }
 
-  // 11. Record 생성
   await prisma.record.createMany({
     data: [
       {
