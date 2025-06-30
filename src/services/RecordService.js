@@ -2,15 +2,15 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const createRecord = async (authorId, data) => {
+const createRecord = async (data) => {
   return await prisma.record.create({
     data: {
-      exerciseType,
-      description,
-      time,
-      distance,
-      photos,
-      authorId,
+      exerciseType: data.exerciseType,
+      description: data.description,
+      time: data.time,
+      distance: data.distance,
+      photos: data.photos,
+      authorId: data.authorId,
     }
   })
 };
