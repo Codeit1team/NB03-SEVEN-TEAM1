@@ -98,33 +98,33 @@ const createGroup = async (data) => {
 }
 
 
-const formatGroupResponse = (groupData) => {
-  return {
-    id: groupData.id,
-    name: groupData.name,
-    description: groupData.description,
-    photoUrl: groupData.photoUrl,
-    goalRep: groupData.goalRep,
-    discordWebhookUrl: groupData.discordWebhookUrl,
-    discordInviteUrl: groupData.discordInviteUrl,
-    likeCount: groupData.likeCount,
-    tags: groupData.tags.map(tag => tag.name), // 태그 이름만 추출
-    owner: {
-      id: groupData.owner.id,
-      nickname: groupData.owner.nickname,
-      createdAt: groupData.owner.createdAt.getTime(),
-      updatedAt: groupData.owner.updatedAt.getTime()
-    },
-    participants: groupData.members.map(member => ({
-      id: member.id,
-      nickname: member.nickname,
-      createdAt: member.createdAt.getTime(),
-      updatedAt: member.updatedAt.getTime()
-    })),
-    createdAt: groupData.createdAt.getTime(),
-    updatedAt: groupData.updatedAt.getTime(),
-    badges: groupData.badges
-  };
-}
+// const formatGroupResponse = (groupData) => {
+//   return {
+//     id: groupData.id,
+//     name: groupData.name,
+//     description: groupData.description,
+//     photoUrl: groupData.photoUrl,
+//     goalRep: groupData.goalRep,
+//     discordWebhookUrl: groupData.discordWebhookUrl,
+//     discordInviteUrl: groupData.discordInviteUrl,
+//     likeCount: groupData.likeCount,
+//     tags: groupData.tags.map(tag => tag.name), // 태그 이름만 추출
+//     owner: {
+//       id: groupData.owner.id,
+//       nickname: groupData.owner.nickname,
+//       createdAt: groupData.owner.createdAt.getTime(),
+//       updatedAt: groupData.owner.updatedAt.getTime()
+//     },
+//     participants: groupData.members.map(member => ({
+//       id: member.id,
+//       nickname: member.nickname,
+//       createdAt: member.createdAt.getTime(),
+//       updatedAt: member.updatedAt.getTime()
+//     })),
+//     createdAt: groupData.createdAt.getTime(),
+//     updatedAt: groupData.updatedAt.getTime(),
+//     badges: groupData.badges
+//   };
+// }
 
 export default { createGroup };
