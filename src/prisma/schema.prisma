@@ -20,18 +20,14 @@ enum ExerciseType {
 }
 
 model Participant {
-  id        Int      @id @default(autoincrement()) // PK
-  nickname  String
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement()) // PK
+  nickname    String
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  ownedGroup Group? @relation("GroupOwner")
-
-  groupId Int?
-  group   Group? @relation("GroupParticipants", fields: [groupId], references: [id], onDelete: Cascade)
-
-  records Record[]
+  ownedGroup  Group?   @relation("GroupOwner")
+  records     Record[]
 }
 
 model Group {
@@ -43,15 +39,13 @@ model Group {
   discordWebhookUrl String?
   discordInviteUrl  String?
   likeCount         Int
+  tags              String[]
   ownerId           Int      @unique
   recordCount       Int
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  owner        Participant   @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  Participants Participant[] @relation("GroupParticipants")
-
-  tags   Tag[]
+  owner  Participant @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   badges BadgeType[]
 }
 
@@ -63,17 +57,8 @@ model Record {
   distance     Float // km 단위
   photos       String[]
   authorId     Int
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   author Participant @relation(fields: [authorId], references: [id], onDelete: Cascade)
-}
-
-model Tag {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  groups Group[]
 }
