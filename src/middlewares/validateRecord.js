@@ -3,7 +3,7 @@ import * as struct from 'superstruct'
 const createRecord = struct.object({
   exerciseType: struct.enums(['RUN', 'BIKE', 'SWIM']),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
-  time: struct.refine(integer(), 'timeLimit', (value) => {
+  time: struct.refine(struct.integer(), 'timeLimit', (value) => {
     return value > 0 && value <= (3600 * 1000 * 10)
   }),
   distance: struct.refine(struct.number(), 'distanceLimit', (value) => {
@@ -22,5 +22,3 @@ export const validateCreateRecord = (req, res, next) => {
   }
   next();
 };
-
-
