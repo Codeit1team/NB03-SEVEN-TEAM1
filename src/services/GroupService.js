@@ -42,7 +42,7 @@ const createGroup = async (data) => {
       });
 
       if (tags && tags.length > 0) {
-        const createdTags = await Promise.all(
+        await Promise.all(
           tags.map(tagName => 
             tx.tag.upsert({
               where: { name: tagName },
@@ -52,6 +52,13 @@ const createGroup = async (data) => {
           )
         );
       }
+
+      await tx.group.update({
+        where: { id: group.id },
+        data: {
+          tags: { connect: tagRecords.map(tag => ({ id: tag.id })) }
+        }
+      });
 
       await tx.participant.update({
         where: { id: owner.id },
@@ -112,17 +119,11 @@ const createGroup = async (data) => {
 //     owner: {
 //       id: groupData.owner.id,
 //       nickname: groupData.owner.nickname,
-//       createdAt: groupData.owner.createdAt.getTime(),
-//       updatedAt: groupData.owner.updatedAt.getTime()
 //     },
-//     participants: groupData.members.map(member => ({
-//       id: member.id,
-//       nickname: member.nickname,
-//       createdAt: member.createdAt.getTime(),
-//       updatedAt: member.updatedAt.getTime()
+//     participants: groupData.participants.map(participant => ({
+//       id: participant.id,
+//       nickname: participant.nickname,
 //     })),
-//     createdAt: groupData.createdAt.getTime(),
-//     updatedAt: groupData.updatedAt.getTime(),
 //     badges: groupData.badges
 //   };
 // }
