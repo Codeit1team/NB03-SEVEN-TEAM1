@@ -26,6 +26,13 @@ const getRecordDetail = async (req, res, next) => {
   }
 }
 
+// const recordController = {
+//   createRecord,
+//   getRecordDetail
+// };
+
+// export default recordController;
+
 export default {
   createRecord,
   getRecordDetail
