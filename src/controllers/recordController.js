@@ -26,7 +26,6 @@ const createRecord = async (req, res, next) => {
   }
 };
 
-
 const getRecords = async (req, res, next) => {
   try{
     const groupId = req.params.id;
@@ -36,6 +35,8 @@ const getRecords = async (req, res, next) => {
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 기록 목록을 가져오는 데 실패했습니다"
+  }
+};
 
 const getRecordDetail = async (req, res, next) => {
   try {
@@ -48,10 +49,10 @@ const getRecordDetail = async (req, res, next) => {
     error.message = '기록 조회에 실패했습니다. 해당하는 기록이 없습니다.';
     next(error);
   }
-}
+};
 
 export default {
   createRecord,
   getRecords,
   getRecordDetail
-}
+};
