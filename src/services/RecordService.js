@@ -15,7 +15,7 @@ const createRecord = async (data) => {
   })
 };
 
-const getRecords = async (groupId, page = '1', limit = '10', order = 'createdAt', orderBy = 'desc', search = '') => {
+const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
   const where = {
