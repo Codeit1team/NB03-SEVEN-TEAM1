@@ -94,12 +94,10 @@ const createGroup = async (data) => {
         }
       });
 
-      const groupWithArrayTags = {
+      const resultGroup = {
         ...groupWithRelationData,
         tags: groupWithRelationData.tags.map(tag => tag.name)
       };
-
-      const { createdAt, updatedAt, ...resultGroup } = groupWithArrayTags;
 
       return resultGroup;
     });

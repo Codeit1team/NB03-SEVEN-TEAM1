@@ -4,6 +4,9 @@
   "description": "",
   "main": "src/app.js",
   "type": "module",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:be\" \"npm run dev:fe\"",
     "dev:migrate": "prisma migrate dev --schema=src/prisma/schema.prisma",
