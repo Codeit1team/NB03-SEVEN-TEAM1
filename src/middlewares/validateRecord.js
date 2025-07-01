@@ -71,7 +71,7 @@ const validateCreateRecord = async (req, res, next) => {
 };*/ 
 
 const validateGetRecords = (req, res, next) => {
-  const { page = '1', limit = '10', order = 'createdAt', orderBy = 'desc' } = req.query;
+  const { page = '1', limit = '10', order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
@@ -90,8 +90,13 @@ const validateGetRecords = (req, res, next) => {
   }
 
   const allowedOrderBy = ['asc', 'desc'];
-  if (!allowedOrderBy.includes(orderBy.toLowerCase())) {
+  if (!allowedOrderBy.includes(orderBy)) {
     return res.status(400).json({ error: 'orderby는 asc 또는 desc만 가능합니다.' });
+  }
+
+  const allowedDuration = ['weekly', 'monthly'];
+  if (!allowedDuration.includes(duration)) {
+    return res.status(400).json({error: 'Duration은 weekly, monthly만 가능합니다'});
   }
 
   next();
