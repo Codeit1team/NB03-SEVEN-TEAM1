@@ -54,7 +54,6 @@ const getRecords = async (groupId, page = '1', limit = '10', order = 'createdAt'
       where,
     })
   ]);
-
   return {
     data: records,
     total
