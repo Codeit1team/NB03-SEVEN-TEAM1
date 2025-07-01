@@ -36,11 +36,11 @@ const getRecordDetail = async (id) => {
   }
   return {
     id: rec.id,
-    exerciseType: rec.type,
+    exerciseType: rec.exerciseType,
     description: rec.description,
     time: rec.time,       // ms 단위 그대로
     distance: rec.distance,
-    photos: rec.photos.map(file => `http://localhost:3000/uploads/${file}`),
+    photos: rec.photos,
     // photos: rec.photos.map(file => `${baseUrl}${uploadPath}/${file}`),
     author: {
       id: rec.author.id,
