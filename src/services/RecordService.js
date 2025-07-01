@@ -15,15 +15,25 @@ const createRecord = async (data) => {
   })
 };
 
-const getRecordList = async (groupId, page, limit, orderBy = { id: 'desc' }) => {
+const getRecords = async (groupId, page = '1', limit = '10', order = 'createdAt', orderBy = 'desc', search = '') => {
+  const intPage = parseInt(page, 10);
+  const intLimit = parseInt(limit, 10);
+  const where = {
+    author: {
+      groupId: parseInt(groupId, 10),
+      ...(search && search.trim() !== '' && {
+        nickname: { contains: search, mode: 'insensitive' }
+      })
+    }
+  };
   const [records, total] = await Promise.all([
     prisma.record.findMany({
-      where: {
-        author: {
-          groupId: groupId
-        }
+      where,
+      orderBy: {
+        [order]: orderBy
       },
-      orderBy,
+      skip: (intPage - 1) * intLimit,
+      take: intLimit,
       select: {
         id: true,
         exerciseType: true,
@@ -31,6 +41,7 @@ const getRecordList = async (groupId, page, limit, orderBy = { id: 'desc' }) => 
         time: true,
         distance: true,
         photos: true,
+        createdAt: true,
         author: {
           select: {
             id: true,
@@ -40,11 +51,7 @@ const getRecordList = async (groupId, page, limit, orderBy = { id: 'desc' }) => 
       }
     }),
     prisma.record.count({
-      where: {
-        author: {
-          groupId: groupId
-        }
-      }
+      where,
     })
   ]);
 
@@ -55,7 +62,8 @@ const getRecordList = async (groupId, page, limit, orderBy = { id: 'desc' }) => 
 };
 
 export default {
-  createRecord
+  createRecord,
+  getRecords
 }
 
 
