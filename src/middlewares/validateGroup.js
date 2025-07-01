@@ -27,7 +27,7 @@ export const validateCreateGroup = (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
-  const [error] = validate(req.body, patchGroup);
+  const [error] = struct.validate(req.body, patchGroup);
 
   if (error) {
     const field = error.path[0];

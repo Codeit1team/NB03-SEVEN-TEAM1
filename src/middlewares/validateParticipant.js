@@ -19,7 +19,7 @@ export const validateCreateParticipant = (req, res, next) => {
 };
 
 export const validatePatchParticipant = (req, res, next) => {
-  const [error] = validate(req.body, patchParticipant);
+  const [error] = struct.validate(req.body, patchParticipant);
 
   if (error) {
     const field = error.path[0];
