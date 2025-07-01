@@ -12,12 +12,3 @@ const createGroup = async (req, res, next) => {
 };
 
 export default { createGroup };
-
-// const {owner: { nickname, password }, tags, photoUrl, ...groupData} = req.body;
-//     const hashedPassword = await hashPassword(password);
-
-//     const group = await GroupService.createGroup(groupData);
-//     const owner = await ParticipantService.createParticipant({
-//       nickname,
-//       hashedPassword,
-//     });
