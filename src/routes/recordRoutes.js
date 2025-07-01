@@ -7,7 +7,9 @@ import RecordController from '#controllers/recordController.js';
 const RecordRouter = Router();
 
 RecordRouter.route('/:id')
-  .post(uploadImages(),validateCreateRecord,getUser,RecordController.createRecord)
+  .post(uploadImages(), validateCreateRecord, getUser, RecordController.createRecord)
+
+RecordRouter.route('/detail/:id')
   .get(RecordController.getRecordDetail)
 
 export default RecordRouter

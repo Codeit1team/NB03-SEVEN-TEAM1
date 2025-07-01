@@ -41,7 +41,6 @@ const getRecordDetail = async (id) => {
     time: rec.time,       // ms 단위 그대로
     distance: rec.distance,
     photos: rec.photos,
-    // photos: rec.photos.map(file => `${baseUrl}${uploadPath}/${file}`),
     author: {
       id: rec.author.id,
       nickname: rec.author.nickname,
