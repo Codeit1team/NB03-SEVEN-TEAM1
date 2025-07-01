@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { hashPassword } from "#utils/passwordUtil";
+import { hashPassword } from "#utils/passwordUtil.js";
 
 const prisma = new PrismaClient();
 
@@ -42,7 +42,7 @@ const createGroup = async (data) => {
       });
 
       if (tags && tags.length > 0) {
-        await Promise.all(
+        const tagRecords = await Promise.all(
           tags.map(tagName => 
             tx.tag.upsert({
               where: { name: tagName },
@@ -51,14 +51,14 @@ const createGroup = async (data) => {
             })
           )
         );
-      }
 
-      await tx.group.update({
-        where: { id: group.id },
-        data: {
-          tags: { connect: tagRecords.map(tag => ({ id: tag.id })) }
-        }
-      });
+        await tx.group.update({
+          where: { id: group.id },
+          data: {
+            tags: { connect: tagRecords.map(tag => ({ id: tag.id })) }
+          }
+        });
+      }
 
       await tx.participant.update({
         where: { id: owner.id },
@@ -67,9 +67,14 @@ const createGroup = async (data) => {
         }
       });
 
-      const finalGroup = await tx.group.findUnique({
+      const groupWithRelationData = await tx.group.findUnique({
         where: { id: group.id },
         include: {
+          tags: {
+            select: {
+              name: true
+            }
+          },
           owner: {
             select: {
               id: true,
@@ -78,54 +83,33 @@ const createGroup = async (data) => {
               updatedAt: true
             }
           },
-          participants: {
+          Participants: {
             select: {
               id: true,
               nickname: true,
               createdAt: true,
               updatedAt: true
             }
-          },
-          tags: {
-            select: {
-              name: true
-            }
           }
         }
       });
 
-      return finalGroup;
+      const groupWithArrayTags = {
+        ...groupWithRelationData,
+        tags: groupWithRelationData.tags.map(tag => tag.name)
+      };
+
+      const { createdAt, updatedAt, ...resultGroup } = groupWithArrayTags;
+
+      return resultGroup;
     });
 
-    return formatGroupResponse(result);
+    return result;
 
   } catch (error) {
+    console.error('❌ GroupService 에러:', error);
     throw new Error(`그룹 생성 실패: ${error.message}`);
   }
 }
-
-
-// const formatGroupResponse = (groupData) => {
-//   return {
-//     id: groupData.id,
-//     name: groupData.name,
-//     description: groupData.description,
-//     photoUrl: groupData.photoUrl,
-//     goalRep: groupData.goalRep,
-//     discordWebhookUrl: groupData.discordWebhookUrl,
-//     discordInviteUrl: groupData.discordInviteUrl,
-//     likeCount: groupData.likeCount,
-//     tags: groupData.tags.map(tag => tag.name), // 태그 이름만 추출
-//     owner: {
-//       id: groupData.owner.id,
-//       nickname: groupData.owner.nickname,
-//     },
-//     participants: groupData.participants.map(participant => ({
-//       id: participant.id,
-//       nickname: participant.nickname,
-//     })),
-//     badges: groupData.badges
-//   };
-// }
 
 export default { createGroup };

@@ -1,11 +1,21 @@
 import * as struct from 'superstruct'
 
+const Url = struct.refine(struct.string(), 'URL', value => {
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+})
+
 export const createGroup = struct.object({
   name: struct.size(struct.string(), 1, 20),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
+  photoUrl: struct.optional(Url),
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
-  discordWebhookUrl: struct.optional(struct.url()),
-  discordInviteUrl: struct.optional(struct.url()),
+  discordWebhookUrl: struct.optional(Url),
+  discordInviteUrl: struct.optional(Url),
 
   tags: struct.optional(struct.array(struct.size(struct.string(), 1, 20))),
 

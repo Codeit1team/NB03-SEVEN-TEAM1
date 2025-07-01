@@ -6,4 +6,6 @@ import GroupController from '#controllers/groupController.js';
 const GroupRouter = Router();
 
 GroupRouter.route('/')
-  .post(uploadImages(),validateCreateGroup,GroupController.createGroup);
+  .post(validateCreateGroup,GroupController.createGroup);
+
+export default GroupRouter;

@@ -1,5 +1,4 @@
-import GroupService from "#services/GroupService";
-import ParticipantService from "#services/ParticipantService";
+import GroupService from "#services/GroupService.js";
 
 const createGroup = async (req, res, next) => {
   try {
@@ -7,7 +6,7 @@ const createGroup = async (req, res, next) => {
     return res.status(201).json(result);
   } catch (error) {
     error.status = 400;
-    error.message = '기록 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
+    error.message = '그룹 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
     next(error);
   }
 };

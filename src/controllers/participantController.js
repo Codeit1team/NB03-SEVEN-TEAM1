@@ -1,4 +1,4 @@
-import ParticipantService from "#services/ParticipantService";
+import ParticipantService from "#services/ParticipantService.js";
 
 const createParticipant = async (req, res, next) => {
   try {
