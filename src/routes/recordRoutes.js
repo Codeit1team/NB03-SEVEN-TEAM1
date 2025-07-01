@@ -10,4 +10,8 @@ RecordRouter.route('/:id')
   .get(validateRecord.validateGetRecords, RecordController.getRecords)
   .post(uploadImages(), validateRecord.validateCreateRecord, getUser, RecordController.createRecord)
 
-export default RecordRouter;
+
+RecordRouter.route('/detail/:id')
+  .get(RecordController.getRecordDetail)
+
+export default RecordRouter
