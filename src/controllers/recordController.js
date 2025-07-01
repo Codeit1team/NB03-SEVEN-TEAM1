@@ -24,6 +24,27 @@ const createRecord = async (req, res, next) => {
   }
 };
 
+const getRecordDetail = async (req, res, next) => {
+  try {
+    const recordId = req.params.id
+    const record = await RecordService.getRecordDetail(recordId)
+    return res.status(200).json(record)
+  } catch (error) {
+    console.log(error)
+    error.status = 404;
+    error.message = '기록 조회에 실패했습니다. 해당하는 기록이 없습니다.';
+    next(error);
+  }
+}
+
+// const recordController = {
+//   createRecord,
+//   getRecordDetail
+// };
+
+// export default recordController;
+
 export default {
-  createRecord
+  createRecord,
+  getRecordDetail
 }
