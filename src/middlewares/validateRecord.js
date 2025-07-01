@@ -10,8 +10,8 @@ const createRecord = struct.object({
   distance: struct.refine(struct.number(), 'distanceLimit', (value) => {
     return value > 0 && value <= 1000
   }),
-  authorNickname: struct.string(),
-  authorPassword: struct.string(),
+  authorNickname: struct.size(struct.string(), 1, 20),
+  authorPassword: struct.size(struct.string(), 4, 20)
 });
 
 //  postman 테스트 코드 포스트맨은 int,float 값 보낼수없이 전부 string이라 테스트코드변경
@@ -71,7 +71,7 @@ const validateCreateRecord = async (req, res, next) => {
 };*/ 
 
 const validateGetRecords = (req, res, next) => {
-  const { page = '1', limit = '10', order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
+  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
