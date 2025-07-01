@@ -32,7 +32,7 @@ const getRecordDetail = async (req, res, next) => {
   } catch (error) {
     console.log(error)
     error.status = 404;
-    error.message = '기록 조회에 실패했습니다. 데이터가 올바른지 확인해주세요.';
+    error.message = '기록 조회에 실패했습니다. 해당하는 기록이 없습니다.';
     next(error);
   }
 }
