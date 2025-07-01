@@ -32,7 +32,6 @@ model Participant {
   group   Group? @relation("GroupParticipants", fields: [groupId], references: [id], onDelete: Cascade)
 
   records Record[]
-
   @@unique([groupId, nickname])
 }
 
