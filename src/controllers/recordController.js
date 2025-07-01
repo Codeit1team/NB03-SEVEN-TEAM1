@@ -31,7 +31,7 @@ const getRecordDetail = async (req, res, next) => {
     return res.status(200).json(record)
   } catch (error) {
     console.log(error)
-    error.status = 400;
+    error.status = 404;
     error.message = '기록 조회에 실패했습니다. 데이터가 올바른지 확인해주세요.';
     next(error);
   }
