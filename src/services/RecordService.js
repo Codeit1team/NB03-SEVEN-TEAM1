@@ -54,15 +54,75 @@ const getRecords = async (groupId, page = '1', limit = '10', order = 'createdAt'
       where,
     })
   ]);
+
   return {
     data: records,
     total
   };
 };
 
+const getRanks = async (groupId, page = '1', limit = '10', duration = 'weekly') => {
+  const intPage = parseInt(page, 10);
+  const intLimit = parseInt(limit, 10);
+  const now = new Date();
+  const startDate = new Date(now);
+
+  if (duration === 'weekly') {
+    startDate.setDate(now.getDate() - 7);
+  } else {
+    startDate.setMonth(now.getMonth() - 1);
+  }
+
+  const rankings = await prisma.record.groupBy({
+    by: ['authorId'],
+    where: {
+      author: {
+        groupId: parseInt(groupId)
+      },
+      createdAt: {
+        gte: startDate,
+        lte: now
+      }
+    },
+    _count: true,
+    _sum: {
+      time: true
+    },
+    orderBy: {
+      _count: {
+        id: 'desc'
+      }
+    },
+    skip: (intPage - 1) * intLimit,
+    take: intLimit
+  });
+
+  const authorIds = rankings.map(ranking => ranking.authorId);
+  const participants = await prisma.participant.findMany({
+    where: {
+      id: { in: authorIds }
+    },
+    select: {
+      id: true,
+      nickname: true
+    }
+  });
+
+  const nicknameMap = Object.fromEntries(
+    participants.map(participant => [participant.id, participant.nickname])
+  );
+
+  return rankings.map(ranking => ({
+    participantId: ranking.authorId,
+    nickname: nicknameMap[ranking.authorId] || '이름 없음',
+    recordCount: ranking._count ?? 0,
+    recordTime: ranking._sum.time ?? 0
+  }));
+}
 export default {
   createRecord,
-  getRecords
+  getRecords,
+  getRanks
 }
 
 

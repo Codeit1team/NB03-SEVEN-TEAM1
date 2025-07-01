@@ -32,10 +32,21 @@ const getRecords = async (req, res, next) => {
     const { page, limit, order, orderBy, search } = req.query;
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
     res.json(records);
-  } catch (error){
+  } catch (error) {
     error.status = 500;
     error.message = "그룹 기록 정보를 얻어오는데 실패했습니다"
     next(error);
+  }
+}
+
+const getRanks = async (req, res, next) => {
+  try{
+    const groupId = req.params.id;
+    const { page, limit, duration} = req.query;
+    const recordRankings = await RecordService.getRanks(groupId, page, limit, duration);
+    res.json(recordRankings)
+  } catch (error) {
+    
   }
 }
 
