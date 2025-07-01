@@ -33,7 +33,7 @@ const getRecords = async (req, res, next) => {
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
     res.json(records);
   } catch (error) {
-    error.status = 500;
+    error.status = 404;
     error.message = "그룹 기록 정보를 얻어오는데 실패했습니다"
     next(error);
   }
