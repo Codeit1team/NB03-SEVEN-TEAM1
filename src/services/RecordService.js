@@ -24,7 +24,7 @@ const getRecordDetail = async (id) => {
         select: {
           id: true,
           nickname: true,
-        }
+        },
       }
     }
   })
@@ -32,7 +32,7 @@ const getRecordDetail = async (id) => {
   if (!rec) {
     const error = new Error('Record not found')
     error.status = 400
-    throw error 
+    throw error
   }
   return {
     id: rec.id,
@@ -40,7 +40,8 @@ const getRecordDetail = async (id) => {
     description: rec.description,
     time: rec.time,       // ms 단위 그대로
     distance: rec.distance,
-    photos: rec.images,
+    photos: rec.photos.map(file => `http://localhost:3000/uploads/${file}`),
+    // photos: rec.photos.map(file => `${baseUrl}${uploadPath}/${file}`),
     author: {
       id: rec.author.id,
       nickname: rec.author.nickname,
