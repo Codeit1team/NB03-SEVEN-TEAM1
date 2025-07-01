@@ -71,7 +71,7 @@ const validateCreateRecord = async (req, res, next) => {
 };*/ 
 
 const validateGetRecords = (req, res, next) => {
-  const { page = '1', limit = '10', order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
+  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
