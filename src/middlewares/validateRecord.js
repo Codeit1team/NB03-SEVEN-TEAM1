@@ -96,7 +96,7 @@ const validateGetRecords = (req, res, next) => {
 
   const allowedDuration = ['weekly', 'monthly'];
   if (!allowedDuration.includes(duration)) {
-    return res.status(400).json({error: 'Duration은 weekly, monthly만 가능합니다'});
+    return res.status(400).json({error: 'duration은 weekly, monthly만 가능합니다'});
   }
 
   next();
