@@ -15,7 +15,8 @@ const createRecord = struct.object({
 });
 
 //  postman 테스트 코드 포스트맨은 int,float 값 보낼수없이 전부 string이라 테스트코드변경
-/*const timeStruct = struct.refine(
+/*
+const timeStruct = struct.refine(
   struct.coerce(struct.integer(), struct.string(), (value) => parseInt(value, 10)),
   'timeLimit',
   (value) => value > 0 && value <= (3600 * 1000 * 10)
@@ -32,16 +33,17 @@ const createRecord = struct.object({
   description: struct.optional(struct.size(struct.string(), 0, 500)),
   time: timeStruct,
   distance: distanceStruct,
-  authorNickname: struct.string(),
-  authorPassword: struct.string(),
-});*/
+  authorNickname: struct.size(struct.string(), 1, 20),
+  authorPassword: struct.size(struct.string(), 4, 20),
+});
+*/
 
 const validateCreateRecord = async (req, res, next) => {
   const [error] = struct.validate(req.body, createRecord);
 
   if (error) {
-    await deleteUploadedFiles(req.files);
-    const field = error.path[0];
+    await deleteUploadedFiles(req.files.photos);
+    const field = error.path?.[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
   }
@@ -49,26 +51,21 @@ const validateCreateRecord = async (req, res, next) => {
 };
 
 // postman 테스트 코드
-/*export const validateCreateRecord = async (req, res, next) => {
-  try {
-    const validated = struct.create(req.body, createRecord);
-    req.body = validated; 
-    next();
-  } catch (error) {
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        try {
-          await fs.unlink(file.path);
-        } catch (unlinkError) {
-          console.error('파일 삭제 실패:', unlinkError);
-        }
-      }
-    }
-    const field = error.path?.[0];
-    const message = field ? `${field} 해당 데이터가 유효하지 않습니다`: '데이터가 잘못되었습니다';
-    return res.status(400).json({ message });
-  }
-};*/ 
+/*
+// export const validateCreateRecord = async (req, res, next) => {
+//   try {
+//     const validated = struct.create(req.body, createRecord);
+//     req.body = validated;
+//     next();
+//   } catch (error) {
+//     console.log(error)
+//     if (req.files.photos) await deleteUploadedFiles(req.files.photos);
+//     const field = error.path?.[0];
+//     const message = field ? `${field} 해당 데이터가 유효하지 않습니다`: '데이터가 잘못되었습니다';
+//     return res.status(400).json({ message });
+//   }
+// };
+*/
 
 const validateGetRecords = (req, res, next) => {
   const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly'} = req.query;
