@@ -4,7 +4,7 @@ import ParticipantController from '#controllers/participantController.js';
 
 const ParticipantRouter = Router();
 
-ParticipantRouter.route('/:id/participants')
+ParticipantRouter.route('/groups/:id')
   .post(validateCreateParticipant, ParticipantController.createParticipant)
   .delete(ParticipantController.deleteParticipant);
 
