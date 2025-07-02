@@ -11,6 +11,20 @@ const createRecord = async (data) => {
       distance: data.distance,
       photos: data.photos,
       authorId: data.authorId,
+    },
+    select: {
+      id: true,
+      exerciseType: true,
+      description: true,
+      time: true,
+      distance: true,
+      photos: true,
+      author: {
+        select: {
+          id: true,
+          nickname: true
+        }
+      }
     }
   })
 };
@@ -41,7 +55,6 @@ const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', or
         time: true,
         distance: true,
         photos: true,
-        createdAt: true,
         author: {
           select: {
             id: true,
