@@ -55,8 +55,8 @@ const getRanks = async (req, res, next) => {
   try{
     const groupId = req.params.id;
     const { page, limit, duration} = req.query;
-    const recordRankings = await RecordService.getRanks(groupId, page, limit, duration);
-    res.json(recordRankings)
+    const recordsRanking = await RecordService.getRanks(groupId, page, limit, duration);
+    res.json(recordsRanking)
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 랭킹을 가져오는 데 실패했습니다"
