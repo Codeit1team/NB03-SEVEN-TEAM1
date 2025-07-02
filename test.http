@@ -38,3 +38,22 @@ Content-Disposition: form-data; name="ownerPassword"
 
 1234
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### JSON 버전 그룹 등록
+
+POST http://localhost:3000/api/groups
+Content-Type: application/json
+
+{
+  "name": "운동실허",
+  "description": "하지만 해야겠지?",
+  "photoUrl": "https://picsum.photos/200/300",
+  "goalRep": 0,
+  "discordWebhookUrl": "https://discord.com/api/webhooks/123/abc",
+  "discordInviteUrl": "https://discord.gg/eternalreturn",
+  "tags": [
+    "이터널 리턴", "운동"
+  ],
+  "ownerNickname": "박재성",
+  "ownerPassword": "1234"
+}
