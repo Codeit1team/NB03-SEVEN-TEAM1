@@ -32,9 +32,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 // /api 하위로 모든 경로 마운트. cors 생략 위함. fe-be
+app.use('/api/participants', participantRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/records', recordRoutes);
-app.use('/api/rankings', rankingRoutes);
+// app.use('/api/rankings', rankingRoutes);
 
 // 공통 에러 핸들러
 app.use(errorHandler);
