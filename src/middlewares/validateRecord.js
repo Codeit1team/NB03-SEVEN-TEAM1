@@ -55,7 +55,7 @@ const createRecord = struct.object({
 export const validateCreateRecord = async (req, res, next) => {
   try {
     const validated = struct.create(req.body, createRecord);
-    req.body = validated; 
+    req.body = validated;
     next();
   } catch (error) {
     if (req.files.photos) await deleteUploadedFiles(req.files.photos);
