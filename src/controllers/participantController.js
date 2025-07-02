@@ -2,13 +2,32 @@ import ParticipantService from "#services/ParticipantService.js";
 
 const createParticipant = async (req, res, next) => {
   try {
-    const participant = await ParticipantService.createParticipant(req.body);
+    const participantData = {
+      ...req.body,
+      groupId: Number(req.params.id)
+    };
+    
+    const participant = await ParticipantService.createParticipant(participantData);
     return res.status(201).json(participant);
   } catch (error) {
-    error.status = 400;
-    error.message = '참여자 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
+    error.statusCode = error.statusCode || 400;
     next(error);
   }
 };
 
-export default { createParticipant };
+const deleteParticipant = async (req, res, next) => {
+  try {
+    const participantData = {
+      ...req.body,
+      groupId: Number(req.params.id)
+    };
+    
+    await ParticipantService.deleteParticipant(participantData);
+    return res.status(204).send();
+  } catch (error) {
+    error.statusCode = error.statusCode || 400;
+    next(error);
+  }
+}
+
+export default { createParticipant, deleteParticipant };

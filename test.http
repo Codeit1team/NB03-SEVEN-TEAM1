@@ -54,6 +54,26 @@ Content-Type: application/json
   "tags": [
     "이터널 리턴", "운동"
   ],
-  "ownerNickname": "박재성",
+  "ownerNickname": "못바",
   "ownerPassword": "1234"
+}
+
+### 그룹 참여
+
+POST http://localhost:3000/api/groups/11/participants
+Content-Type: application/json
+
+{
+  "nickname": "박재성2",
+  "password": "1234"
+}
+
+### 그룹 참여 취소
+
+DELETE http://localhost:3000/api/groups/11/participants
+Content-Type: application/json
+
+{
+  "nickname": "박재성",
+  "password": "1234"
 }
