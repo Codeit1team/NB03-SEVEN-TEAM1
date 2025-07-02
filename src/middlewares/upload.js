@@ -13,13 +13,31 @@ const __dirname = path.dirname(__filename);
  * @returns {Function[]} - Express용 미들웨어 배열
  *
  * @example
+ * // [여러 장 업로드 예시]
+ * // 운동 기록 작성 등 photos 필드로 여러 장 업로드할 때:
  * import { uploadImages } from '../middlewares/upload.js';
  *
  * router.post(
  *   '/:groupId/records',
- *   uploadImages({ maxCount: 5 }), // 최대 5장 업로드 허용
+ *   uploadImages({ maxCount: 5 }), // photos: 최대 5장 업로드 허용
  *   RecordController.createRecord
  * );
+ * // 프론트엔드 작업 시에 참조:
+ * // formData.append('photos', file1);
+ * // formData.append('photos', file2);
+ *
+ * @example
+ * // [단일 파일 업로드 예시]
+ * // 그룹 대표 이미지 등 photoUrl 필드로 단일 업로드할 때:
+ * import { uploadImages } from '../middlewares/upload.js';
+ *
+ * router.post(
+ *   '/groups',
+ *   uploadImages({ maxCount: 1 }), // photoUrl: 단일 업로드
+ *   GroupController.createGroup
+ * );
+ * // 프론트엔드 작업 시에 참조:
+ * // formData.append('photoUrl', file);
  */
 export const uploadImages = ({ maxCount = 5 } = {}) => {
   const storage = multer.diskStorage({
@@ -48,9 +66,11 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     fileFilter,
     limits: {
       fileSize: 1 * 1024 * 1024, // 1MB 제한
-      files: maxCount,
     },
-  }).array('photos', maxCount);
+  }).fields([
+    { name: 'photos', maxCount: maxCount },
+    { name: 'photoUrl', maxCount: 1 },
+  ]);
 
   return [
     (req, res, next) => {
@@ -62,17 +82,19 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
             case 'LIMIT_FILE_SIZE':
               message = '파일 용량은 1MB 이하만 가능합니다.';
               break;
-            case 'LIMIT_FILE_COUNT':
-              message = '최대 업로드 개수를 초과했습니다.';
-              break;
             case 'LIMIT_UNEXPECTED_FILE':
-              message = '허용되지 않는 파일 형식입니다.';
+              const photoFiles = req.files?.photos ?? [];
+              if (photoFiles.length >= (maxCount ?? 5)) {
+                message = '최대 업로드 개수를 초과했습니다.';
+              } else {
+                message = '허용되지 않는 파일이거나, 업로드 가능한 파일 개수를 초과했습니다.';
+              }
               break;
           }
 
           return res.status(400).json({ success: false, message });
         }
-        
+
         if (err) {
           return res.status(500).json({
             success: false,
