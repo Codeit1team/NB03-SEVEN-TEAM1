@@ -1,104 +1,74 @@
 # NB03-SEVEN-TEAM1
 
-##### (팀 협업 문서 링크 게시)
+##### [팀 협업 문서](https://docs.google.com/spreadsheets/d/1RjmFuiSnZA_rl31L6QnpKLuEhtjjX0h8l22q1DcvuAw/edit?usp=sharing)
 
 팀원 구성
-조영욱 (개인 Github 링크)   
-박재성 (개인 Github 링크)   
-김나연 (개인 Github 링크)   
-유진호 (개인 Github 링크)   
+[조영욱](https://github.com/youngwookjo) 
+[박재성](https://github.com/qkrwotjd1731)
+[김나연](https://github.com/luciakim22)
+[유진호](https://github.com/selentia)
   
 프로젝트 소개   
-코드잇제공의 사이트의 백엔드 시스템 구축   
-프로젝트 기간: 2025.06.26 ~ 2025.07.15
+운동 인증과 그룹 활동, 랭킹 시스템을 결합한 건강 커뮤니티 플랫폼 SEVEN의 백엔드 시스템 구축
+<br>프로젝트 기간: 2025.06.26 ~ 2025.07.15
 
 기술 스택   
-Backend: Express.js, PrismaORM   
-Database: MongoDB   
-공통 Tool: Git & Github, Discord
+| 구분          | 사용 기술 및 도구                                                    |
+|---------------|---------------------------------------------------------------------|
+| Backend       | Express.js, PrismaORM, helmet, dotenv, multer, axios, bcrypt        |
+| Database      | PostgreSQL                                                          |
+| Server        | Nginx                                                               |
+| 공통 Tool     | Git & Github, Discord, Google Sheet, Google Docs, Postman           |
 
 팀원별 구현 기능 상세
 
-웨인   
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)   
-소셜 로그인 API   
-구글 소셜 로그인 API를 활용하여 소셜 로그인 기능을 구현   
-로그인 후 추가 정보 입력을 위한 API 엔드포인트 개발   
-회원 추가 정보 입력 API   
-회원 유형(관리자, 학생)에 따른 조건부 입력 처리 API 구현   
-
-제이든   
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
-회원별 권한 관리
-사용자의 역할에 따라 권한을 설정하는 API 구현
-관리자 페이지와 일반 사용자 페이지를 위한 조건부 라우팅 기능 개발
-반응형 레이아웃 API
-클라이언트에서 전달된 요청에 맞춰 반응형 레이아웃을 위한 API 엔드포인트 구현
-
-마크   
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
-수강생 정보 관리 API
-fetch(GET)을 사용하여 학생의 수강 정보를 조회하는 API 엔드포인트 개발
-수강 정보의 반응형 UI 구성
-공용 Button API
-공통으로 사용할 버튼 기능을 처리하는 API 구현
-
-데이지   
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
-관리자 API
-Path Parameter를 활용한 동적 라우팅 기능 구현
-fetch(PATCH, DELETE)를 사용하여 학생 정보를 수정하고 탈퇴하는 API 엔드포인트 개발
-CRUD 기능
-학생 정보 CRUD 기능을 제공하는 API 구현
-회원관리 슬라이더
-학생별 정보 목록을 carousel 방식으로 보여주는 API 개발
-
-제이   
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
-학생 시간 정보 관리 API
-학생별 시간 정보를 조회하는 API 구현
-fetch(GET)을 통해 실시간 접속 현황을 관리
-수정 및 탈퇴 API
-fetch(PATCH, DELETE)을 사용하여 수강생의 개인정보 수정 및 탈퇴 처리
-공용 Modal API
-공통 Modal 컴포넌트를 처리하는 API 구현
+| 이름     | 구현 기능 |
+|----------|-----------|
+| **조영욱** | • 기록 등록  <br> • 기록 목록 조회  <br> • 기록 상세 조회  <br> • 기록 랭킹 조회  <br> • 기록 정보 유효성 검사  <br> • 그룹 추천(좋아요/취소)  <br> • 기록 기능 테스트  <br> • API 명세서 작성  <br> • Github Readme 작성 |
+| **박재성** | • 그룹 등록  <br> • 그룹 목록 조회  <br> • 그룹 상세 조회  <br> • 그룹 수정  <br> • 그룹 삭제  <br> • 그룹 참여(유저 추가)  <br> • 그룹 참여 취소  <br> • 그룹 정보 유효성 검사  <br> • API 명세서 작성 |
+| **김나연** | • 기록 상세 조회  <br> • 태그 목록 조회  <br> • 태그 상세 조회  <br> • API 명세서 작성  <br> • 중간 발표 자료 정리  <br> • 최종 발표 자료 정리 |
+| **유진호** | • 프로젝트 환경 구축 및 관리(app.js, Prisma, alias, 환경변수, 배포/도메인)  <br> • 공통 함수/유틸/미들웨어/에러핸들러 작성  <br> • 그룹 배지 부여 함수  <br> • 프론트/배포 환경 연결  <br> • 프로젝트 계획서 작성  <br> • 주제 문서 정리  <br> • 기술 스택 및 가이드 작성  <br> • 예상 이슈 목록 정리  <br> • 목데이터 스크립트 추가  <br> • DB 연결  <br> • upload 미들웨어 작성/추가 처리 |
 
 
-$ node tree.js   
-┌── src   
-│   ├── app.js   
-│   ├── jobs   
-│   │   └── badgeAssigner.js   
-│   ├── lib  
-│   │   └── prisma.js   
-│   ├── middlewares   
-│   │   ├── errorHandler.js   
-│   │   ├── upload.js   
-│   │   └── validatePassword.js   
-│   ├── prisma   
-│   │   ├── migrations    
-│   │   │   ├── 20250616083340_init   
-│   │   │   │   └── migration.sql   
-│   │   │   └── migration_lock.toml    
-│   │   └── schema.prisma    
-│   ├── routes    
-│   │   ├── exampleRoutes.js   
-│   │   ├── groupRoutes.js    
-│   │   ├── rankingRoutes.js    
-│   │   └── recordRoutes.js    
-│   ├── services    
-│   │   ├── GroupService.js   
-│   │   ├── RankingService.js    
-│   │   └── RecordService.js   
-│   ├── swagger   
-│   │   └── swagger.js    
-│   └── utils    
-│       └── sendDiscordWebhook.js    
-├── .env    
-├── .gitignore    
-├── package-lock.json    
-├── package.json   
-├── README.md   
-├── tree.js     
-├── TREE.MD     
-└── uploads    
+Tree
+```
+┌── .env
+├── .env.example
+├── .gitignore
+├── jsconfig.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── src
+│   ├── app.js
+│   ├── controllers
+│   │   ├── groupController.js
+│   │   ├── rankingController.js
+│   │   └── recordController.js
+│   ├── middlewares
+│   │   ├── errorHandler.js
+│   │   ├── getUser.js
+│   │   ├── upload.js
+│   │   ├── validateGroup.js
+│   │   ├── validateParticipant.js
+│   │   ├── validatePassword.js
+│   │   └── validateRecord.js
+│   ├── prisma
+│   │   ├── schema.prisma
+│   │   └── seed.js
+│   ├── routes
+│   │   ├── groupRoutes.js
+│   │   ├── rankingRoutes.js
+│   │   ├── recordRoutes.js
+│   │   └── tagRoutes.js
+│   ├── services
+│   │   ├── GroupService.js
+│   │   ├── RankingService.js
+│   │   └── RecordService.js
+│   └── utils
+│       ├── deleteUploadedFiles.js
+│       ├── grantGroupBadge.js
+│       ├── passwordUtil.js
+│       └── sendDiscordWebhook.js
+└── uploads
+```
