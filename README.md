@@ -54,12 +54,6 @@ Tree
 │   │   ├── validatePassword.js
 │   │   └── validateRecord.js
 │   ├── prisma
-│   │   ├── migrations
-│   │   │   ├── 20250630005151_
-│   │   │   │   └── migration.sql
-│   │   │   ├── 20250630005951_
-│   │   │   │   └── migration.sql
-│   │   │   └── migration_lock.toml
 │   │   ├── schema.prisma
 │   │   └── seed.js
 │   ├── routes
