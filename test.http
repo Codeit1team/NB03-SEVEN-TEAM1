@@ -1,0 +1,40 @@
+POST http://localhost:3000/api/groups
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+운동실허
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+하지만 해야겠지?
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photoUrl"
+
+https://picsum.photos/200/300
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="goalRep"
+
+0
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="discordWebhookUrl"
+
+https://discord.com/api/webhooks/123/abc
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="discordInviteUrl"
+
+https://discord.gg/eternalreturn
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags"
+
+["이터널 리턴", "운동"]
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ownerNickname"
+
+박재성
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ownerPassword"
+
+1234
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
