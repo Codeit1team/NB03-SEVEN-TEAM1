@@ -1,4 +1,5 @@
 import * as struct from 'superstruct'
+import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 
 const Url = struct.refine(struct.string(), 'URL', value => {
   try {
@@ -25,10 +26,39 @@ export const createGroup = struct.object({
 
 export const patchGroup = struct.partial(createGroup);
 
-export const validateCreateGroup = (req, res, next) => {
-  const [error] = struct.validate(req.body, createGroup);
+export const validateCreateGroup = async (req, res, next) => {
+  // multipart/form-data에서 tags, goalRep 필드가 문자열로 전송된 경우 JSON 파싱
+  if (req.body.tags && typeof req.body.tags === 'string') {
+    try {
+      req.body.tags = JSON.parse(req.body.tags);
+    } catch (error) {
+      if (req.files) { await deleteUploadedFiles(req.files); }
+      return res.status(400).json({ message: 'tags 필드가 유효하지 않습니다' });
+    }
+  }
+
+  if (req.body.goalRep && typeof req.body.goalRep === 'string') {
+    const goalRep = parseInt(req.body.goalRep, 10);
+    if (isNaN(goalRep)) {
+      if (req.files) { await deleteUploadedFiles(req.files); }
+      return res.status(400).json({ message: 'goalRep 필드가 유효하지 않습니다' });
+    }
+    req.body.goalRep = goalRep;
+  }
+
+  // photoUrl이 파일 업로드인 경우 검증에서 제외
+  const hasPhotoFile = req.files && req.files.photoUrl && req.files.photoUrl[0];
+
+  // photoUrl이 파일 업로드인 경우 임시로 제거하여 검증 우회
+  let bodyForValidation = { ...req.body };
+  if (hasPhotoFile) {
+    delete bodyForValidation.photoUrl;
+  }
+
+  const [error] = struct.validate(bodyForValidation, createGroup);
 
   if (error) {
+    if (req.files) { await deleteUploadedFiles(req.files); }
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
