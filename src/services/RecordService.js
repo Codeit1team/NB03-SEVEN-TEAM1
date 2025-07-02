@@ -2,31 +2,46 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-const createRecord = async (data) => {
-  return await prisma.record.create({
-    data: {
-      exerciseType: data.exerciseType,
-      description: data.description,
-      time: data.time,
-      distance: data.distance,
-      photos: data.photos,
-      authorId: data.authorId,
-    },
-    select: {
-      id: true,
-      exerciseType: true,
-      description: true,
-      time: true,
-      distance: true,
-      photos: true,
-      author: {
-        select: {
-          id: true,
-          nickname: true
-        }
-      }
-    }
-  })
+const createRecord = async (groupId, data) => {
+  return await prisma.$transaction(async (tx) => {
+    const record = await tx.record.create({
+      data: {
+        exerciseType: data.exerciseType,
+        description: data.description,
+        time: data.time,
+        distance: data.distance,
+        photos: data.photos,
+        authorId: data.authorId,
+      },
+      select: {
+        id: true,
+        exerciseType: true,
+        description: true,
+        time: true,
+        distance: true,
+        photos: true,
+        author: {
+          select: {
+            id: true,
+            nickname: true,
+          },
+        },
+      },
+    });
+
+    await tx.group.update({
+      where: {
+        id: groupId,
+      },
+      data: {
+        recordCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return record;
+  });
 };
 
 const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
