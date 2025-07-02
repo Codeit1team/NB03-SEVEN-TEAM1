@@ -73,7 +73,12 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 10,
-      tags: { connectOrCreate: [{ name: '러닝' }, { name: '건강' }, { name: '아침' }] },
+      tags: {
+        connectOrCreate:
+          [{ where: { name: '러닝' }, create: { name: '러닝' } },
+          { where: { name: '건강' }, create: { name: '건강' } },
+          { where: { name: '아침' }, create: { name: '아침' } }]
+      },
       ownerId: user1.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'RECORD_100'],
@@ -89,7 +94,11 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 5,
-      tags: { connectOrCreate: [{ name: '자전거' }, { name: '월루좋아' }], },
+      tags: {
+        connectOrCreate:
+          [{ where: { name: '자전거' }, create: { name: '자전거' } },
+          { where: { name: '월루좋아' }, create: { name: '월루좋아' } }]
+      },
       ownerId: user3.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10'],
@@ -105,7 +114,11 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 15,
-      tags: { connectOrCreate: [{ name: '수영' }, { name: '시원해요' }], },
+      tags: {
+        connectOrCreate:
+          [{ where: { name: '수영' }, create: { name: '수영' } },
+          { where: { name: '시원해요' }, create: { name: '시원해요' } }],
+      },
       ownerId: user4.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10'],
@@ -121,7 +134,10 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 100,
-      tags: { connectOrCreate: [{ name: '수영' }, { name: '자전거' }] },
+      tags: {
+        connectOrCreate: [{ where: { name: '수영' }, create: { name: '수영' } },
+        { where: { name: '자전거' }, create: { name: '자전거' } }]
+      },
       ownerId: user5.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'LIKE_100'],
@@ -138,7 +154,9 @@ const main = async () => {
       discordInviteUrl: null,
       likeCount: 150,
       tags: {
-        connectOrCreate: [{ name: '태그1' }, { name: '태그2' }, { name: '러닝' }]
+        connectOrCreate: [{ where: { name: '러닝' }, create: { name: '러닝' } },
+        { where: { name: '태그1' }, create: { name: '태그1' } },
+        { where: { name: '태그2' }, create: { name: '태그2' } }]
       },
       ownerId: user6.id,
       recordCount: 0,
