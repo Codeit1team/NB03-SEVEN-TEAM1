@@ -43,7 +43,7 @@ const createRecord = struct.object({
 
 //   if (error) {
 //     await deleteUploadedFiles(req.files.phoyos);
-//     const field = error.path[0];
+//     const field = error.path?.[0];
 //     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
 //     return res.status(400).json({ message });
 //   }
@@ -58,6 +58,7 @@ export const validateCreateRecord = async (req, res, next) => {
     req.body = validated;
     next();
   } catch (error) {
+    console.log(error)
     if (req.files.photos) await deleteUploadedFiles(req.files.photos);
     const field = error.path?.[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다`: '데이터가 잘못되었습니다';
