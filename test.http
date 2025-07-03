@@ -80,4 +80,8 @@ Content-Type: application/json
 
 ### 그룹 목록 조회
 
-GET http://localhost:3000/api/groups
+GET http://localhost:3000/api/groups?search=이터널
+
+### 그룹 상세 조회
+
+GET http://localhost:3000/api/groups/11
