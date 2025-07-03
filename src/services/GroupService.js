@@ -113,7 +113,7 @@ const createGroup = async (data) => {
 const likeGroup = async(groupId) => {
   await prisma.group.update({
     where: {
-      id: parseInt(groupId),
+      id: groupId,
     },
     data: {
       likeCount: {
@@ -123,7 +123,21 @@ const likeGroup = async(groupId) => {
   })
 }
 
+const unlikeGroup = async(groupId) => {
+  await prisma.group.update({
+    where: {
+      id: groupId,
+    },
+    data: {
+      likeCount: {
+        decrement: 1,
+      }
+    }
+  })
+}
+
 export default {
   createGroup,
-  likeGroup
+  likeGroup,
+  unlikeGroup
 };

@@ -9,6 +9,7 @@ GroupRouter.route('/')
   .post(validateCreateGroup,GroupController.createGroup);
 
 GroupRouter.route('/like/:id')
-  .post(GroupController.likeGroup);
+  .post(GroupController.likeGroup)
+  .delete(GroupController.unlikeGroup);
 
 export default GroupRouter;

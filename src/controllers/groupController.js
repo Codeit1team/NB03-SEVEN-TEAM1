@@ -14,7 +14,7 @@ const createGroup = async (req, res, next) => {
 
 const likeGroup = async (req, res, next) => {
   try{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     await GroupService.likeGroup(id);
     await grantLike100Badge(id);
     return res.sendStatus(204);
@@ -25,7 +25,20 @@ const likeGroup = async (req, res, next) => {
   }
 }
 
+const unlikeGroup = async (req, res, next) => {
+  try{
+    const id = parseInt(req.params.id);
+    await GroupService.unlikeGroup(id);
+    return res.sendStatus(204);
+  } catch (error) {
+    error.status = 404;
+    error.message = "요청이 잘못 되었습니다. 해당 그룹은 없습니다"
+    next(error);
+  }
+}
+
 export default { 
   createGroup,
-  likeGroup
+  likeGroup,
+  unlikeGroup
 };
