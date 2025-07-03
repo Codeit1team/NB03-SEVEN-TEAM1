@@ -49,7 +49,7 @@ const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', or
   const intLimit = parseInt(limit, 10);
   const where = {
     author: {
-      groupId: parseInt(groupId, 10),
+      groupId,
       ...(search && search.trim() !== '' && {
         nickname: { contains: search, mode: 'insensitive' }
       })
@@ -138,7 +138,7 @@ const getRanks = async (groupId, page = '1', limit = '10', duration = 'weekly') 
     by: ['authorId'],
     where: {
       author: {
-        groupId: parseInt(groupId)
+        groupId
       },
       createdAt: {
         gte: startDate,

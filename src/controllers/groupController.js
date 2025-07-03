@@ -14,9 +14,9 @@ const createGroup = async (req, res, next) => {
 
 const likeGroup = async (req, res, next) => {
   try{
-    const id = parseInt(req.params.id);
-    await GroupService.likeGroup(id);
-    await grantLike100Badge(id);
+    const groupId = parseInt(req.params.groupId);
+    await GroupService.likeGroup(groupId);
+    await grantLike100Badge(groupId);
     return res.sendStatus(204);
   } catch (error) {
     error.status = 404;
@@ -27,8 +27,8 @@ const likeGroup = async (req, res, next) => {
 
 const unlikeGroup = async (req, res, next) => {
   try{
-    const id = parseInt(req.params.id);
-    await GroupService.unlikeGroup(id);
+    const groupId = parseInt(req.params.groupId);
+    await GroupService.unlikeGroup(groupId);
     return res.sendStatus(204);
   } catch (error) {
     error.status = 404;

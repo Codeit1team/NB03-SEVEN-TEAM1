@@ -6,12 +6,12 @@ const prisma = new PrismaClient();
 
 const getUser = async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
+    const groupId = parseInt(req.params.groupId);
     const { authorNickname, authorPassword } = req.body;
     const user = await prisma.participant.findUnique({
       where: {
         groupId_nickname: {
-          groupId: id,
+          groupId,
           nickname: authorNickname
         }
       },

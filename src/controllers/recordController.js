@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 const createRecord = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.id);
+    const groupId = parseInt(req.params.groupId);
     req.body.photos = req.files.photos.map(file => `http://localhost:3000/uploads/${file.filename}`);
     const record = await RecordService.createRecord(groupId, req.body);
     await grantRecord100Badge(groupId)
@@ -30,7 +30,7 @@ const createRecord = async (req, res, next) => {
 
 const getRecords = async (req, res, next) => {
   try{
-    const groupId = req.params.id;
+    const groupId = parseInt(req.params.groupId);
     const { page, limit, order, orderBy, search } = req.query;
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
     return res.json(records);
@@ -42,7 +42,7 @@ const getRecords = async (req, res, next) => {
 
 const getRecordDetail = async (req, res, next) => {
   try {
-    const recordId = req.params.id
+    const recordId = req.params.recordId
     const record = await RecordService.getRecordDetail(recordId)
     return res.status(200).json(record)
   } catch (error) {
@@ -55,7 +55,7 @@ const getRecordDetail = async (req, res, next) => {
 
 const getRanks = async (req, res, next) => {
   try{
-    const groupId = req.params.id;
+    const groupId = parseInt(req.params.groupId);
     const { page, limit, duration} = req.query;
     const recordsRanking = await RecordService.getRanks(groupId, page, limit, duration);
     return res.json(recordsRanking)

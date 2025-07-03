@@ -8,7 +8,7 @@ const GroupRouter = Router();
 GroupRouter.route('/')
   .post(validateCreateGroup,GroupController.createGroup);
 
-GroupRouter.route('/like/:id')
+GroupRouter.route('/like/:groupId')
   .post(GroupController.likeGroup)
   .delete(GroupController.unlikeGroup);
 
