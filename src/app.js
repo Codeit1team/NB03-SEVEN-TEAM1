@@ -11,7 +11,6 @@ import rankingRoutes from '#routes/rankingRoutes.js';
 import participantRoutes from '#routes/participantRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
-import participantRoutes from '#routes/participantRoutes.js'
 
 // 환경 변수 로딩
 dotenv.config();

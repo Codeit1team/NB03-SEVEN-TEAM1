@@ -7,14 +7,26 @@ const createGroup = async (req, res, next) => {
       req.files.photoUrl = `http://localhost:3000/uploads/${req.file.filename}`;
     }
     
-    const result = await GroupService.createGroup(req.body);
-    return res.status(201).json(result);
+    const group = await GroupService.createGroup(req.body);
+    return res.status(201).json(group);
   } catch (error) {
     error.status = 400;
     error.message = '그룹 생성에 실패했습니다. 데이터가 올바른지 확인해주세요.';
     next(error);
   }
 };
+
+const getGroups = async (req, res, next) => {
+  try{
+    const { page, limit, order, orderBy, search } = req.query;
+    const groups = await GroupService.getGroups(page, limit, order, orderBy, search);
+    return res.json(groups);
+  } catch (error) {
+    error.status = 500;
+    error.message = "그룹 목록을 가져오는 데 실패했습니다";
+    next(error);
+  }
+}
 
 const likeGroup = async (req, res, next) => {
   try{
@@ -43,6 +55,7 @@ const unlikeGroup = async (req, res, next) => {
 
 export default { 
   createGroup,
+  getGroups,
   likeGroup,
   unlikeGroup
 };
