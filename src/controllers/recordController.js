@@ -2,14 +2,16 @@ import { PrismaClient } from '@prisma/client';
 import RecordService from "#services/RecordService.js";
 import sendDiscordWebhook from "#utils/sendDiscordWebhook.js";
 import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
+import { grantRecord100Badge } from '#utils/grantGroupBadge.js';
 
 const prisma = new PrismaClient();
 
 const createRecord = async (req, res, next) => {
   try {
+    const groupId = parseInt(req.params.groupId);
     req.body.photos = req.files.photos.map(file => `http://localhost:3000/uploads/${file.filename}`);
-    const record = await RecordService.createRecord(req.body);
-    // const groupId = req.params.id;
+    const record = await RecordService.createRecord(groupId, req.body);
+    await grantRecord100Badge(groupId)
     // const group = await prisma.group.findUnique({
     //   where: { id: groupId },
     //   select: { webhookUrl: true },
@@ -28,10 +30,10 @@ const createRecord = async (req, res, next) => {
 
 const getRecords = async (req, res, next) => {
   try{
-    const groupId = req.params.id;
+    const groupId = parseInt(req.params.groupId);
     const { page, limit, order, orderBy, search } = req.query;
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
-    res.json(records);
+    return res.json(records);
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 기록 목록을 가져오는 데 실패했습니다"
@@ -40,7 +42,7 @@ const getRecords = async (req, res, next) => {
 
 const getRecordDetail = async (req, res, next) => {
   try {
-    const recordId = req.params.id
+    const recordId = req.params.recordId
     const record = await RecordService.getRecordDetail(recordId)
     return res.status(200).json(record)
   } catch (error) {
@@ -53,10 +55,10 @@ const getRecordDetail = async (req, res, next) => {
 
 const getRanks = async (req, res, next) => {
   try{
-    const groupId = req.params.id;
+    const groupId = parseInt(req.params.groupId);
     const { page, limit, duration} = req.query;
     const recordsRanking = await RecordService.getRanks(groupId, page, limit, duration);
-    res.json(recordsRanking)
+    return res.json(recordsRanking)
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 랭킹을 가져오는 데 실패했습니다"

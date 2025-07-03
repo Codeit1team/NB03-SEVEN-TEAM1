@@ -1,4 +1,5 @@
 import GroupService from "#services/GroupService.js";
+import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 
 const createGroup = async (req, res, next) => {
   try {
@@ -15,4 +16,33 @@ const createGroup = async (req, res, next) => {
   }
 };
 
-export default { createGroup };
+const likeGroup = async (req, res, next) => {
+  try{
+    const groupId = parseInt(req.params.groupId);
+    await GroupService.likeGroup(groupId);
+    await grantLike100Badge(groupId);
+    return res.sendStatus(204);
+  } catch (error) {
+    error.status = 404;
+    error.message = "요청이 잘못 되었습니다. 해당 그룹은 없습니다"
+    next(error);
+  }
+}
+
+const unlikeGroup = async (req, res, next) => {
+  try{
+    const groupId = parseInt(req.params.groupId);
+    await GroupService.unlikeGroup(groupId);
+    return res.sendStatus(204);
+  } catch (error) {
+    error.status = 404;
+    error.message = "요청이 잘못 되었습니다. 해당 그룹은 없습니다"
+    next(error);
+  }
+}
+
+export default { 
+  createGroup,
+  likeGroup,
+  unlikeGroup
+};

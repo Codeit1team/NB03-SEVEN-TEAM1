@@ -8,4 +8,8 @@ const GroupRouter = Router();
 GroupRouter.route('/')
   .post(uploadImages(), validateCreateGroup, GroupController.createGroup);
 
+GroupRouter.route('/like/:groupId')
+  .post(GroupController.likeGroup)
+  .delete(GroupController.unlikeGroup);
+
 export default GroupRouter;
