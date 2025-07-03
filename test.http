@@ -58,6 +58,23 @@ Content-Type: application/json
   "ownerPassword": "1234"
 }
 
+### JSON 버전 그룹 등록 2
+
+POST http://localhost:3000/api/groups
+Content-Type: application/json
+
+{
+  "name": "스쿼트100",
+  "description": "하루 100개 도전!",
+  "photoUrl": "https://picsum.photos/200/200",
+  "goalRep": 100,
+  "discordWebhookUrl": "https://discord.com/api/webhooks/abc/xyz",
+  "discordInviteUrl": "https://discord.gg/abcd",
+  "tags": ["운동", "스쿼트"],
+  "ownerNickname": "재성",
+  "ownerPassword": "1234"
+}
+
 ### 그룹 참여
 
 POST http://localhost:3000/api/groups/11/participants
