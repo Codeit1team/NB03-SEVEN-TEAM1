@@ -5,11 +5,13 @@ const main = async () => {
   await prisma.record.deleteMany({});
   await prisma.group.deleteMany({});
   await prisma.participant.deleteMany({});
+  await prisma.tag.deleteMany({});
 
   // id 리셋
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Participant_id_seq" RESTART WITH 1;');
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Group_id_seq" RESTART WITH 1;');
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Record_id_seq" RESTART WITH 1;');
+  await prisma.$executeRawUnsafe('ALTER SEQUENCE "Tag_id_seq" RESTART WITH 1;');
 
   const hashExample = [
     '$2a$10$GA3d/3lmqt3XxEgg2yCTreP/ccMEgZuWVeV2HXmAbFZ8K36RMNata', // 고양이좋아
@@ -63,6 +65,22 @@ const main = async () => {
     },
   })
 
+  // 태그 생성
+  await prisma.tag.createMany({
+    data: [
+      { name: '러닝' },      // id: 1
+      { name: '건강' },      // id: 2
+      { name: '아침' },      // id: 3
+      { name: '자전거' },    // id: 4
+      { name: '월루좋아' },  // id: 5
+      { name: '수영' },      // id: 6
+      { name: '시원해요' },  // id: 7
+      { name: '태그1' },     // id: 8
+      { name: '태그2' },     // id: 9
+    ],
+    skipDuplicates: true,
+  });
+
   // 그룹 생성 및 ownerId 매칭
   const group1 = await prisma.group.create({
     data: {
@@ -73,7 +91,7 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 10,
-      tags: ['러닝', '건강', '아침'],
+      tags: { connect: [{ id: 1 }, { id: 2 }, { id: 3 }] }, // 러닝, 건강, 아침
       ownerId: user1.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'RECORD_100'],
@@ -89,7 +107,7 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 5,
-      tags: ['자전거', '월루좋아'],
+      tags: { connect: [{ id: 4 }, { id: 5 }] }, // 자전거, 월루좋아
       ownerId: user3.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10'],
@@ -105,7 +123,7 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 15,
-      tags: ['수영', '시원해요'],
+      tags: { connect: [{ id: 6 }, { id: 7 }] }, // 수영, 시원해요
       ownerId: user4.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10'],
@@ -121,7 +139,7 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 100,
-      tags: ['수영', '자전거'],
+      tags: { connect: [{ id: 6 }, { id: 4 }] }, // 수영, 자전거
       ownerId: user5.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'LIKE_100'],
@@ -137,7 +155,7 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 150,
-      tags: ['태그1', '태그2', '러닝'],
+      tags: { connect: [{ id: 8 }, { id: 9 }, { id: 1 }] }, // 태그1, 태그2, 러닝
       ownerId: user6.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'RECORD_100', 'LIKE_100'],
