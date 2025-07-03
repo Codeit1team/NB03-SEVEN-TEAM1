@@ -3,6 +3,10 @@ import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 
 const createGroup = async (req, res, next) => {
   try {
+    if (req.files.photoUrl && req.files.photoUrl.fieldname === 'photoUrl') {
+      req.files.photoUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+    }
+    
     const result = await GroupService.createGroup(req.body);
     return res.status(201).json(result);
   } catch (error) {
