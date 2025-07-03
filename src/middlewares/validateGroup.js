@@ -47,8 +47,8 @@ export const validateCreateGroup = async (req, res, next) => {
     
     next();
   } catch (err) {
-    // 에러 발생 시 업로드된 파일 삭제
-    if (req.files.photoUrl) { 
+    // 에러 발생 시 업로드된 파일 삭제 (multipart/form-data인 경우에만)
+    if (req.files?.photoUrl) {
       await deleteUploadedFiles(req.files.photoUrl); 
     }
     
