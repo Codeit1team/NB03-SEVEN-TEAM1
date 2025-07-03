@@ -33,7 +33,7 @@ const getRecords = async (req, res, next) => {
     const groupId = req.params.id;
     const { page, limit, order, orderBy, search } = req.query;
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
-    res.json(records);
+    return res.json(records);
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 기록 목록을 가져오는 데 실패했습니다"
@@ -58,7 +58,7 @@ const getRanks = async (req, res, next) => {
     const groupId = req.params.id;
     const { page, limit, duration} = req.query;
     const recordsRanking = await RecordService.getRanks(groupId, page, limit, duration);
-    res.json(recordsRanking)
+    return res.json(recordsRanking)
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 랭킹을 가져오는 데 실패했습니다"

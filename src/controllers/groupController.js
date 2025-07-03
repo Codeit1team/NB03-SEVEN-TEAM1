@@ -1,4 +1,5 @@
 import GroupService from "#services/GroupService.js";
+import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 
 const createGroup = async (req, res, next) => {
   try {
@@ -15,7 +16,8 @@ const likeGroup = async (req, res, next) => {
   try{
     const id = req.params.id;
     await GroupService.likeGroup(id);
-    res.sendStatus(204);
+    await grantLike100Badge(id);
+    return res.sendStatus(204);
   } catch (error) {
     error.status = 404;
     error.message = "요청이 잘못 되었습니다. 해당 그룹은 없습니다"
