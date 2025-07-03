@@ -9,6 +9,9 @@ GroupRouter.route('/')
   .post(uploadImages(), validateCreateGroup, GroupController.createGroup)
   .get(GroupController.getGroups);
 
+GroupRouter.route('/:groupId')
+  .get(GroupController.getGroupDetail);
+
 GroupRouter.route('/like/:groupId')
   .post(GroupController.likeGroup)
   .delete(GroupController.unlikeGroup);

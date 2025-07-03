@@ -116,12 +116,55 @@ const getGroups = async (page = 1, limit = 10, order = 'createdAt', orderBy = 'd
   
   const [groupsWithRelationData, total] = await Promise.all([
     prisma.group.findMany({
-    where,
-    orderBy: { 
-      [order]: orderBy,
-    },
-    skip: (intPage - 1) * intLimit,
-    take: intLimit,
+      where,
+      orderBy: { 
+        [order]: orderBy,
+      },
+      skip: (intPage - 1) * intLimit,
+      take: intLimit,
+      include: {
+        tags: {
+          select: {
+            name: true
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            nickname: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        },
+        Participants: {
+          select: {
+            id: true,
+            nickname: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        }  
+      }
+    }),
+    prisma.group.count({
+      where,
+    })
+  ]);
+
+  const resultGroups = groupsWithRelationData.map(group => ({
+    ...group,
+    tags: group.tags.map(tag => tag.name)
+  }));
+
+  return {
+    data: resultGroups,
+    total,
+  }
+}
+
+const getGroupDetail = async (groupId) => {
+  const groupWithRelationData = await prisma.group.findUnique({
+    where: { id: groupId },
     include: {
       tags: {
         select: {
@@ -143,23 +186,22 @@ const getGroups = async (page = 1, limit = 10, order = 'createdAt', orderBy = 'd
           createdAt: true,
           updatedAt: true
         }
-      }  
       }
-    }),
-    prisma.group.count({
-      where,
-    })
-  ]);
+    }
+  });
 
-  const resultGroups = groupsWithRelationData.map(group => ({
-    ...group,
-    tags: group.tags.map(tag => tag.name)
-  }));
-
-  return {
-    data: resultGroups,
-    total,
+  if (!groupWithRelationData) {
+    const error = new Error('Group not found');
+    error.status = 404;
+    throw error;
   }
+
+  const resultGroup = {
+    ...groupWithRelationData,
+    tags: groupWithRelationData.tags.map(tag => tag.name)
+  };
+
+  return resultGroup;
 }
 
 const likeGroup = async(groupId) => {
@@ -191,6 +233,7 @@ const unlikeGroup = async(groupId) => {
 export default {
   createGroup,
   getGroups,
+  getGroupDetail,
   likeGroup,
   unlikeGroup
 };

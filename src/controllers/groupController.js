@@ -28,6 +28,18 @@ const getGroups = async (req, res, next) => {
   }
 }
 
+const getGroupDetail = async (req, res, next) => {
+  try{
+    const groupId = parseInt(req.params.groupId);
+    const group = await GroupService.getGroupDetail(groupId);
+    return res.json(group);
+  } catch (error) {
+    error.status = 404;
+    error.message = "그룹 조회에 실패했습니다. 해당하는 기록이 없습니다.";
+    next(error);
+  }
+}
+
 const likeGroup = async (req, res, next) => {
   try{
     const groupId = parseInt(req.params.groupId);
@@ -56,6 +68,7 @@ const unlikeGroup = async (req, res, next) => {
 export default { 
   createGroup,
   getGroups,
+  getGroupDetail,
   likeGroup,
   unlikeGroup
 };
