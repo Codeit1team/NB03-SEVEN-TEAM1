@@ -34,11 +34,7 @@ export const validateCreateGroup = async (req, res, next) => {
     }
 
     if (req.body.goalRep && typeof req.body.goalRep === 'string') {
-      const goalRep = parseInt(req.body.goalRep, 10);
-      if (isNaN(goalRep)) {
-        throw new Error('goalRep 필드가 유효하지 않습니다');
-      }
-      req.body.goalRep = goalRep;
+      req.body.goalRep = parseInt(req.body.goalRep, 10);
     }
 
     const [error] = struct.validate(req.body, createGroup);
@@ -52,8 +48,8 @@ export const validateCreateGroup = async (req, res, next) => {
     next();
   } catch (err) {
     // 에러 발생 시 업로드된 파일 삭제
-    if (req.files) { 
-      await deleteUploadedFiles(req.files); 
+    if (req.files.photoUrl) { 
+      await deleteUploadedFiles(req.files.photoUrl); 
     }
     
     const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;

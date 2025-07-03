@@ -2,8 +2,8 @@ import GroupService from "#services/GroupService.js";
 
 const createGroup = async (req, res, next) => {
   try {
-    if (req.file && req.file.fieldname === 'photoUrl') {
-      req.body.photoUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+    if (req.files.photoUrl && req.files.photoUrl.fieldname === 'photoUrl') {
+      req.files.photoUrl = `http://localhost:3000/uploads/${req.file.filename}`;
     }
     
     const result = await GroupService.createGroup(req.body);
