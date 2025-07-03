@@ -5,15 +5,15 @@ const prisma = new PrismaClient();
 
 const createGroup = async (data) => {
   const {
-    name, 
-    description, 
-    photoUrl, 
+    name,
+    description,
+    photoUrl,
     goalRep,
-    discordWebhookUrl, 
+    discordWebhookUrl,
     discordInviteUrl,
     tags,
-    ownerNickname, 
-    ownerPassword, 
+    ownerNickname,
+    ownerPassword,
   } = data;
 
   try {
@@ -43,7 +43,7 @@ const createGroup = async (data) => {
 
       if (tags && tags.length > 0) {
         const tagRecords = await Promise.all(
-          tags.map(tagName => 
+          tags.map(tagName =>
             tx.tag.upsert({
               where: { name: tagName },
               update: {},
@@ -110,4 +110,34 @@ const createGroup = async (data) => {
   }
 }
 
-export default { createGroup };
+const likeGroup = async(groupId) => {
+  await prisma.group.update({
+    where: {
+      id: groupId,
+    },
+    data: {
+      likeCount: {
+        increment: 1,
+      }
+    }
+  })
+}
+
+const unlikeGroup = async(groupId) => {
+  await prisma.group.update({
+    where: {
+      id: groupId,
+    },
+    data: {
+      likeCount: {
+        decrement: 1,
+      }
+    }
+  })
+}
+
+export default {
+  createGroup,
+  likeGroup,
+  unlikeGroup
+};
