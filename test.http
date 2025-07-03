@@ -77,11 +77,11 @@ Content-Type: application/json
 
 ### 그룹 참여
 
-POST http://localhost:3000/api/groups/11/participants
+POST http://localhost:3000/api/participants/6
 Content-Type: application/json
 
 {
-  "nickname": "박재성2",
+  "nickname": "영욱",
   "password": "1234"
 }
 
