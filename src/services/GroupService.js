@@ -104,6 +104,64 @@ const createGroup = async (data) => {
   return result;
 }
 
+const getGroups = async (page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
+  const intPage = parseInt(page, 10);
+  const intLimit = parseInt(limit, 10);
+  const where = {
+    name: {
+      contains: search,
+      mode: 'insensitive',
+    },
+  };
+  
+  const [groupsWithRelationData, total] = await Promise.all([
+    prisma.group.findMany({
+    where,
+    orderBy: { 
+      [order]: orderBy,
+    },
+    skip: (intPage - 1) * intLimit,
+    take: intLimit,
+    include: {
+      tags: {
+        select: {
+          name: true
+        }
+      },
+      owner: {
+        select: {
+          id: true,
+          nickname: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      },
+      Participants: {
+        select: {
+          id: true,
+          nickname: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      }  
+      }
+    }),
+    prisma.group.count({
+      where,
+    })
+  ]);
+
+  const resultGroups = groupsWithRelationData.map(group => ({
+    ...group,
+    tags: group.tags.map(tag => tag.name)
+  }));
+
+  return {
+    data: resultGroups,
+    total,
+  }
+}
+
 const likeGroup = async(groupId) => {
   await prisma.group.update({
     where: {
@@ -132,6 +190,7 @@ const unlikeGroup = async(groupId) => {
 
 export default {
   createGroup,
+  getGroups,
   likeGroup,
   unlikeGroup
 };
