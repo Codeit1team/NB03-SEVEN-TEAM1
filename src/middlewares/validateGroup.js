@@ -74,8 +74,8 @@ export const validatePatchGroup = (req, res, next) => {
   next();
 };
 
-const validateGetRecords = (req, res, next) => {
-  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly' } = req.query;
+const validateGetGroups = (req, res, next) => {
+  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc' } = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
@@ -88,7 +88,7 @@ const validateGetRecords = (req, res, next) => {
     return res.status(400).json({ error: 'limit은 1~50 사이 숫자여야 합니다.' });
   }
 
-  const allowedOrderFields = ['createdAt', 'time'];
+  const allowedOrderFields = ['likeCount', 'participantCount', 'createdAt'];
   if (!allowedOrderFields.includes(order)) {
     return res.status(400).json({ error: `order는 ${allowedOrderFields.join(', ')} 중 하나여야 합니다.` });
   }
@@ -100,3 +100,9 @@ const validateGetRecords = (req, res, next) => {
 
   next();
 };
+
+export default {
+  validateCreateGroup,
+  validatePatchGroup,
+  validateGetGroups
+}
