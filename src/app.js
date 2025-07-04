@@ -11,12 +11,13 @@ import rankingRoutes from '#routes/rankingRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
 import participantRoutes from '#routes/participantRoutes.js'
+import tagRoutes from '#routes/tagRoutes.js'
 
 // 환경 변수 로딩
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // 보안 미들웨어
 app.use(helmet());
@@ -37,6 +38,7 @@ app.use('/api/participants', participantRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/records', recordRoutes);
 // app.use('/api/rankings', rankingRoutes);
+app.use('/api/tags', tagRoutes);
 
 // 공통 에러 핸들러
 app.use(errorHandler);
