@@ -9,7 +9,8 @@ const prisma = new PrismaClient();
 const createRecord = async (req, res, next) => {
   try {
     const groupId = parseInt(req.params.groupId);
-    req.body.photos = req.files.photos.map(file => `http://localhost:3000/uploads/${file.filename}`);
+    const PORT = process.env.PORT || 3001
+    req.body.photos = req.files.photos.map(file => `http://localhost:${PORT}/uploads/${file.filename}`);
     const record = await RecordService.createRecord(groupId, req.body);
     await grantRecord100Badge(groupId)
     // const group = await prisma.group.findUnique({
