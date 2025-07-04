@@ -108,12 +108,15 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
   
-  const where = {
-    name: {
-      contains: search,
-      mode: 'insensitive',
-    },
-  };
+  let where = {};
+  if (search.trim()) {
+    where = {
+      name: {
+        contains: search,
+        mode: 'insensitive',
+      },
+    };
+  }
 
   // participantCount 정렬을 위한 특별 처리
   let orderByConfig;
