@@ -21,17 +21,12 @@ const createGroup = async (req, res, next) => {
 const getGroups = async (req, res, next) => {
   try {
     const { page, limit, order, orderBy, search } = req.query;
-    const groups = await GroupService.getGroups(page, limit, order, orderBy, search);
+    const { data: groups, total } = await GroupService.getGroups(page, limit, order, orderBy, search);
 
-    // tags: Tag[] → string[] 변환
-    const groupsWithTags = groups.map(group => ({
-      ...group,
-      tags: group.tags ? group.tags.map(tag => tag.name) : [],
-    }));
-
-    return res.json(groupsWithTags);
+    return res.json({ data: groups, total });
   } catch (error) {
     error.status = 500;
+    console.error(error)
     error.message = "그룹 목록을 가져오는 데 실패했습니다";
     next(error);
   }
