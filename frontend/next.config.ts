@@ -23,7 +23,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'seven.mimu.live',
       },
-      // S3, CDN 등 추가 이미지 호스트
+      {
+      protocol: 'https',
+      hostname: 'example.com',
+    },
     ],
   },
 };
