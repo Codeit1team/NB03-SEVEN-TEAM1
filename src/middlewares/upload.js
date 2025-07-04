@@ -74,6 +74,11 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
 
   return [
     (req, res, next) => {
+      // multipart/form-data가 아닌 경우 파일 업로드 처리 건너뛰기
+      if (!req.headers['content-type']?.includes('multipart/form-data')) {
+        return next();
+      }
+
       upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
           let message = '파일 업로드 오류입니다.';

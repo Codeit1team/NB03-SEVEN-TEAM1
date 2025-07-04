@@ -15,11 +15,11 @@ const createRecord = struct.object({
 });
 
 const validateCreateRecord = async (req, res, next) => {
-  if (req.body.time && typeof req.body.time === 'string'){
+  if (req.body.time && typeof req.body.time === 'string') {
     req.body.time = parseInt(req.body.time)
   }
 
-  if (req.body.distance && typeof req.body.distance === 'string'){
+  if (req.body.distance && typeof req.body.distance === 'string') {
     req.body.distance = Number(req.body.distance)
   }
 
@@ -35,7 +35,7 @@ const validateCreateRecord = async (req, res, next) => {
 };
 
 const validateGetRecords = (req, res, next) => {
-  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly' } = req.query;
+  const { page = 1, limit = 10, orderBy = 'createdAt', order = 'desc', duration = 'weekly' } = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
@@ -48,14 +48,14 @@ const validateGetRecords = (req, res, next) => {
     return res.status(400).json({ error: 'limit은 1~50 사이 숫자여야 합니다.' });
   }
 
-  const allowedOrderFields = ['createdAt', 'time'];
-  if (!allowedOrderFields.includes(order)) {
-    return res.status(400).json({ error: `order는 ${allowedOrderFields.join(', ')} 중 하나여야 합니다.` });
+  const allowedOrderByFields = ['createdAt', 'time'];
+  if (!allowedOrderByFields.includes(orderBy)) {
+    return res.status(400).json({ error: `orderBy는 ${allowedOrderByFields.join(', ')} 중 하나여야 합니다.` });
   }
 
-  const allowedOrderBy = ['asc', 'desc'];
-  if (!allowedOrderBy.includes(orderBy)) {
-    return res.status(400).json({ error: 'orderby는 asc 또는 desc만 가능합니다.' });
+  const allowedOrder = ['asc', 'desc'];
+  if (!allowedOrder.includes(order)) {
+    return res.status(400).json({ error: 'order는 asc 또는 desc만 가능합니다.' });
   }
 
   const allowedDuration = ['weekly', 'monthly'];
