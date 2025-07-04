@@ -101,8 +101,20 @@ const validateGetGroups = (req, res, next) => {
   next();
 };
 
+const validateIdParam = (paramName, label = paramName) => {
+  return (req, res, next) => {
+    const id = parseInt(req.params[paramName]);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: `${label}가 숫자가 아닙니다.` });
+    }
+    req.params[paramName] = id; 
+    next();
+  };
+};
+
 export default {
   validateCreateGroup,
   validatePatchGroup,
-  validateGetGroups
+  validateGetGroups,
+  validateIdParam
 }
