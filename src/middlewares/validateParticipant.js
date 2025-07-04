@@ -5,7 +5,7 @@ export const createParticipant = struct.object({
   password: struct.size(struct.string(), 4, 20),
 });
 
-export const validateCreateParticipant = (req, res, next) => {
+const validateCreateParticipant = (req, res, next) => {
   const [error] = struct.validate(req.body, createParticipant);
 
   if (error) {
@@ -15,3 +15,19 @@ export const validateCreateParticipant = (req, res, next) => {
   }
   next();
 };
+
+const validateIdParam = (paramName, label = paramName) => {
+  return (req, res, next) => {
+    const id = parseInt(req.params[paramName]);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: `${label}가 숫자가 아닙니다.` });
+    }
+    req.params[paramName] = id; 
+    next();
+  };
+};
+
+export default {
+  validateCreateParticipant,
+  validateIdParam
+}
