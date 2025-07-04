@@ -4,7 +4,7 @@ const createParticipant = async (req, res, next) => {
   try {
     const participantData = {
       ...req.body,
-      groupId: Number(req.params.groupId)
+      groupId
     };
     
     const participant = await ParticipantService.createParticipant(participantData);
@@ -19,7 +19,7 @@ const deleteParticipant = async (req, res, next) => {
   try {
     const participantData = {
       ...req.body,
-      groupId: Number(req.params.groupId)
+      groupId
     };
     
     await ParticipantService.deleteParticipant(participantData);
