@@ -1,10 +1,12 @@
 import GroupService from "#services/GroupService.js";
 import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 
+const PORT = process.env.PORT || 3001
+
 const createGroup = async (req, res, next) => {
   try {
-    if (req.files?.photoUrl) {
-      req.body.photoUrl = `http://localhost:3000/uploads/${req.files.photoUrl[0].filename}`;
+    if (req.files?.photoUrl?.[0]) {
+      req.body.photoUrl = `http://localhost:${PORT}/uploads/${req.files.photoUrl[0].filename}`;
     }
     
     const group = await GroupService.createGroup(req.body);
