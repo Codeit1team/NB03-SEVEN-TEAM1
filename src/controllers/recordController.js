@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 const createRecord = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const PORT = process.env.PORT || 3001
     req.body.photos = req.files.photos.map(file => `http://localhost:${PORT}/uploads/${file.filename}`);
     const record = await RecordService.createRecord(groupId, req.body);
@@ -31,7 +31,7 @@ const createRecord = async (req, res, next) => {
 
 const getRecords = async (req, res, next) => {
   try{
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const { page, limit, order, orderBy, search } = req.query;
     const records = await RecordService.getRecords(groupId, page, limit, order, orderBy, search);
     return res.json(records);
@@ -56,7 +56,7 @@ const getRecordDetail = async (req, res, next) => {
 
 const getRanks = async (req, res, next) => {
   try{
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const { page, limit, duration} = req.query;
     const recordsRanking = await RecordService.getRanks(groupId, page, limit, duration);
     return res.json(recordsRanking)
