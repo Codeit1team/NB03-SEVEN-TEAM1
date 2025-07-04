@@ -102,12 +102,7 @@ const getRecordDetail = async (id) => {
       }
     }
   })
-
-  if (!rec) {
-    const error = new Error('Record not found')
-    error.status = 400
-    throw error
-  }
+  
   return {
     id: rec.id,
     exerciseType: rec.exerciseType,
