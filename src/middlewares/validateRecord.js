@@ -66,7 +66,19 @@ const validateGetRecords = (req, res, next) => {
   next();
 };
 
+const validateIdParam = (paramName, label = paramName) => {
+  return (req, res, next) => {
+    const id = parseInt(req.params[paramName]);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: `${label}가 숫자가 아닙니다.` });
+    }
+    req.params[paramName] = id; // 문자열 → 숫자로 덮어쓰기
+    next();
+  };
+};
+
 export default {
   validateCreateRecord,
-  validateGetRecords
+  validateGetRecords,
+  validateIdParam
 }

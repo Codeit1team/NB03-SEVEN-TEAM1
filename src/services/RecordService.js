@@ -90,7 +90,7 @@ const getRecords = async (groupId, page = 1, limit = 10, order = 'desc', orderBy
 };
 
 const getRecordDetail = async (id) => {
-  const recordId = Number(id) //url 파라미터는 문자열로 들어와서 변환 필요
+  const recordId = id //url 파라미터는 문자열로 들어와서 변환 필요
   const rec = await prisma.record.findUnique({
     where: { id: recordId },
     include: {
