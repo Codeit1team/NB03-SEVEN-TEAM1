@@ -48,7 +48,7 @@ export const validateCreateGroup = async (req, res, next) => {
     next();
   } catch (err) {
     // 에러 발생 시 업로드된 파일 삭제 (multipart/form-data인 경우에만)
-    if (req.files) {
+    if (req.files?.photoUrl?.[0]) { 
       await deleteUploadedFiles(req.files.photoUrl); 
     }
     
@@ -73,3 +73,36 @@ export const validatePatchGroup = (req, res, next) => {
   }
   next();
 };
+
+const validateGetGroups = (req, res, next) => {
+  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly' } = req.query;
+
+  const intPage = parseInt(page, 10);
+  const intLimit = parseInt(limit, 10);
+
+  if (isNaN(intPage) || intPage < 1) {
+    return res.status(400).json({ error: 'page는 1 이상의 숫자여야 합니다.' });
+  }
+
+  if (isNaN(intLimit) || intLimit < 1 || intLimit > 50) {
+    return res.status(400).json({ error: 'limit은 1~50 사이 숫자여야 합니다.' });
+  }
+
+  const allowedOrderFields = ['createdAt', 'time'];
+  if (!allowedOrderFields.includes(order)) {
+    return res.status(400).json({ error: `order는 ${allowedOrderFields.join(', ')} 중 하나여야 합니다.` });
+  }
+
+  const allowedOrderBy = ['asc', 'desc'];
+  if (!allowedOrderBy.includes(orderBy)) {
+    return res.status(400).json({ error: 'orderby는 asc 또는 desc만 가능합니다.' });
+  }
+
+  next();
+};
+
+export default {
+  validateCreateGroup,
+  validatePatchGroup,
+  validateGetGroups
+}

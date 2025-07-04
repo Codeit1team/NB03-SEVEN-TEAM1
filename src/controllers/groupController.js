@@ -1,10 +1,12 @@
 import GroupService from "#services/GroupService.js";
 import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 
+const PORT = process.env.PORT || 3001
+
 const createGroup = async (req, res, next) => {
   try {
-    if (req.files) {
-      req.body.photoUrl = `http://localhost:3000/uploads/${req.files.photoUrl[0].filename}`;
+    if (req.files?.photoUrl?.[0]) {
+      req.body.photoUrl = `http://localhost:${PORT}/uploads/${req.files.photoUrl[0].filename}`;
     }
     
     const group = await GroupService.createGroup(req.body);
@@ -17,10 +19,17 @@ const createGroup = async (req, res, next) => {
 };
 
 const getGroups = async (req, res, next) => {
-  try{
+  try {
     const { page, limit, order, orderBy, search } = req.query;
     const groups = await GroupService.getGroups(page, limit, order, orderBy, search);
-    return res.json(groups);
+
+    // tags: Tag[] → string[] 변환
+    const groupsWithTags = groups.map(group => ({
+      ...group,
+      tags: group.tags ? group.tags.map(tag => tag.name) : [],
+    }));
+
+    return res.json(groupsWithTags);
   } catch (error) {
     error.status = 500;
     error.message = "그룹 목록을 가져오는 데 실패했습니다";
@@ -29,7 +38,7 @@ const getGroups = async (req, res, next) => {
 }
 
 const getGroupDetail = async (req, res, next) => {
-  try{
+  try {
     const groupId = parseInt(req.params.groupId);
     const group = await GroupService.getGroupDetail(groupId);
     return res.json(group);
@@ -65,7 +74,7 @@ const unlikeGroup = async (req, res, next) => {
   }
 }
 
-export default {
+export default { 
   createGroup,
   getGroups,
   getGroupDetail,
