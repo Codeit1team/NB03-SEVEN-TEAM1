@@ -44,7 +44,7 @@ const createRecord = async (groupId, data) => {
   });
 };
 
-const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
+const getRecords = async (groupId, page = 1, limit = 10, order = 'desc', orderBy = 'createdAt', search = '') => {
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
   const where = {
@@ -59,7 +59,7 @@ const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', or
     prisma.record.findMany({
       where,
       orderBy: {
-        [order]: orderBy
+        [orderBy]: order
       },
       skip: (intPage - 1) * intLimit,
       take: intLimit,
@@ -103,11 +103,6 @@ const getRecordDetail = async (id) => {
     }
   })
 
-  if (!rec) {
-    const error = new Error('Record not found')
-    error.status = 400
-    throw error
-  }
   return {
     id: rec.id,
     exerciseType: rec.exerciseType,
@@ -180,6 +175,7 @@ const getRanks = async (groupId, page = '1', limit = '10', duration = 'weekly') 
     recordTime: ranking._sum.time ?? 0
   }));
 }
+
 export default {
   createRecord,
   getRecords,
