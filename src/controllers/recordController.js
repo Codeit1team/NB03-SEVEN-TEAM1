@@ -37,6 +37,7 @@ const getRecords = async (req, res, next) => {
   } catch (error) {
     error.status = 500;
     error.message = "그룹의 기록 목록을 가져오는 데 실패했습니다"
+    next(error)
   }
 };
 
