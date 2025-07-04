@@ -111,11 +111,11 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
   let where = {};
   if (search.trim()) {
     where = {
-    name: {
-      contains: search,
-      mode: 'insensitive',
-    },
-  };
+      name: {
+        contains: search,
+        mode: 'insensitive',
+      },
+    };
   }
 
   // participantCount 정렬을 위한 특별 처리

@@ -7,13 +7,13 @@ import RecordController from '#controllers/recordController.js';
 const RecordRouter = Router();
 
 RecordRouter.route('/:groupId')
-  .get(validateRecord.validateGetRecords, RecordController.getRecords)
-  .post(uploadImages(), validateRecord.validateCreateRecord, getUser, RecordController.createRecord)
+  .get(validateRecord.validateIdParam('groupId','그룹아이디'), validateRecord.validateGetRecords, RecordController.getRecords)
+  .post(uploadImages(), validateRecord.validateIdParam('groupId','그룹아이디'), validateRecord.validateCreateRecord, getUser, RecordController.createRecord)
 
 RecordRouter.route('/detail/:recordId')
-  .get(RecordController.getRecordDetail)
+  .get(validateRecord.validateIdParam('recordId','기록아이디'), RecordController.getRecordDetail)
 
 RecordRouter.route('/ranking/:groupId')
-  .get(validateRecord.validateGetRecords, RecordController.getRanks)
+  .get(validateRecord.validateIdParam('groupId','그룹아이디'), validateRecord.validateGetRecords, RecordController.getRanks)
 
 export default RecordRouter

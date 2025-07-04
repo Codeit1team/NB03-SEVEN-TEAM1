@@ -17,7 +17,6 @@ const getUser = async (req, res, next) => {
       },
     });
 
-    let err;
     if (!user) {
       if (req.files.photos) await deleteUploadedFiles(req.files.photos);
       return res.status(401).json({ message: '그룹에 존재하지않는 참여자 입니다' });

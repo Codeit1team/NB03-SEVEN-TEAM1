@@ -19,10 +19,17 @@ const createGroup = async (req, res, next) => {
 };
 
 const getGroups = async (req, res, next) => {
-  try{
+  try {
     const { page, limit, order, orderBy, search } = req.query;
     const groups = await GroupService.getGroups(page, limit, order, orderBy, search);
-    return res.json(groups);
+
+    // tags: Tag[] → string[] 변환
+    const groupsWithTags = groups.map(group => ({
+      ...group,
+      tags: group.tags ? group.tags.map(tag => tag.name) : [],
+    }));
+
+    return res.json(groupsWithTags);
   } catch (error) {
     error.status = 500;
     error.message = "그룹 목록을 가져오는 데 실패했습니다";
@@ -31,7 +38,7 @@ const getGroups = async (req, res, next) => {
 }
 
 const getGroupDetail = async (req, res, next) => {
-  try{
+  try {
     const groupId = parseInt(req.params.groupId);
     const group = await GroupService.getGroupDetail(groupId);
     return res.json(group);
@@ -43,7 +50,7 @@ const getGroupDetail = async (req, res, next) => {
 }
 
 const likeGroup = async (req, res, next) => {
-  try{
+  try {
     const groupId = parseInt(req.params.groupId);
     await GroupService.likeGroup(groupId);
     await grantLike100Badge(groupId);
@@ -56,7 +63,7 @@ const likeGroup = async (req, res, next) => {
 }
 
 const unlikeGroup = async (req, res, next) => {
-  try{
+  try {
     const groupId = parseInt(req.params.groupId);
     await GroupService.unlikeGroup(groupId);
     return res.sendStatus(204);
