@@ -44,7 +44,7 @@ const createRecord = async (groupId, data) => {
   });
 };
 
-const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
+const getRecords = async (groupId, page = 1, limit = 10, order = 'desc', orderBy = 'createdAt', search = '') => {
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
   const where = {
@@ -59,7 +59,7 @@ const getRecords = async (groupId, page = 1, limit = 10, order = 'createdAt', or
     prisma.record.findMany({
       where,
       orderBy: {
-        [order]: orderBy
+        [orderBy]: order
       },
       skip: (intPage - 1) * intLimit,
       take: intLimit,
@@ -102,7 +102,7 @@ const getRecordDetail = async (id) => {
       }
     }
   })
-  
+
   return {
     id: rec.id,
     exerciseType: rec.exerciseType,
