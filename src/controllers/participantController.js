@@ -4,7 +4,7 @@ const createParticipant = async (req, res, next) => {
   try {
     const participantData = {
       ...req.body,
-      groupId,
+      groupId
     };
     
     const participant = await ParticipantService.createParticipant(participantData);
