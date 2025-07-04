@@ -50,7 +50,7 @@ model Group {
   updatedAt         DateTime @updatedAt
 
   owner        Participant   @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  Participants Participant[] @relation("GroupParticipants")
+  participants Participant[] @relation("GroupParticipants")
 
   tags   Tag[]
   badges BadgeType[]
