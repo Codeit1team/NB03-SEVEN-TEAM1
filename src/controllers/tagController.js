@@ -1,19 +1,5 @@
 import TagService from '#services/tagService.js'
 
-// const searchGroupsByTag = async (req, res, next) => {
-//   try {
-//     const { tag } = req.query
-//     const { data, total } = await TagService.searchGroupsByTag(tag)
-//     res.status(200).json({ data, total })
-//   } catch (error) {
-//     if (error.message === '유효하지 않은 태그') {
-//       return res.status(400).json({ message: error.message });
-//     }
-//     console.error('searchGroupsByTag 오류:', error.message)
-//     return res.status(500).json({ message: '서버 오류가 발생했습니다.' })
-//   }
-// }
-
 const getTags = async (req, res, next) => {
   try {
     const { search = '', page = '1', limit = '10', order = 'desc', orderBy = 'createdAt' } = req.query //req.query로 들어오는 값이 모두 문자열이기 때문에 '1'처럼 표시해줘야 함. 이후 pageNum으로 숫자로 변환
