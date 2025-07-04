@@ -82,7 +82,7 @@ const createGroup = async (data) => {
             updatedAt: true
           }
         },
-        Participants: {
+        participants: {
           select: {
             id: true,
             nickname: true,
@@ -122,7 +122,7 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
   let orderByConfig;
   if (orderBy === 'participantCount') {
     orderByConfig = {
-      Participants: {
+      participants: {
         _count: order
       }
     };
@@ -152,7 +152,7 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
             updatedAt: true
           }
         },
-        Participants: {
+        participants: {
           select: {
             id: true,
             nickname: true,
@@ -195,7 +195,7 @@ const getGroupDetail = async (groupId) => {
           updatedAt: true
         }
       },
-      Participants: {
+      participants: {
         select: {
           id: true,
           nickname: true,
