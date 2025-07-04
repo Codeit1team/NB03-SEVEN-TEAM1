@@ -43,9 +43,12 @@ export const grantParticipation10Badge = async (groupId) => {
  */
 export const grantRecord100Badge = async (groupId) => {
   try {
-    const recordCount = await prisma.record.count({ where: { author: { groupId } } });
-    if (recordCount < 100) return false;
-
+    const record = await prisma.group.findUnique({
+      where: { id: groupId },
+      select: { recordCount: true }
+    })
+    
+    if (record["recordCount"] < 100) return false;
     const group = await prisma.group.findUnique({
       where: { id: groupId },
       select: { badges: true }
@@ -53,7 +56,6 @@ export const grantRecord100Badge = async (groupId) => {
 
     if (!group) return false;
     if (group.badges.includes(BadgeType.RECORD_100)) return false;
-
     await prisma.group.update({
       where: { id: groupId },
       data: { badges: { push: BadgeType.RECORD_100 } }

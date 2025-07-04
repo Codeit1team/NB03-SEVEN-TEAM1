@@ -6,12 +6,14 @@ import RecordController from '#controllers/recordController.js';
 
 const RecordRouter = Router();
 
-RecordRouter.route('/:id')
+RecordRouter.route('/:groupId')
   .get(validateRecord.validateGetRecords, RecordController.getRecords)
   .post(uploadImages(), validateRecord.validateCreateRecord, getUser, RecordController.createRecord)
 
-
-RecordRouter.route('/detail/:id')
+RecordRouter.route('/detail/:recordId')
   .get(RecordController.getRecordDetail)
+
+RecordRouter.route('/ranking/:groupId')
+  .get(validateRecord.validateGetRecords, RecordController.getRanks)
 
 export default RecordRouter
