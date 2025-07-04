@@ -180,6 +180,7 @@ const getRanks = async (groupId, page = '1', limit = '10', duration = 'weekly') 
     recordTime: ranking._sum.time ?? 0
   }));
 }
+
 export default {
   createRecord,
   getRecords,
