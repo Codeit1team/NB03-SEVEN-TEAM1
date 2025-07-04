@@ -68,16 +68,18 @@ const validateGetRecords = (req, res, next) => {
 
 const validateGroupId = (req, res, next) => {
   const groupId = parseInt(req.params.groupId);
-    if (isNaN(groupId)) {
-      return res.status(400).json({ message: "그룹ID가 숫자가 아닙니다"});
-    }
+  if (isNaN(groupId)) {
+    return res.status(400).json({ message: "그룹ID가 숫자가 아닙니다" });
+  }
+  next();
 }
 
 const validateRecordId = (req, res, next) => {
   const recordId = parseInt(req.params.recordId);
-    if (isNaN(recordId)) {
-      return res.status(400).json({ message: "기록ID가 숫자가 아닙니다"});
-    }
+  if (isNaN(recordId)) {
+    return res.status(400).json({ message: "기록ID가 숫자가 아닙니다" });
+  }
+  next();
 }
 
 export default {
