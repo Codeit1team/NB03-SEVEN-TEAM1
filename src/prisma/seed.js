@@ -190,6 +190,24 @@ const main = async () => {
     data: { ownedGroup: { connect: { id: group5.id } } },
   })
 
+  // 각 그룹에 참가자 추가
+  await Promise.all([
+    prisma.participant.update({ where: { id: user2.id }, data: { groupId: group1.id } }),
+    prisma.participant.update({ where: { id: user3.id }, data: { groupId: group1.id } }),
+
+    prisma.participant.update({ where: { id: user1.id }, data: { groupId: group2.id } }),
+    prisma.participant.update({ where: { id: user4.id }, data: { groupId: group2.id } }),
+
+    prisma.participant.update({ where: { id: user2.id }, data: { groupId: group3.id } }),
+    prisma.participant.update({ where: { id: user5.id }, data: { groupId: group3.id } }),
+
+    prisma.participant.update({ where: { id: user3.id }, data: { groupId: group4.id } }),
+    prisma.participant.update({ where: { id: user6.id }, data: { groupId: group4.id } }),
+
+    prisma.participant.update({ where: { id: user1.id }, data: { groupId: group5.id } }),
+    prisma.participant.update({ where: { id: user4.id }, data: { groupId: group5.id } }),
+  ]);
+
   // Record 생성
   await prisma.record.createMany({
     data: [
