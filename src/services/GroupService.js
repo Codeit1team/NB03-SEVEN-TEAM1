@@ -104,22 +104,35 @@ const createGroup = async (data) => {
   return result;
 }
 
-const getGroups = async (page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', search = '') => {
+const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'createdAt', search = '') => {
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
+  
   const where = {
     name: {
       contains: search,
       mode: 'insensitive',
     },
   };
+
+  // participantCount 정렬을 위한 특별 처리
+  let orderByConfig;
+  if (orderBy === 'participantCount') {
+    orderByConfig = {
+      Participants: {
+        _count: order
+      }
+    };
+  } else {
+    orderByConfig = {
+      [orderBy]: order,
+    };
+  }
   
   const [groupsWithRelationData, total] = await Promise.all([
     prisma.group.findMany({
       where,
-      orderBy: { 
-        [order]: orderBy,
-      },
+      orderBy: orderByConfig,
       skip: (intPage - 1) * intLimit,
       take: intLimit,
       include: {
