@@ -10,24 +10,28 @@ const prisma = new PrismaClient();
  * await grantParticipation10Badge(1);
  */
 export const grantParticipation10Badge = async (groupId) => {
+  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
+
   try {
-    const participantCount = await prisma.participant.count({ where: { groupId } });
-    if (participantCount < 10) return false;
+    return await prisma.$transaction(async (tx) => {
+      const participantCount = await tx.participant.count({ where: { groupId } });
+      if (participantCount < 10) return false;
 
-    const group = await prisma.group.findUnique({
-      where: { id: groupId },
-      select: { badges: true }
+      const group = await tx.group.findUnique({
+        where: { id: groupId },
+        select: { badges: true }
+      });
+
+      if (!group) return false;
+      if (group.badges.includes(BadgeType.PARTICIPATION_10)) return false;
+
+      await tx.group.update({
+        where: { id: groupId },
+        data: { badges: { push: BadgeType.PARTICIPATION_10 } }
+      });
+
+      return true;
     });
-
-    if (!group) return false;
-    if (group.badges.includes(BadgeType.PARTICIPATION_10)) return false;
-
-    await prisma.group.update({
-      where: { id: groupId },
-      data: { badges: { push: BadgeType.PARTICIPATION_10 } }
-    });
-
-    return true;
   } catch (error) {
     console.error('❌ grantParticipation10Badge 에러:', error);
     return false;
@@ -42,26 +46,26 @@ export const grantParticipation10Badge = async (groupId) => {
  * await grantRecord100Badge(1);
  */
 export const grantRecord100Badge = async (groupId) => {
+  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
+
   try {
-    const record = await prisma.group.findUnique({
-      where: { id: groupId },
-      select: { recordCount: true }
-    })
-    
-    if (record["recordCount"] < 100) return false;
-    const group = await prisma.group.findUnique({
-      where: { id: groupId },
-      select: { badges: true }
-    });
+    return await prisma.$transaction(async (tx) => {
+      const group = await tx.group.findUnique({
+        where: { id: groupId },
+        select: { recordCount: true, badges: true }
+      });
 
-    if (!group) return false;
-    if (group.badges.includes(BadgeType.RECORD_100)) return false;
-    await prisma.group.update({
-      where: { id: groupId },
-      data: { badges: { push: BadgeType.RECORD_100 } }
-    });
+      if (!group) return false;
+      if (group.recordCount < 100) return false;
+      if (group.badges.includes(BadgeType.RECORD_100)) return false;
 
-    return true;
+      await tx.group.update({
+        where: { id: groupId },
+        data: { badges: { push: BadgeType.RECORD_100 } }
+      });
+
+      return true;
+    });
   } catch (error) {
     console.error('❌ grantRecord100Badge 에러:', error);
     return false;
@@ -77,22 +81,26 @@ export const grantRecord100Badge = async (groupId) => {
  * await grantLike100Badge(1);
  */
 export const grantLike100Badge = async (groupId) => {
+  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
+  
   try {
-    const group = await prisma.group.findUnique({
-      where: { id: groupId },
-      select: { likeCount: true, badges: true }
+    return await prisma.$transaction(async (tx) => {
+      const group = await tx.group.findUnique({
+        where: { id: groupId },
+        select: { likeCount: true, badges: true }
+      });
+
+      if (!group) return false;
+      if (group.likeCount < 100) return false;
+      if (group.badges.includes(BadgeType.LIKE_100)) return false;
+
+      await tx.group.update({
+        where: { id: groupId },
+        data: { badges: { push: BadgeType.LIKE_100 } }
+      });
+
+      return true;
     });
-
-    if (!group) return false;
-    if (group.likeCount < 100) return false;
-    if (group.badges.includes(BadgeType.LIKE_100)) return false;
-
-    await prisma.group.update({
-      where: { id: groupId },
-      data: { badges: { push: BadgeType.LIKE_100 } }
-    });
-
-    return true;
   } catch (error) {
     console.error('❌ grantLike100Badge 에러:', error);
     return false;
