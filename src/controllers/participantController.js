@@ -2,8 +2,8 @@ import ParticipantService from "#services/ParticipantService.js";
 import handleServerError from '#utils/handleServerError.js';
 
 const createParticipant = async (req, res, next) => {
-  const groupId = req.params.groupId;
   try {
+    const groupId = req.params.groupId;
     const participantData = {
       ...req.body,
       groupId
@@ -16,8 +16,8 @@ const createParticipant = async (req, res, next) => {
 };
 
 const deleteParticipant = async (req, res, next) => {
-  const groupId = req.params.groupId;
   try {
+    const groupId = req.params.groupId;
     const participantData = {
       ...req.body,
       groupId
