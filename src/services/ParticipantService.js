@@ -31,7 +31,7 @@ const createParticipant = async (data) => {
               updatedAt: true
             }
           },
-          Participants: {
+          participants: {
             select: {
               id: true,
               nickname: true,

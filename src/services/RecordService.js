@@ -103,6 +103,12 @@ const getRecordDetail = async (id) => {
     }
   })
 
+  if (!rec) {
+  const error = new Error("기록이 존재하지 않습니다.");
+  error.status = 404;
+  throw error;
+}
+
   return {
     id: rec.id,
     exerciseType: rec.exerciseType,
