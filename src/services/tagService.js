@@ -15,7 +15,7 @@ const getTagList = async ({ search = '', page = 1, limit = 10, order = 'desc', o
       }
     }
   }
-  
+
   const [tags, total] = await Promise.all([
     prisma.tag.findMany({
       where,
@@ -38,7 +38,7 @@ const getTagList = async ({ search = '', page = 1, limit = 10, order = 'desc', o
 const getTag = async (tagId) => {
 
   const tag = await prisma.tag.findUnique({
-    where: { id: Number(tagId) },
+    where: { id: tagId },
     select: {
       name: true,
       createdAt: true,

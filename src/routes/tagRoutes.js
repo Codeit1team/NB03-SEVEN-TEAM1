@@ -8,6 +8,6 @@ TagRouter.route('/')
   .get(validateTag.validateTagList, tagController.getTagList)
 
 TagRouter.route('/:tagId')
-  .get(validateTag.validateTagSearch, tagController.getTag)
+  .get(validateTag.validateTagId, tagController.getTag)
 
 export default TagRouter

@@ -22,7 +22,7 @@ const validateTagList = async (req, res, next) => {
   }
 }
 
-const validateTagSearch = async (req, res, next) => {
+const validateTagId = async (req, res, next) => {
   const { tagId } = req.params
 
   if (!tagId || isNaN(Number(tagId))) {
@@ -30,10 +30,11 @@ const validateTagSearch = async (req, res, next) => {
     error.status = 400
     return next(error)
   }
+  req.params.tagId = Number(tagId)
   next();
 }
 
 export default {
   validateTagList,
-  validateTagSearch
+  validateTagId
 }
