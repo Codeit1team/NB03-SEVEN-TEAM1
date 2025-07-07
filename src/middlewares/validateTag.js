@@ -3,7 +3,7 @@ const validateTagList = async (req, res, next) => {
     const {
       search = '',
       order = 'desc',
-    } = req.query;
+    } = req.params;
 
     if (typeof search !== 'string') {
       const error = new Error('태그 리스트를 불러올 수 없습니다.')
@@ -12,7 +12,7 @@ const validateTagList = async (req, res, next) => {
     }
 
     if (!['asc', 'desc'].includes(order)) {
-      req.query.order = 'desc'
+      req.params.order = 'desc'
     };
 
     next();
@@ -23,7 +23,7 @@ const validateTagList = async (req, res, next) => {
 }
 
 const validateTagSearch = async (req, res, next) => {
-  const { tagId } = req.query
+  const { tagId } = req.params
 
   if (!tagId || isNaN(Number(tagId))) {
     const error = new Error('태그가 존재하지 않습니다.')

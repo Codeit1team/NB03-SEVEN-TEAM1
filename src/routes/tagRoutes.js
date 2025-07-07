@@ -7,7 +7,7 @@ const TagRouter = Router();
 TagRouter.route('/')
   .get(validateTag.validateTagList, tagController.getTagList)
 
-// TagRouter.route('/:tagId')
-//   .get(validateTag.validateTagSearch, tagController.getTag)
+TagRouter.route('/:tagId')
+  .get(validateTag.validateTagSearch, tagController.getTag)
 
 export default TagRouter
