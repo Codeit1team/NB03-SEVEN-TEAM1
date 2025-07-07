@@ -10,8 +10,6 @@ const prisma = new PrismaClient();
  * await grantParticipation10Badge(1);
  */
 export const grantParticipation10Badge = async (groupId) => {
-  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
-
   try {
     return await prisma.$transaction(async (tx) => {
       const participantCount = await tx.participant.count({ where: { groupId } });
@@ -46,8 +44,6 @@ export const grantParticipation10Badge = async (groupId) => {
  * await grantRecord100Badge(1);
  */
 export const grantRecord100Badge = async (groupId) => {
-  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
-
   try {
     return await prisma.$transaction(async (tx) => {
       const group = await tx.group.findUnique({
@@ -81,8 +77,6 @@ export const grantRecord100Badge = async (groupId) => {
  * await grantLike100Badge(1);
  */
 export const grantLike100Badge = async (groupId) => {
-  if (typeof groupId !== "number" || isNaN(groupId) || groupId <= 0) return false;
-  
   try {
     return await prisma.$transaction(async (tx) => {
       const group = await tx.group.findUnique({
