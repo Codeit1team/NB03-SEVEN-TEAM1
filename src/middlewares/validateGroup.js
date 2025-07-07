@@ -36,7 +36,7 @@ export const validateCreateGroup = async (req, res, next) => {
     }
 
     const [error] = struct.validate(req.body, createGroup);
-
+  
     if (error) {
       const field = error.path[0];
       const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
@@ -62,8 +62,8 @@ export const validateCreateGroup = async (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
-  const [error] = struct.validate(req.body, patchGroup);
-
+  const masked = struct.mask(req.body, patchGroup);
+  const [error] = struct.validate(masked, patchGroup);
   if (error) {
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
