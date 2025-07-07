@@ -1,5 +1,6 @@
 import ParticipantService from "#services/ParticipantService.js";
 import { grantParticipation10Badge } from '#utils/grantGroupBadge.js';
+import handleServerError from "#utils/handleServerError.js";
 
 const createParticipant = async (req, res, next) => {
   try {
