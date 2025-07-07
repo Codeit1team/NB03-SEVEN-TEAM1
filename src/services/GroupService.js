@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { hashPassword } from "#utils/passwordUtil.js";
+import { hashPassword, isPasswordValid } from "#utils/passwordUtil.js";
 
 const prisma = new PrismaClient();
 
@@ -17,11 +17,10 @@ const createGroup = async (data) => {
   } = data;
 
   const result = await prisma.$transaction(async (tx) => {
-    const hashedPassword = await hashPassword(ownerPassword);
     const owner = await tx.participant.create({
       data: {
         nickname: ownerNickname,
-        password: hashedPassword
+        password: await hashPassword(ownerPassword),
       }
     });
 
@@ -207,7 +206,7 @@ const getGroupDetail = async (groupId) => {
   });
 
   if (!groupWithRelationData) {
-    const error = new Error('그룹ID를 찾을 수 없습니다');
+    const error = new Error('그룹을 찾을 수 없습니다');
     error.status = 404;
     throw error;
   }
@@ -218,6 +217,118 @@ const getGroupDetail = async (groupId) => {
   };
 
   return resultGroup;
+}
+
+const updateGroup = async (groupId, data) => {
+  const result = await prisma.$transaction(async (tx) => {
+    const group = await tx.group.findUnique({
+      where: { id: groupId },
+    });
+
+    if (!group) {
+      const error = new Error('그룹을 찾을 수 없습니다');
+      error.status = 404;
+      throw error;
+    }
+
+    const owner = await tx.participant.findUnique({
+      where: { id: group.ownerId },
+    });
+
+    if (!owner) {
+      const error = new Error('소유자를 찾을 수 없습니다');
+      error.status = 404;
+      throw error;
+    }
+
+    if (!await isPasswordValid(data.ownerPassword, owner.password)) {
+      const error = new Error('비밀번호가 일치하지 않습니다');
+      error.status = 401;
+      throw error;
+    }
+
+    const groupUpdateData = {
+      name: data.name,
+      description: data.description,
+      photoUrl: data.photoUrl,
+      goalRep: data.goalRep,
+      discordWebhookUrl: data.discordWebhookUrl,
+      discordInviteUrl: data.discordInviteUrl,
+    };
+
+    if (data.tags !== undefined) {
+      let tagRecords = [];
+      
+      if (data.tags && data.tags.length > 0) {
+        tagRecords = await Promise.all(
+          data.tags.map(tagName =>
+            tx.tag.upsert({
+              where: { name: tagName },
+              update: {},
+              create: { name: tagName }
+            })
+          )
+        );
+      }
+
+      // 태그 관계 초기화 후 연결
+      groupUpdateData.tags = {
+        set: [],
+        connect: tagRecords.map(tag => ({ id: tag.id }))
+      };
+    }
+
+    // 그룹 업데이트 적용
+    await tx.group.update({
+      where: { id: groupId },
+      data: groupUpdateData
+    });
+
+    // 고아 태그 삭제
+    if (data.tags !== undefined) {
+      await tx.tag.deleteMany({
+        where: {
+          groups: { none: {} }
+        }
+      });
+    }
+
+    const groupWithRelationData = await tx.group.findUnique({
+      where: { id: groupId },
+      include: {
+        tags: {
+          select: {
+            name: true
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            nickname: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        },
+        participants: {
+          select: {
+            id: true,
+            nickname: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        }
+      }
+    });
+
+    const resultGroup = {
+      ...groupWithRelationData,
+      tags: groupWithRelationData.tags.map(tag => tag.name)
+    };
+
+    return resultGroup;
+  });
+
+  return result;
 }
 
 const likeGroup = async(groupId) => {
@@ -250,6 +361,8 @@ export default {
   createGroup,
   getGroups,
   getGroupDetail,
+  updateGroup,
+  deleteGroup,
   likeGroup,
   unlikeGroup
 };

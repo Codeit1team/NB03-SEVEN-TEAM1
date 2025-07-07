@@ -1,19 +1,20 @@
 import { Router } from 'express';
-import { validateCreateGroup, validatePatchGroup } from '#middlewares/validateGroup.js';
+import validateGroup from '#middlewares/validateGroup.js';
 import { uploadImages } from '#middlewares/upload.js';
 import GroupController from '#controllers/groupController.js';
 
 const GroupRouter = Router();
 
 GroupRouter.route('/')
-  .post(uploadImages(), validateCreateGroup, GroupController.createGroup)
-  .get(GroupController.getGroups);
+  .post(uploadImages(), validateGroup.validateCreateGroup, GroupController.createGroup)
+  .get(validateGroup.validateGetGroups, GroupController.getGroups);
 
 GroupRouter.route('/:groupId')
-  .get(GroupController.getGroupDetail);
+  .get(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.getGroupDetail)
+  .patch(validateGroup.validateIdParam('groupId','그룹아이디'), validateGroup.validatePatchGroup, GroupController.updateGroup);
 
 GroupRouter.route('/like/:groupId')
-  .post(GroupController.likeGroup)
-  .delete(GroupController.unlikeGroup);
+  .post(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.likeGroup)
+  .delete(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.unlikeGroup);
 
 export default GroupRouter;

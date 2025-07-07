@@ -21,7 +21,6 @@ const getGroups = async (req, res, next) => {
   try {
     const { page, limit, order, orderBy, search } = req.query;
     const { data: groups, total } = await GroupService.getGroups(page, limit, order, orderBy, search);
-
     return res.json({ data: groups, total });
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹목록을 가져오는데 실패했습니다.'));
@@ -35,6 +34,16 @@ const getGroupDetail = async (req, res, next) => {
     return res.json(group);
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹 ID조회에 실패했습니다.'));
+  }
+}
+
+const updateGroup = async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId);
+    const group = await GroupService.updateGroup(groupId, req.body);
+    return res.json(group);
+  } catch (error) {
+    next(handleServerError(error, '서버 내부 오류로 그룹 업데이트에 실패했습니다.'));
   }
 }
 
@@ -63,6 +72,7 @@ export default {
   createGroup,
   getGroups,
   getGroupDetail,
+  updateGroup,
   likeGroup,
   unlikeGroup
 };
