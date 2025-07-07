@@ -206,7 +206,7 @@ const getGroupDetail = async (groupId) => {
   });
 
   if (!groupWithRelationData) {
-    const error = new Error('그룹을 찾을 수 없습니다');
+    const error = new Error('그룹을 찾을 수 없습니다.');
     error.status = 404;
     throw error;
   }
@@ -226,7 +226,7 @@ const updateGroup = async (groupId, data) => {
     });
 
     if (!group) {
-      const error = new Error('그룹을 찾을 수 없습니다');
+      const error = new Error('그룹을 찾을 수 없습니다.');
       error.status = 404;
       throw error;
     }
@@ -236,13 +236,13 @@ const updateGroup = async (groupId, data) => {
     });
 
     if (!owner) {
-      const error = new Error('소유자를 찾을 수 없습니다');
+      const error = new Error('소유자를 찾을 수 없습니다.');
       error.status = 404;
       throw error;
     }
 
     if (!await isPasswordValid(data.ownerPassword, owner.password)) {
-      const error = new Error('비밀번호가 일치하지 않습니다');
+      const error = new Error('비밀번호가 일치하지 않습니다.');
       error.status = 401;
       throw error;
     }
@@ -338,7 +338,7 @@ const deleteGroup = async (groupId, password) => {
     });
 
     if (!group) {
-      const error = new Error('그룹을 찾을 수 없습니다');
+      const error = new Error('그룹을 찾을 수 없습니다.');
       error.status = 404;
       throw error;
     }
@@ -348,13 +348,13 @@ const deleteGroup = async (groupId, password) => {
     });
 
     if (!owner) {
-      const error = new Error('소유자를 찾을 수 없습니다');
+      const error = new Error('소유자를 찾을 수 없습니다.');
       error.status = 404;
       throw error;
     }
 
     if (!await isPasswordValid(password, owner.password)) {
-      const error = new Error('비밀번호가 일치하지 않습니다');
+      const error = new Error('비밀번호가 일치하지 않습니다.');
       error.status = 401;
       throw error;
     }

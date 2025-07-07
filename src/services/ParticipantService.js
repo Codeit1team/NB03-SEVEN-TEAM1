@@ -89,7 +89,7 @@ const deleteParticipant = async (data) => {
       });
 
       if (participant.id === group.ownerId) {
-        const error = new Error('그룹 오너는 삭제할 수 없습니다.');
+        const error = new Error('그룹 소유자는 삭제할 수 없습니다.');
         error.statusCode = 400;
         throw error;
       }
