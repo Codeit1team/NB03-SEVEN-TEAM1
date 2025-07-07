@@ -1,20 +1,24 @@
 import express from 'express';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://seven.mimu.live:3000'
+];
+
+// 환경 변수 로딩
+dotenv.config();
 
 // 핸들러
 import errorHandler from '#middlewares/errorHandler.js';
 
-/* 라우터
-import rankingRoutes from '#routes/rankingRoutes.js';
-*/
+// 라우터
+import uploadRoutes from '#routes/uploadRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
 import participantRoutes from '#routes/participantRoutes.js'
-import tagRoutes from '#routes/tagRoutes.js'
-
-// 환경 변수 로딩
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -28,12 +32,24 @@ app.use(express.json());
 // form-urlencoded 바디 파싱
 app.use(express.urlencoded({ extended: true }));
 
+// cors
+app.use('/api/uploads', cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  //credentials: true
+}));
+
 // 정적 파일 서빙(매핑)
 // /uploads 경로로 들어오는 요청을 uploads/ 폴더 내부의 실제 파일로 매핑
-// 예) uploads/image.jpg → http://localhost:3000/uploads/image.jpg
-app.use('/uploads', express.static('uploads'));
-
-// /api 하위로 모든 경로 마운트. cors 생략 위함. fe-be
+// 예) uploads/image.jpg → http://localhost:3001/uploads/image.jpg
+app.use('/api/uploads', uploadRoutes);
+app.use('/api/uploads', express.static('uploads'));
 app.use('/api/participants', participantRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/records', recordRoutes);
