@@ -47,8 +47,9 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
       const base = path.basename(file.originalname, ext);
-      const unique = Date.now();
-      cb(null, `${base}-${unique}${ext}`);
+      const safeBase = Buffer.from(base, 'utf8').toString('hex'); // 안전한 파일명으로 변경
+      const uuidUnique = crypto.randomUUID();
+      cb(null, `${safeBase}-${uuidUnique}${ext}`);
     },
   });
 

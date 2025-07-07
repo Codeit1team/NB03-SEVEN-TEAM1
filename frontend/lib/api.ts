@@ -75,7 +75,7 @@ export const createGroup = async (group: GroupCreate): Promise<Group> => {
   }
 };
 
-export const updateGroup = async (
+export const updateGroup = async (//2025.07.07 13:07 기준 백엔드 미구현
   groupId: number,
   group: GroupUpdate
 ): Promise<Group> => {
@@ -89,32 +89,34 @@ export const updateGroup = async (
   }
 };
 
-export const deleteGroup = (groupId: number, data: GroupDelete) => {
+export const deleteGroup = (groupId: number, data: GroupDelete) => {//2025.07.07 13:07 기준 백엔드 미구현
   return axios.delete(`/groups/${groupId}`, { data }).catch((error) => {
     logError(error);
     throw error;
   });
 };
 
+// 기존: await axios.post(`/groups/${groupId}/participants`, data);
 export const joinGroup = async (
   groupId: number,
   data: GroupJoin
 ): Promise<void> => {
   try {
-    await axios.post(`/groups/${groupId}/participants`, data);
+    await axios.post(`/participants/${groupId}`, data);
   } catch (error) {
     logError(error);
     throw error;
   }
 };
 
+// 기존: await axios.delete(`/groups/${groupId}/participants`, { data });
 export const leaveGroup = async (
   groupId: number,
   data: GroupJoin
 ): Promise<void> => {
   try {
-    await axios.delete(`/groups/${groupId}/participants`, {
-      data,
+    await axios.delete(`/participants/${groupId}`, {
+      data
     });
   } catch (error) {
     logError(error);
@@ -122,18 +124,20 @@ export const leaveGroup = async (
   }
 };
 
+// 기존: await axios.post(`/groups/${groupId}/likes`);
 export const likeGroup = async (groupId: number): Promise<void> => {
   try {
-    await axios.post(`/groups/${groupId}/likes`);
+    await axios.post(`/groups/like/${groupId}`);
   } catch (error) {
     logError(error);
     throw error;
   }
 };
 
+// 기존: await axios.delete(`/groups/${groupId}/likes`);
 export const unlikeGroup = async (groupId: number): Promise<void> => {
   try {
-    await axios.delete(`/groups/${groupId}/likes`);
+    await axios.delete(`/groups/like/${groupId}`);
   } catch (error) {
     logError(error);
     throw error;
@@ -148,12 +152,13 @@ export const DEFAULT_RECORDS_PAGINATION_QUERY: PaginationQuery = {
   search: '',
 };
 
+// 기존: await axios.get(`/groups/${groupId}/records`, { params });
 export const getRecords = async (
   groupId: number,
   query: PaginationQuery
 ): Promise<PaginationResponse<Record>> => {
   try {
-    const response = await axios.get(`/groups/${groupId}/records`, {
+    const response = await axios.get(`/records/${groupId}`, {
       params: {
         ...DEFAULT_RECORDS_PAGINATION_QUERY,
         ...query,
@@ -167,12 +172,13 @@ export const getRecords = async (
   }
 };
 
+// 기존: await axios.post(`/groups/${groupId}/records`, record);
 export const createRecord = async (
   groupId: number,
   record: RecordCreate
 ): Promise<Record> => {
   try {
-    const response = await axios.post(`/groups/${groupId}/records`, record);
+    const response = await axios.post(`/records/${groupId}`, record);
     const createdRecord = response.data;
     return createdRecord;
   } catch (error) {
@@ -181,12 +187,13 @@ export const createRecord = async (
   }
 };
 
+// 기존: await axios.get(`/groups/${groupId}/rank`, { params: { duration } });
 export const getRanks = async (
   groupId: number,
   duration: RankDuration
 ): Promise<Rank[]> => {
   try {
-    const response = await axios.get(`/groups/${groupId}/rank`, {
+    const response = await axios.get(`/records/ranking/${groupId}`, {
       params: { duration },
     });
     const ranks: Rank[] = response.data;
@@ -197,15 +204,27 @@ export const getRanks = async (
   }
 };
 
+// 기존 프론트에는 기록 상세 조회가 구현되어 있지 않음.
+// 구현된다면 아래와 같은 형태로 처리될 것.
+/* export const getRecordDetail = async (recordId: number) => {
+  const response = await axios.get(`/records/detail/${recordId}`);
+  return response.data;
+}; */
+
 export const uploadImage = async (
-  files: File[]
+  files: File[],
+  isSingle: boolean = false
 ): Promise<{
   urls: string[];
 }> => {
   try {
     const formData = new FormData();
-    files.forEach((file) => formData.append('files', file));
-    const response = await axios.postForm('/images', formData);
+    if (isSingle) {
+      formData.append('photoUrl', files[0]);
+    } else {
+      files.forEach((file) => formData.append('photos', file));
+    }
+    const response = await axios.postForm('/uploads', formData);
     const { urls } = response.data;
     return { urls };
   } catch (error) {
