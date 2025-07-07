@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import RecordService from "#services/RecordService.js";
-import sendDiscordWebhook from "#utils/sendDiscordWebhook.js";
+import { sendDiscordWebhook } from "#utils/sendDiscordWebhook.js";
 import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 import { grantRecord100Badge } from '#utils/grantGroupBadge.js';
 import handleServerError from '#utils/handleServerError.js';

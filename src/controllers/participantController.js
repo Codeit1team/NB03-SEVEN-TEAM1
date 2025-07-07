@@ -1,5 +1,6 @@
 import ParticipantService from "#services/ParticipantService.js";
-import handleServerError from '#utils/handleServerError.js';
+import handleServerError from "#utils/handleServerError.js";
+
 
 const createParticipant = async (req, res, next) => {
   const groupId = req.params.groupId;
@@ -8,6 +9,7 @@ const createParticipant = async (req, res, next) => {
       ...req.body,
       groupId
     };
+
     const participant = await ParticipantService.createParticipant(participantData);
     return res.status(201).json(participant);
   } catch (error) {
@@ -22,12 +24,12 @@ const deleteParticipant = async (req, res, next) => {
       ...req.body,
       groupId
     };
-    
+
     await ParticipantService.deleteParticipant(participantData);
     return res.status(204).send();
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹 탈퇴에 실패했습니다.'));
   }
-}
+};
 
 export default { createParticipant, deleteParticipant };
