@@ -26,7 +26,7 @@ const validateTagSearch = async (req, res, next) => {
   const { tagId } = req.params
 
   if (!tagId || isNaN(Number(tagId))) {
-    const error = new Error('태그가 존재하지 않습니다.')
+    const error = new Error('태그 아이디가 존재하지 않습니다.')
     error.status = 400
     return next(error)
   }
