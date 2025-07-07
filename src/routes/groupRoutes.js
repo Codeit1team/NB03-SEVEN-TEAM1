@@ -11,7 +11,8 @@ GroupRouter.route('/')
 
 GroupRouter.route('/:groupId')
   .get(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.getGroupDetail)
-  .patch(validateGroup.validateIdParam('groupId','그룹아이디'), validateGroup.validatePatchGroup, GroupController.updateGroup);
+  .patch(validateGroup.validateIdParam('groupId','그룹아이디'), validateGroup.validatePatchGroup, GroupController.updateGroup)
+  .delete(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.deleteGroup);
 
 GroupRouter.route('/like/:groupId')
   .post(validateGroup.validateIdParam('groupId','그룹아이디'), GroupController.likeGroup)

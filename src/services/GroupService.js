@@ -331,6 +331,46 @@ const updateGroup = async (groupId, data) => {
   return result;
 }
 
+const deleteGroup = async (groupId, password) => {
+  await prisma.$transaction(async (tx) => {
+    const group = await tx.group.findUnique({
+      where: { id: groupId },
+    });
+
+    if (!group) {
+      const error = new Error('그룹을 찾을 수 없습니다');
+      error.status = 404;
+      throw error;
+    }
+
+    const owner = await tx.participant.findUnique({
+      where: { id: group.ownerId },
+    });
+
+    if (!owner) {
+      const error = new Error('소유자를 찾을 수 없습니다');
+      error.status = 404;
+      throw error;
+    }
+
+    if (!await isPasswordValid(password, owner.password)) {
+      const error = new Error('비밀번호가 일치하지 않습니다');
+      error.status = 401;
+      throw error;
+    }
+
+    await tx.group.delete({
+      where: { id: groupId },
+    });
+
+    await tx.tag.deleteMany({
+      where: {
+        groups: { none: {} }
+      }
+    });
+  });
+}
+
 const likeGroup = async(groupId) => {
   await prisma.group.update({
     where: {

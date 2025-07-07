@@ -47,6 +47,16 @@ const updateGroup = async (req, res, next) => {
   }
 }
 
+const deleteGroup = async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId);
+    await GroupService.deleteGroup(groupId, req.body.ownerPassword);
+    return res.sendStatus(204);
+  } catch (error) {
+    next(handleServerError(error, '서버 내부 오류로 그룹 삭제에 실패했습니다.'));
+  }
+}
+
 const likeGroup = async (req, res, next) => {
   try {
     const groupId = parseInt(req.params.groupId);
@@ -73,6 +83,7 @@ export default {
   getGroups,
   getGroupDetail,
   updateGroup,
+  deleteGroup,
   likeGroup,
   unlikeGroup
 };
