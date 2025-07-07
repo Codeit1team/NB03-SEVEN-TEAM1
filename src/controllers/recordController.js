@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import RecordService from "#services/RecordService.js";
-import sendDiscordWebhook from "#utils/sendDiscordWebhook.js";
+import { sendDiscordWebhook } from "#utils/sendDiscordWebhook.js";
 import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 import { grantRecord100Badge } from '#utils/grantGroupBadge.js';
 import handleServerError from '#utils/handleServerError.js';
@@ -47,7 +47,7 @@ const getRecordDetail = async (req, res, next) => {
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 기록 조회에 실패했습니다.'));
   }
-}
+};
 
 const getRanks = async (req, res, next) => {
   try {
@@ -58,7 +58,7 @@ const getRanks = async (req, res, next) => {
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹의 랭킹을 가져오는 데 실패했습니다'));
   }
-}
+};
 
 export default {
   createRecord,

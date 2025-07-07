@@ -45,7 +45,7 @@ export default (err, req, res, next) => {
   }
 
   // 기타 에러
-  const status = err.statusCode || 500;
+  const status = err.status || 500;
   const message = err.message || 'Internal Server Error';
 
   res.status(status).json({
