@@ -21,7 +21,6 @@ const getGroups = async (req, res, next) => {
   try {
     const { page, limit, order, orderBy, search } = req.query;
     const { data: groups, total } = await GroupService.getGroups(page, limit, order, orderBy, search);
-
     return res.json({ data: groups, total });
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹목록을 가져오는데 실패했습니다.'));
@@ -30,7 +29,7 @@ const getGroups = async (req, res, next) => {
 
 const getGroupDetail = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const group = await GroupService.getGroupDetail(groupId);
     return res.json(group);
   } catch (error) {
@@ -38,9 +37,29 @@ const getGroupDetail = async (req, res, next) => {
   }
 }
 
+const updateGroup = async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const group = await GroupService.updateGroup(groupId, req.body);
+    return res.json(group);
+  } catch (error) {
+    next(handleServerError(error, '서버 내부 오류로 그룹 업데이트에 실패했습니다.'));
+  }
+}
+
+const deleteGroup = async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    await GroupService.deleteGroup(groupId, req.body.ownerPassword);
+    return res.sendStatus(204);
+  } catch (error) {
+    next(handleServerError(error, '서버 내부 오류로 그룹 삭제에 실패했습니다.'));
+  }
+}
+
 const likeGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     await GroupService.likeGroup(groupId);
     await grantLike100Badge(groupId);
     return res.sendStatus(204);
@@ -51,7 +70,7 @@ const likeGroup = async (req, res, next) => {
 
 const unlikeGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     await GroupService.unlikeGroup(groupId);
     return res.sendStatus(204);
   } catch (error) {
@@ -63,6 +82,8 @@ export default {
   createGroup,
   getGroups,
   getGroupDetail,
+  updateGroup,
+  deleteGroup,
   likeGroup,
   unlikeGroup
 };
