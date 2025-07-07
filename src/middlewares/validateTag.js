@@ -1,22 +1,27 @@
 import * as struct from 'superstruct'
 
 const validateTagList = async (req, res, next) => {
-  if (req.body.time && typeof req.body.time === 'string') {
-    req.body.time = parseInt(req.body.time)
+  if (typeof req.body.search !== 'string') {
+    const error = new Error('태그 리스트를 불러올 수 없습니다.')
+    error.status = 404
+    throw error;
   }
 
-  if (req.body.distance && typeof req.body.distance === 'string') {
-    req.body.distance = Number(req.body.distance)
+  if (!['asc', 'desc'].includes(order)) {
+    order = 'desc'
+  };
+
+  const searchTrimmed = search.trim()
+
+  if (searchTrimmed) {
+    where = {
+      name: {
+        contains: searchTrimmed,
+        mode: 'insensitive',
+      }
+    }
   }
 
-  const [error] = struct.validate(req.body, createRecord);
-
-  if (error) {
-    await deleteUploadedFiles(req.files.photos);
-    const field = error.path?.[0];
-    const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
-    return res.status(400).json({ message });
-  }
   next();
 };
 
