@@ -38,16 +38,7 @@ const getTagList = async ({ search = '', page = 1, limit = 10, order = 'desc', o
 //     const { tagId } = req.query
 
 //     const tag = await prisma.tag.findUnique({
-//       where: {
-//         tags: {
-//           some: {
-//             name: {
-//               equals: { id: tagId },
-//               mode: 'insensitive'
-//             }
-//           }
-//         }
-//       },
+//       where: { id: Number(tagId) },
 //       select: {
 //         name: true,
 //         createdAt: true,
@@ -57,7 +48,7 @@ const getTagList = async ({ search = '', page = 1, limit = 10, order = 'desc', o
 
 //     res.status(200).json(tag)
 //   } catch (error) {
-//     console.error('searchGroupsByTag 오류:', error.message)
+//     console.error('getTag 오류:', error.message)
 //     return res.status(500).json({ message: '서버 오류가 발생했습니다.' })
 //   }
 // }
