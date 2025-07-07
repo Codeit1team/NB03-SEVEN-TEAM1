@@ -9,7 +9,7 @@ const createGroup = async (req, res, next) => {
     if (req.files?.photoUrl?.[0]) {
       req.body.photoUrl = `http://localhost:${PORT}/uploads/${req.files.photoUrl[0].filename}`;
     }
-    
+
     const group = await GroupService.createGroup(req.body);
     return res.status(201).json(group);
   } catch (error) {
