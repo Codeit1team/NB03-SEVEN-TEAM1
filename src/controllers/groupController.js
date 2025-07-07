@@ -29,7 +29,7 @@ const getGroups = async (req, res, next) => {
 
 const getGroupDetail = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const group = await GroupService.getGroupDetail(groupId);
     return res.json(group);
   } catch (error) {
@@ -39,7 +39,7 @@ const getGroupDetail = async (req, res, next) => {
 
 const updateGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     const group = await GroupService.updateGroup(groupId, req.body);
     return res.json(group);
   } catch (error) {
@@ -49,7 +49,7 @@ const updateGroup = async (req, res, next) => {
 
 const deleteGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     await GroupService.deleteGroup(groupId, req.body.ownerPassword);
     return res.sendStatus(204);
   } catch (error) {
@@ -59,7 +59,7 @@ const deleteGroup = async (req, res, next) => {
 
 const likeGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     await GroupService.likeGroup(groupId);
     await grantLike100Badge(groupId);
     return res.sendStatus(204);
@@ -70,7 +70,7 @@ const likeGroup = async (req, res, next) => {
 
 const unlikeGroup = async (req, res, next) => {
   try {
-    const groupId = parseInt(req.params.groupId);
+    const groupId = req.params.groupId;
     await GroupService.unlikeGroup(groupId);
     return res.sendStatus(204);
   } catch (error) {
