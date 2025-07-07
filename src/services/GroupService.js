@@ -17,10 +17,11 @@ const createGroup = async (data) => {
   } = data;
 
   const result = await prisma.$transaction(async (tx) => {
+    const hashedPassword = await hashPassword(ownerPassword);
     const owner = await tx.participant.create({
       data: {
         nickname: ownerNickname,
-        password: await hashPassword(ownerPassword),
+        password: hashedPassword,
       }
     });
 
