@@ -207,7 +207,7 @@ const getGroupDetail = async (groupId) => {
   });
 
   if (!groupWithRelationData) {
-    const error = new Error('Group not found');
+    const error = new Error('그룹ID를 찾을 수 없습니다');
     error.status = 404;
     throw error;
   }
