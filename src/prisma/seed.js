@@ -210,7 +210,7 @@ const main = async () => {
   await prisma.record.createMany({
     data: [
       {
-        exerciseType: 'RUN',
+        exerciseType: 'run',
         description: '아침 러닝 5km',
         time: 1800000,
         distance: 5.0,
@@ -218,7 +218,7 @@ const main = async () => {
         authorId: user1.id,
       },
       {
-        exerciseType: 'BIKE',
+        exerciseType: 'bike',
         description: '자전거 10km',
         time: 2700000,
         distance: 10.0,
@@ -226,7 +226,7 @@ const main = async () => {
         authorId: user2.id,
       },
       {
-        exerciseType: 'SWIM',
+        exerciseType: 'swim',
         description: '수영 5km',
         time: 1800000,
         distance: 5.0,
@@ -234,7 +234,7 @@ const main = async () => {
         authorId: user3.id,
       },
       {
-        exerciseType: 'RUN',
+        exerciseType: 'run',
         description: '아침 러닝 5km(2)',
         time: 1800000,
         distance: 5.0,
@@ -242,7 +242,7 @@ const main = async () => {
         authorId: user4.id,
       },
       {
-        exerciseType: 'RUN',
+        exerciseType: 'run',
         description: '아침 러닝 5km(3)',
         time: 1800000,
         distance: 5.0,
@@ -250,7 +250,7 @@ const main = async () => {
         authorId: user5.id,
       },
       {
-        exerciseType: 'BIKE',
+        exerciseType: 'bike',
         description: '라이딩 기록',
         time: 2100000,
         distance: 7.0,
