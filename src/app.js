@@ -15,6 +15,7 @@ dotenv.config();
 import errorHandler from '#middlewares/errorHandler.js';
 
 // 라우터
+import uploadRoutes from '#routes/uploadRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
 import participantRoutes from '#routes/participantRoutes.js'
@@ -47,8 +48,6 @@ app.use('/api/uploads', cors({
 // 정적 파일 서빙(매핑)
 // /uploads 경로로 들어오는 요청을 uploads/ 폴더 내부의 실제 파일로 매핑
 // 예) uploads/image.jpg → http://localhost:3001/uploads/image.jpg
-import uploadRoutes from './routes/uploadRoutes.js';
-
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/uploads', express.static('uploads'));
 app.use('/api/participants', participantRoutes);
