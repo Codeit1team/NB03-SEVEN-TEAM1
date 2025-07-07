@@ -18,7 +18,8 @@ import errorHandler from '#middlewares/errorHandler.js';
 import uploadRoutes from '#routes/uploadRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
-import participantRoutes from '#routes/participantRoutes.js'
+import participantRoutes from '#routes/participantRoutes.js';
+import tagRoutes from '#routes/tagRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
