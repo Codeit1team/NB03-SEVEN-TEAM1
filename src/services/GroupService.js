@@ -159,7 +159,7 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
             createdAt: true,
             updatedAt: true
           }
-        }  
+        }
       }
     }),
     prisma.group.count({
