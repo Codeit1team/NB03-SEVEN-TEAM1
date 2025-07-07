@@ -17,9 +17,7 @@ export const createGroup = struct.object({
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
   discordWebhookUrl: struct.optional(Url),
   discordInviteUrl: struct.optional(Url),
-
   tags: struct.optional(struct.array(struct.size(struct.string(), 1, 20))),
-
   ownerNickname: struct.size(struct.string(), 1, 20),
   ownerPassword: struct.size(struct.string(), 4, 20),
 });
@@ -75,7 +73,7 @@ export const validatePatchGroup = (req, res, next) => {
 };
 
 const validateGetGroups = (req, res, next) => {
-  const { page = 1, limit = 10, order = 'createdAt', orderBy = 'desc', duration = 'weekly' } = req.query;
+  const { page = 1, limit = 10, order = 'desc', orderBy = 'createAt' } = req.query;
 
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
@@ -88,21 +86,33 @@ const validateGetGroups = (req, res, next) => {
     return res.status(400).json({ error: 'limit은 1~50 사이 숫자여야 합니다.' });
   }
 
-  const allowedOrderFields = ['createdAt', 'time'];
+  const allowedOrderFields = ['asc', 'desc'];
   if (!allowedOrderFields.includes(order)) {
-    return res.status(400).json({ error: `order는 ${allowedOrderFields.join(', ')} 중 하나여야 합니다.` });
+    return res.status(400).json({ error: 'order는 asc 또는 desc만 가능합니다.' });
   }
 
-  const allowedOrderBy = ['asc', 'desc'];
+  const allowedOrderBy = ['likeCount', 'participantCount', 'createdAt'];
   if (!allowedOrderBy.includes(orderBy)) {
-    return res.status(400).json({ error: 'orderby는 asc 또는 desc만 가능합니다.' });
+    return res.status(400).json({ error: `orderBy는 ${allowedOrderFields.join(', ')} 중 하나여야 합니다.` });
   }
 
   next();
 };
 
+const validateIdParam = (paramName, label = paramName) => {
+  return (req, res, next) => {
+    const id = parseInt(req.params[paramName]);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: `${label}가 숫자가 아닙니다.` });
+    }
+    req.params[paramName] = id; 
+    next();
+  };
+};
+
 export default {
   validateCreateGroup,
   validatePatchGroup,
-  validateGetGroups
+  validateGetGroups,
+  validateIdParam
 }
