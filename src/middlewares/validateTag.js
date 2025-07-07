@@ -6,7 +6,7 @@ const validateTagList = async (req, res, next) => {
     } = req.params;
 
     if (typeof search !== 'string') {
-      const error = new Error('태그 리스트를 불러올 수 없습니다.')
+      const error = new Error('검색어가 올바르지 않습니다.')
       error.status = 400
       return next(error)
     }
