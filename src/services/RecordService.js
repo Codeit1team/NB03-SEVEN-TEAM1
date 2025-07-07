@@ -40,6 +40,12 @@ const createRecord = async (groupId, data) => {
       },
     });
 
+    if (!record) {
+  const error = new Error("기록 생성 하는데 실패했습니다.");
+  error.status = 404;
+  throw error;
+}
+
     return record;
   });
 };
@@ -102,6 +108,12 @@ const getRecordDetail = async (id) => {
       }
     }
   })
+
+  if (!rec) {
+  const error = new Error("기록이 존재하지 않습니다.");
+  error.status = 404;
+  throw error;
+}
 
   return {
     id: rec.id,

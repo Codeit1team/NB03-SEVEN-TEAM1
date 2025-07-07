@@ -28,6 +28,14 @@ export default (err, req, res, next) => {
         ...(process.env.NODE_ENV === 'development' && { target: err.meta?.target }),
       });
     }
+    //P2025 에러 해당하는 ID값이 없을 떄 발생
+    if (err.code === 'P2025') {
+      return res.status(404).json({
+        success: false,
+        message: '해당하는 ID값이 없습니다.',
+        ...(process.env.NODE_ENV === 'development' && { target: err.meta?.target }),
+      });
+    }
     // Prisma 기타 에러
     return res.status(400).json({
       success: false,
