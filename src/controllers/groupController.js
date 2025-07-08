@@ -2,12 +2,13 @@ import GroupService from "#services/GroupService.js";
 import { grantLike100Badge } from "#utils/grantGroupBadge.js";
 import handleServerError from "#utils/handleServerError.js";
 
-const PORT = process.env.PORT || 3001
-
+// 그룹 생성
 const createGroup = async (req, res, next) => {
   try {
+    const BASE_URL = req.app.locals.BASE_URL;
+
     if (req.files?.photoUrl?.[0]) {
-      req.body.photoUrl = `http://localhost:${PORT}/uploads/${req.files.photoUrl[0].filename}`;
+      req.body.photoUrl = `${BASE_URL}/api/uploads/${req.files.photoUrl[0].filename}`;
     }
 
     const group = await GroupService.createGroup(req.body);
@@ -15,7 +16,7 @@ const createGroup = async (req, res, next) => {
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 그룹 생성에 실패했습니다.'));
   }
-};
+}
 
 const getGroups = async (req, res, next) => {
   try {
@@ -23,7 +24,7 @@ const getGroups = async (req, res, next) => {
     const { data: groups, total } = await GroupService.getGroups(page, limit, order, orderBy, search);
     return res.json({ data: groups, total });
   } catch (error) {
-    next(handleServerError(error, '서버 내부 오류로 그룹목록을 가져오는데 실패했습니다.'));
+    next(handleServerError(error, '서버 내부 오류로 그룹 목록을 가져오는데 실패했습니다.'));
   }
 }
 
@@ -33,7 +34,7 @@ const getGroupDetail = async (req, res, next) => {
     const group = await GroupService.getGroupDetail(groupId);
     return res.json(group);
   } catch (error) {
-    next(handleServerError(error, '서버 내부 오류로 그룹 ID조회에 실패했습니다.'));
+    next(handleServerError(error, '서버 내부 오류로 그룹 ID 조회에 실패했습니다.'));
   }
 }
 
@@ -76,9 +77,9 @@ const unlikeGroup = async (req, res, next) => {
   } catch (error) {
     next(handleServerError(error, '서버 내부 오류로 좋아요 취소에 실패했습니다.'));
   }
-}
+};
 
-export default { 
+export default {
   createGroup,
   getGroups,
   getGroupDetail,
@@ -86,4 +87,4 @@ export default {
   deleteGroup,
   likeGroup,
   unlikeGroup
-};
+}

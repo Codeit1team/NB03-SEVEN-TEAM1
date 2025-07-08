@@ -17,9 +17,9 @@ const prisma = new PrismaClient();
 const getGroupWebhookUrl = async (groupId) => {
   const group = await prisma.group.findUnique({
     where: { id: groupId },
-    select: { webhookUrl: true },
+    select: { discordWebhookUrl: true },
   });
-  return group?.webhookUrl;
+  return group?.discordWebhookUrl;
 };
 
 /**

@@ -24,9 +24,9 @@ const nextConfig: NextConfig = {
         hostname: 'seven.mimu.live',
       },
       {
-      protocol: 'https',
-      hostname: 'example.com',
-    },
+        protocol: 'https',
+        hostname: 'example.com',
+      },
     ],
   },
 };
