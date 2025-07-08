@@ -22,6 +22,8 @@ const getTagList = async ({ search = '', page = 1, limit = 10, order = 'desc', o
       select: {
         id: true,
         name: true,
+        createdAt: true,
+        updatedAt: true,
       },
       orderBy: {
         [orderBy]: order,
@@ -40,6 +42,7 @@ const getTag = async (tagId) => {
   const tag = await prisma.tag.findUnique({
     where: { id: tagId },
     select: {
+      id: true,
       name: true,
       createdAt: true,
       updatedAt: true,
