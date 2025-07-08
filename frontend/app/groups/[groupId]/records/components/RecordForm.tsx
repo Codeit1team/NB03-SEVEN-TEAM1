@@ -16,8 +16,11 @@ import Card from '@/lib/components/Card';
 import ImageInput from '@/lib/components/ImageInput';
 import { createRecordAction } from '../actions';
 
-
 const cx = classNames.bind(styles);
+
+// 이미지 URL 인코딩 함수 추가
+const encodeImageUrl = (url?: string) =>
+  url ? `/_next/image?url=${encodeURIComponent(url)}&w=384&q=75` : '';
 
 const defaultValues: RecordCreate = {
   exerciseType: ExerciseType.RUN,
@@ -47,10 +50,10 @@ const RecordForm = ({
     });
 
   const submit = async (data: RecordCreate) => {
-    const reuslt = await createRecordAction(groupId, data);
-    if (reuslt.status !== 200) {
+    const result = await createRecordAction(groupId, data);
+    if (result.status !== 200) {
       setError('root', {
-        message: reuslt.error.message,
+        message: result.error.message,
       });
       return;
     }
@@ -84,9 +87,9 @@ const RecordForm = ({
           <ImageInput
             className={cx('photosInput')}
             maxCount={3}
-            values={watch('photos')}
+            values={watch('photos')?.map(encodeImageUrl) ?? []} // 인코딩 적용
             onChange={(urls) => {
-              setValue('photos', urls);
+              setValue('photos', urls); // 저장은 원본 URL로
             }}
           />
         </div>

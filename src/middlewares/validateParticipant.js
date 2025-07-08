@@ -1,7 +1,10 @@
 import * as struct from 'superstruct'
 
 export const createParticipant = struct.object({
-  nickname: struct.size(struct.string(), 1, 20),
+  nickname: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
+    const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
+    return !specialCharRegex.test(value);
+  }),
   password: struct.size(struct.string(), 4, 20),
 });
 

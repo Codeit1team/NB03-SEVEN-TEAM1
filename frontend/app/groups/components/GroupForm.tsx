@@ -15,6 +15,10 @@ import ImageInput from '@/lib/components/ImageInput';
 import { createGroupAction, updateGroupAction } from '../actions';
 import Form from '@/lib/components/Form';
 
+// 인코딩 추가
+const encodeImageUrl = (url?: string) =>
+  url ? `/_next/image?url=${encodeURIComponent(url)}&w=384&q=75` : '';
+
 const cx = classNames.bind(styles);
 
 const GroupPreview = ({ values }: { values: GroupCreate | GroupUpdate }) => {
@@ -122,7 +126,7 @@ const GroupForm = ({
             </Label>
             <ImageInput
               className={cx('thumbnailInput')}
-              values={values.photoUrl ? [values.photoUrl] : []}
+              values={values.photoUrl ? [encodeImageUrl(values.photoUrl)] : []} // 인코딩 추가
               onChange={(values: string[]) => {
                 setValue('photoUrl', values[0]);
               }}
