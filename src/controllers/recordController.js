@@ -1,11 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import RecordService from "#services/RecordService.js";
-import { sendDiscordWebhook } from "#utils/sendDiscordWebhook.js";
 import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 import { grantRecord100Badge } from '#utils/grantGroupBadge.js';
 import handleServerError from '#utils/handleServerError.js';
-
-const prisma = new PrismaClient();
+import {getGroupWebhookUrl, sendDiscordWebhook } from "#utils/sendDiscordWebhook.js";
 
 const createRecord = async (req, res, next) => {
   try {
@@ -22,13 +19,10 @@ const createRecord = async (req, res, next) => {
 
     const record = await RecordService.createRecord(groupId, req.body);
     await grantRecord100Badge(groupId)
-    // const group = await prisma.group.findUnique({
-    //   where: { id: groupId },
-    //   select: { webhookUrl: true },
-    // });
-    // if (group.webhookUrl) {
-    //   await sendDiscordWebhook(group.webhookUrl, `${req.body.authorNickname} 운동기록 등록이 완료되었습니다`);
-    // }
+  //   const webhookUrl = getGroupWebhookUrl(groupId)
+  //   if (webhookUrl) {
+  //   await sendDiscordWebhook(webhookUrl,`📢 ${req.body.authorNickname} 님이 운동을 기록했습니다!`)
+  // }
     return res.status(201).json(record);
   } catch (error) {
     if (req.files && req.files.photos) {
