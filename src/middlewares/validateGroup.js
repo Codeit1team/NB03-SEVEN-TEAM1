@@ -12,7 +12,6 @@ const Url = struct.refine(struct.string(), 'URL', value => {
 
 export const createGroup = struct.object({
   name: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
-    // 특수문자 방지 (한글, 영문, 숫자, 공백만 허용)
     const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
     return !specialCharRegex.test(value);
   }),
@@ -22,7 +21,10 @@ export const createGroup = struct.object({
   discordWebhookUrl: struct.optional(Url),
   discordInviteUrl: struct.optional(Url),
   tags: struct.optional(struct.array(struct.size(struct.string(), 1, 20))),
-  ownerNickname: struct.size(struct.string(), 1, 20),
+  ownerNickname: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
+    const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
+    return !specialCharRegex.test(value);
+  }),
   ownerPassword: struct.size(struct.string(), 4, 20),
 });
 

@@ -10,7 +10,10 @@ const createRecord = struct.object({
   distance: struct.refine(struct.number(), 'distanceLimit', (value) => {
     return value > 0 && value <= 1000
   }),
-  authorNickname: struct.size(struct.string(), 1, 20),
+  authorNickname: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
+    const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
+    return !specialCharRegex.test(value);
+  }),
   authorPassword: struct.size(struct.string(), 4, 20),
   photos: struct.optional(struct.array(struct.string()))
 });
