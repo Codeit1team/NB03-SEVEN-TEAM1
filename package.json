@@ -14,19 +14,23 @@
     "dev:generate": "prisma generate --schema=src/prisma/schema.prisma",
     "dev:reset": "prisma migrate reset --schema=src/prisma/schema.prisma",
     "seed": "node src/prisma/seed.js",
-    "dev:be": "nodemon src/app.js",
-    "dev:fe": "npm run dev --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "start": "npm run start --prefix frontend"
+    "dev:be": "cross-env NODE_ENV=development nodemon src/app.js",
+    "dev:fe": "cross-env NODE_ENV=development npm run dev --prefix frontend",
+
+    "start:be": "cross-env NODE_ENV=production pm2 start src/app.js --name backend ",
+    "start:fe": "cross-env NODE_ENV=production pm2 start npm --name frontend -- run start --prefix frontend",
+    "start": "npm run start:be && npm run start:fe"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
     "multer": "^2.0.1",
     "pg": "^8.16.2",
