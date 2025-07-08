@@ -11,7 +11,11 @@ const Url = struct.refine(struct.string(), 'URL', value => {
 })
 
 export const createGroup = struct.object({
-  name: struct.size(struct.string(), 1, 20),
+  name: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
+    // 특수문자 방지 (한글, 영문, 숫자, 공백만 허용)
+    const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
+    return !specialCharRegex.test(value);
+  }),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
   photoUrl: struct.optional(Url),
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
@@ -64,6 +68,7 @@ export const validateCreateGroup = async (req, res, next) => {
 export const validatePatchGroup = (req, res, next) => {
   const masked = struct.mask(req.body, patchGroup);
   const [error] = struct.validate(masked, patchGroup);
+  
   if (error) {
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
