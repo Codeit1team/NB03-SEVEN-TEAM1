@@ -14,9 +14,9 @@ enum BadgeType {
 }
 
 enum ExerciseType {
-  RUN
-  BIKE
-  SWIM
+  run
+  bike
+  swim
 }
 
 model Participant {

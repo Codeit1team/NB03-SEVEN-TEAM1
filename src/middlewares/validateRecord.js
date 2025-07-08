@@ -2,7 +2,7 @@ import * as struct from 'superstruct'
 import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 
 const createRecord = struct.object({
-  exerciseType: struct.enums(['RUN', 'BIKE', 'SWIM']),
+  exerciseType: struct.enums(['run', 'bike', 'swim']),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
   time: struct.refine(struct.integer(), 'timeLimit', (value) => {
     return value > 0 && value <= (3600 * 1000 * 10)
@@ -11,7 +11,8 @@ const createRecord = struct.object({
     return value > 0 && value <= 1000
   }),
   authorNickname: struct.size(struct.string(), 1, 20),
-  authorPassword: struct.size(struct.string(), 4, 20)
+  authorPassword: struct.size(struct.string(), 4, 20),
+  photos: struct.optional(struct.array(struct.string()))
 });
 
 const validateCreateRecord = async (req, res, next) => {
@@ -26,7 +27,7 @@ const validateCreateRecord = async (req, res, next) => {
   const [error] = struct.validate(req.body, createRecord);
 
   if (error) {
-    await deleteUploadedFiles(req.files.photos);
+    await deleteUploadedFiles(req.files?.photos);
     const field = error.path?.[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
