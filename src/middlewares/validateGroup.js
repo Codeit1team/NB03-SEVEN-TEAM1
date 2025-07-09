@@ -25,10 +25,14 @@ export const createGroup = struct.object({
     return !specialCharRegex.test(value);
   }),
   ownerPassword: struct.size(struct.string(), 4, 20),
-  ownerId:struct.optional(struct.integer())
 });
 
-export const patchGroup = struct.partial(createGroup);
+export const patchGroup = struct.intersection([
+  struct.partial(createGroup),
+  struct.object({
+    ownerId: struct.integer(),
+  }),
+]);
 
 export const validateCreateGroup = async (req, res, next) => {
   try {
@@ -42,29 +46,29 @@ export const validateCreateGroup = async (req, res, next) => {
     }
 
     const [error] = struct.validate(req.body, createGroup);
-  
+
     if (error) {
       const field = error.path[0];
       const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
       throw new Error(message);
     }
-    
+
     next();
   } catch (err) {
     const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;
     const message = statusCode === 500 ? '서버 오류가 발생했습니다' : err.message;
-    
+
     if (statusCode === 500) {
       console.error('validateCreateGroup 오류:', err);
     }
-    
+
     return res.status(statusCode).json({ message });
   }
 };
 
 export const validatePatchGroup = (req, res, next) => {
   const [error] = struct.validate(req.body, patchGroup);
-  
+
   if (error) {
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
@@ -106,7 +110,7 @@ const validateIdParam = (paramName, label = paramName) => {
     if (isNaN(id)) {
       return res.status(400).json({ message: `${label}가 숫자가 아닙니다.` });
     }
-    req.params[paramName] = id; 
+    req.params[paramName] = id;
     next();
   };
 };
