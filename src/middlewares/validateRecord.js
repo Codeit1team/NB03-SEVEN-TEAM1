@@ -9,6 +9,16 @@ const Url = struct.refine(struct.string(), 'URL', value => {
   }
 })
 
+const VALIDATION_RECORD_ERRORS = {
+  exerciseType: '운동 타입이 올바르지 않습니다',
+  description: '기록 설명은 500자 이하여야 합니다',
+  time: '시간이 잘못 등록되었습니다',
+  distance: '거리가 잘못 등록되었습니다',
+  authorNickname: '닉네임이 너무 길거나 올바르지 않습니다',
+  authorPassword: '비밀번호는 4자 이상 20자 이하로 입력해주세요',
+  photos: '사진 정보가 잘못되었습니다'
+}
+
 const createRecord = struct.object({
   exerciseType: struct.enums(['run', 'bike', 'swim']),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
@@ -39,7 +49,7 @@ const validateCreateRecord = async (req, res, next) => {
 
   if (error) {
     const field = error.path?.[0];
-    const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
+    const message = field ? VALIDATION_RECORD_ERRORS[field] : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
   }
   next();

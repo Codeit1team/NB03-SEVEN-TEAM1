@@ -1,5 +1,19 @@
 import * as struct from 'superstruct'
 
+const VALIDATION_GROUP_ERRORS = {
+  name: '그룹명은 20자이하로 특수문자를 포함하면 안됩니다',
+  description: '그룹 설명은 500자 이하여야 합니다',
+  photoUrl: '사진 정보가 잘못되었습니다',
+  goalRep: '목표횟수가 잘못 등록되었습니다',
+  discordWebhookUrl: 'discordWebhookUrl은 url형태로 등록되어야 합니다',
+  discordInviteUrl: 'discordInviteUrl은 url형태로 등록되어야 합니다',
+  authorPassword: '비밀번호는 4자 이상 20자 이하로 입력해주세요',
+  tags: '태그는 문자열 20자 이하여야 합니다',
+  ownerNickname: '오너이름은 20자이하로 특수문자를 포함하면 안됩니다',
+  ownerPassword: '오너비밀번호는 4자이상 20자 이하여야 합니다',
+  ownerId: '오너ID가 정확하지 않습니다'
+}
+
 const Url = struct.refine(struct.string(), 'URL', value => {
   try {
     new URL(value);
@@ -51,7 +65,7 @@ export const validateCreateGroup = async (req, res, next) => {
 
     if (error) {
       const field = error.path[0];
-      const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
+      const message = field ? VALIDATION_GROUP_ERRORS[field] : '데이터가 잘못되었습니다';
       throw new Error(message);
     }
 
@@ -73,7 +87,7 @@ export const validatePatchGroup = (req, res, next) => {
 
   if (error) {
     const field = error.path[0];
-    const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
+    const message = field ? VALIDATION_GROUP_ERRORS[field] : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
   }
   next();
