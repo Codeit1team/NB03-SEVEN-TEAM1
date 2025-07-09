@@ -8,14 +8,15 @@ const Url = struct.refine(struct.string(), 'URL', value => {
     return false;
   }
 })
+const NullableUrl = struct.union([Url, struct.literal(null)]);
 
-export const createGroup = struct.object({
+const groupFields = {
   name: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
     const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
     return !specialCharRegex.test(value);
   }),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
-  photoUrl: struct.optional(Url),
+    photoUrl: struct.optional(NullableUrl),
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
   discordWebhookUrl: struct.optional(Url),
   discordInviteUrl: struct.optional(Url),
@@ -25,14 +26,15 @@ export const createGroup = struct.object({
     return !specialCharRegex.test(value);
   }),
   ownerPassword: struct.size(struct.string(), 4, 20),
+}
+export const createGroup = struct.object({
+  ...groupFields
 });
 
-export const patchGroup = struct.intersection([
-  struct.partial(createGroup),
-  struct.object({
-    ownerId: struct.integer(),
-  }),
-]);
+export const patchGroup = struct.object({
+  ...groupFields,
+  ownerId: struct.number(),
+});
 
 export const validateCreateGroup = async (req, res, next) => {
   try {
@@ -67,9 +69,14 @@ export const validateCreateGroup = async (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
+  console.log(typeof req.body.ownerId)
+  req.body.ownerId = Number(req.body.ownerId)
+  console.log(patchGroup)
+  console.log(createGroup)
   const [error] = struct.validate(req.body, patchGroup);
 
   if (error) {
+    console.log(error)
     const field = error.path[0];
     const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
