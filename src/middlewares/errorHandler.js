@@ -4,7 +4,7 @@ import getStructErrorMessage from '#utils/getStructErrorMessage.js';
 // Express 글로벌 에러 핸들러
 export default (err, req, res, next) => {
   // 개발 환경일 때만 전체 로그 출력
-  if (process.env.NODE_ENV /* === 'development' */) {
+  if (process.env.NODE_ENV === 'development') {
     console.error('🔴 Error:', err);
   } else {
     console.error('🔴', err.message);
