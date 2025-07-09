@@ -251,7 +251,7 @@ const updateGroup = async (groupId, data) => {
     const groupUpdateData = {
       name: data.name,
       description: data.description,
-      photoUrl: data.photoUrl,
+      photoUrl: data.photoUrl ?? null,
       goalRep: data.goalRep,
       discordWebhookUrl: data.discordWebhookUrl,
       discordInviteUrl: data.discordInviteUrl,
@@ -372,31 +372,24 @@ const deleteGroup = async (groupId, password) => {
   });
 }
 
-const likeGroup = async(groupId) => {
+const likeGroup = async (groupId) => {
   await prisma.group.update({
-    where: {
-      id: groupId,
-    },
+    where: { id: groupId },
     data: {
-      likeCount: {
-        increment: 1,
-      }
+      likeCount: { increment: 1 }
     }
-  })
-}
+  });
+};
 
-const unlikeGroup = async(groupId) => {
+const unlikeGroup = async (groupId) => {
   await prisma.group.update({
-    where: {
-      id: groupId,
-    },
+    where: { id: groupId },
     data: {
-      likeCount: {
-        decrement: 1,
-      }
+      likeCount: { decrement: 1 }
     }
-  })
-}
+  });
+};
+
 
 export default {
   createGroup,
