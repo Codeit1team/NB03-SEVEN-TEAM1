@@ -1,5 +1,14 @@
 import * as struct from 'superstruct'
 
+const Url = struct.refine(struct.string(), 'URL', value => {
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+})
+
 const createRecord = struct.object({
   exerciseType: struct.enums(['run', 'bike', 'swim']),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
@@ -14,7 +23,7 @@ const createRecord = struct.object({
     return !specialCharRegex.test(value);
   }),
   authorPassword: struct.size(struct.string(), 4, 20),
-  photos: struct.optional(struct.array(struct.string()))
+  photos: struct.optional(struct.array(Url))
 });
 
 const validateCreateRecord = async (req, res, next) => {
