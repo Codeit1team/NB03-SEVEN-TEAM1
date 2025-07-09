@@ -69,10 +69,6 @@ export const validateCreateGroup = async (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
-  console.log(typeof req.body.ownerId)
-  req.body.ownerId = Number(req.body.ownerId)
-  console.log(patchGroup)
-  console.log(createGroup)
   const [error] = struct.validate(req.body, patchGroup);
 
   if (error) {
