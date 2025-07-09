@@ -5,12 +5,6 @@ import handleServerError from "#utils/handleServerError.js";
 // 그룹 생성
 const createGroup = async (req, res, next) => {
   try {
-    const BASE_URL = req.app.locals.BASE_URL;
-
-    if (req.files?.photoUrl?.[0]) {
-      req.body.photoUrl = `${BASE_URL}/api/uploads/${req.files.photoUrl[0].filename}`;
-    }
-
     const group = await GroupService.createGroup(req.body);
     return res.status(201).json(group);
   } catch (error) {

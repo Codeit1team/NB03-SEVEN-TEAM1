@@ -1,5 +1,4 @@
 import RecordService from "#services/RecordService.js";
-import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 import { grantRecord100Badge } from '#utils/grantGroupBadge.js';
 import handleServerError from '#utils/handleServerError.js';
 import { getGroupWebhookUrl, sendDiscordWebhook } from "#utils/sendDiscordWebhook.js";
@@ -7,19 +6,8 @@ import { getGroupWebhookUrl, sendDiscordWebhook } from "#utils/sendDiscordWebhoo
 const createRecord = async (req, res, next) => {
   try {
     const groupId = req.params.groupId;
-    const BASE_URL = req.app.locals.BASE_URL;
-
-    let photos = [];
-    if (req.files && req.files.photos) {
-      photos = req.files.photos.map(file => `${BASE_URL}/api/uploads/${file.filename}`);
-    } else if (Array.isArray(req.body.photos)) {
-      photos = req.body.photos;
-    }
-    req.body.photos = photos;
-
     const record = await RecordService.createRecord(groupId, req.body);
     await grantRecord100Badge(groupId);
-
     const webhookUrl = await getGroupWebhookUrl(groupId);
     if (webhookUrl) {
       await sendDiscordWebhook(
@@ -30,9 +18,6 @@ const createRecord = async (req, res, next) => {
 
     return res.status(201).json(record);
   } catch (error) {
-    if (req.files && req.files.photos) {
-      await deleteUploadedFiles(req.files.photos);
-    }
     next(handleServerError(error, '서버 내부 오류로 기록 생성에 실패했습니다.'));
   }
 };
