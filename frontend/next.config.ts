@@ -12,21 +12,15 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      // 로컬 개발 서버
       {
         protocol: 'http',
         hostname: 'localhost',
         port: '3001',
       },
-      // 실제 운영 서버
       {
         protocol: 'https',
         hostname: 'seven.mimu.live',
-      },
-      {
-        protocol: 'https',
-        hostname: 'example.com',
-      },
+      }
     ],
   },
 };
