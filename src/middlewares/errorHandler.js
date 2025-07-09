@@ -1,4 +1,5 @@
 import { StructError } from 'superstruct';
+import getStructErrorMessage from '#utils/getStructErrorMessage.js';
 
 // Express 글로벌 에러 핸들러
 export default (err, req, res, next) => {
@@ -9,11 +10,19 @@ export default (err, req, res, next) => {
     console.error('🔴', err.message);
   }
 
-  // superstruct 유효성 검사 실패 처리
+  // 이미 한글화된 메시지가 err.message에 있으면 그대로 사용
+  if (typeof err.message === 'string' && err.message.endsWith('니다')) {
+    return res.status(err.status || 400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+
+  // superstruct StructError만 한글화해서 응답
   if (err instanceof StructError) {
     return res.status(400).json({
       success: false,
-      message: err.message,
+      message: getStructErrorMessage(err),
       path: err.path,
     });
   }

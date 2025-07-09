@@ -1,7 +1,8 @@
 const uploadImage = (req, res) => {
-  const photos = req.files?.photos || [];
-  const photoUrl = req.files?.photoUrl || [];
-  const files = [...photos, ...photoUrl];
+  const files = [
+    ...(req.files?.photos || []),
+    ...(req.files?.photoUrl || []),
+  ];
 
   if (files.length === 0) {
     return res.status(400).json({
@@ -11,10 +12,7 @@ const uploadImage = (req, res) => {
   }
 
   const BASE_URL = req.app.locals.BASE_URL;
-
-  const urls = files.map(file =>
-    `${BASE_URL}/api/uploads/${file.filename}`
-  );
+  const urls = files.map(file => `${BASE_URL}/api/files/${file.filename}`);
 
   return res.json({ success: true, urls });
 };

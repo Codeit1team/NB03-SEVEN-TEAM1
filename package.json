@@ -16,8 +16,7 @@
     "seed": "node src/prisma/seed.js",
     "dev:be": "cross-env NODE_ENV=development nodemon src/app.js",
     "dev:fe": "cross-env NODE_ENV=development npm run dev --prefix frontend",
-
-    "start:be": "cross-env NODE_ENV=production pm2 start src/app.js --name backend ",
+    "start:be": "cross-env NODE_ENV=production pm2 start src/app.js --name backend",
     "start:fe": "cross-env NODE_ENV=production pm2 start npm --name frontend -- run start --prefix frontend",
     "start": "npm run start:be && npm run start:fe"
   },

@@ -14,7 +14,7 @@ export default function GroupEditForm({
   const router = useRouter();
 
   const onSubmit = () => {
-    router.push(`/groups/${groupId}`);
+    router.push(`/groups/${groupId}/records`);
   };
 
   return <GroupForm type="update" group={group} onSubmit={onSubmit} />;
