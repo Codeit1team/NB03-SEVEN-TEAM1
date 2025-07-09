@@ -51,7 +51,6 @@ export const patchGroup = struct.object({
 });
 
 export const validateCreateGroup = async (req, res, next) => {
-  try {
     // multipart/form-data에서 tags, goalRep 필드가 문자열로 전송된 경우 JSON 파싱
     if (req.body.tags && typeof req.body.tags === 'string') {
       req.body.tags = JSON.parse(req.body.tags);
@@ -66,20 +65,9 @@ export const validateCreateGroup = async (req, res, next) => {
     if (error) {
       const field = error.path[0];
       const message = field ? VALIDATION_GROUP_ERRORS[field] : '데이터가 잘못되었습니다';
-      throw new Error(message);
+      return res.status(400).json({ message });
     }
-
     next();
-  } catch (err) {
-    // const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;
-    // const message = statusCode === 500 ? '서버 오류가 발생했습니다' : err.message;
-
-    // if (statusCode === 500) {
-    //   console.error('validateCreateGroup 오류:', err);
-    // }
-    const message = err.message;
-    return res.status(400).json({ message });
-  }
 };
 
 export const validatePatchGroup = (req, res, next) => {
