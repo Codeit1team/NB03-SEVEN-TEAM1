@@ -1,12 +1,11 @@
 import { Router } from 'express';
 import validateGroup from '#middlewares/validateGroup.js';
-import { uploadImages } from '#middlewares/upload.js';
 import GroupController from '#controllers/groupController.js';
 
 const GroupRouter = Router();
 
 GroupRouter.route('/')
-  .post(uploadImages(), validateGroup.validateCreateGroup, GroupController.createGroup)
+  .post(validateGroup.validateCreateGroup, GroupController.createGroup)
   .get(validateGroup.validateGetGroups, GroupController.getGroups);
 
 GroupRouter.route('/:groupId')

@@ -1,5 +1,4 @@
 import * as struct from 'superstruct'
-import deleteUploadedFiles from '#utils/deleteUploadedFiles.js';
 
 const Url = struct.refine(struct.string(), 'URL', value => {
   try {
@@ -51,11 +50,6 @@ export const validateCreateGroup = async (req, res, next) => {
     
     next();
   } catch (err) {
-    // 에러 발생 시 업로드된 파일 삭제 (multipart/form-data인 경우에만)
-    if (req.files?.photoUrl?.[0]) { 
-      await deleteUploadedFiles(req.files.photoUrl); 
-    }
-    
     const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;
     const message = statusCode === 500 ? '서버 오류가 발생했습니다' : err.message;
     
