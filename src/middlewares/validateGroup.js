@@ -1,17 +1,17 @@
 import * as struct from 'superstruct'
 
 const VALIDATION_GROUP_ERRORS = {
-  name: '그룹명은 20자이하로 특수문자를 포함하면 안됩니다',
+  name: '그룹명은 20자 이하로 특수문자를 포함하면 안됩니다',
   description: '그룹 설명은 500자 이하여야 합니다',
   photoUrl: '사진 정보가 잘못되었습니다',
-  goalRep: '목표횟수가 잘못 등록되었습니다',
+  goalRep: '목표횟수가 너무 많거나 잘못 등록되었습니다',
   discordWebhookUrl: 'discordWebhookUrl은 url형태로 등록되어야 합니다',
   discordInviteUrl: 'discordInviteUrl은 url형태로 등록되어야 합니다',
   authorPassword: '비밀번호는 4자 이상 20자 이하로 입력해주세요',
   tags: '태그는 문자열 20자 이하여야 합니다',
-  ownerNickname: '오너이름은 20자이하로 특수문자를 포함하면 안됩니다',
-  ownerPassword: '오너비밀번호는 4자이상 20자 이하여야 합니다',
-  ownerId: '오너ID가 정확하지 않습니다'
+  ownerNickname: '그룹장 이름은 20자이하로 특수문자를 포함하면 안됩니다',
+  ownerPassword: '그룹장 비밀번호는 4자이상 20자 이하여야 합니다',
+  ownerId: '그룹장 ID가 정확하지 않습니다'
 }
 
 const Url = struct.refine(struct.string(), 'URL', value => {
@@ -31,7 +31,7 @@ const groupFields = {
   }),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
   photoUrl: struct.optional(NullableUrl),
-  goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
+  goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0 && 100000000 >= value),
   discordWebhookUrl: struct.optional(Url),
   discordInviteUrl: struct.optional(Url),
   tags: struct.optional(struct.array(struct.size(struct.string(), 1, 20))),
@@ -71,14 +71,14 @@ export const validateCreateGroup = async (req, res, next) => {
 
     next();
   } catch (err) {
-    const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;
-    const message = statusCode === 500 ? '서버 오류가 발생했습니다' : err.message;
+    // const statusCode = err.message.includes('유효하지 않습니다') ? 400 : 500;
+    // const message = statusCode === 500 ? '서버 오류가 발생했습니다' : err.message;
 
-    if (statusCode === 500) {
-      console.error('validateCreateGroup 오류:', err);
-    }
-
-    return res.status(statusCode).json({ message });
+    // if (statusCode === 500) {
+    //   console.error('validateCreateGroup 오류:', err);
+    // }
+    const message = err.message;
+    return res.status(400).json({ message });
   }
 };
 
