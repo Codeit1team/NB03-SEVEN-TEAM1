@@ -5,10 +5,7 @@ const isBrowser = typeof window !== 'undefined';
 const isDev = process.env.NODE_ENV !== 'production';
 
 // BASE_URL + /api
-let BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-if (!BASE_URL.endsWith('/api')) {
-  BASE_URL = `${BASE_URL.replace(/\/$/, '')}/api`;
-}
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:3001/api';
 
 export const axios = Axios.default.create({
   baseURL: BASE_URL,
