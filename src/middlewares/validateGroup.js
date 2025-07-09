@@ -25,6 +25,7 @@ export const createGroup = struct.object({
     return !specialCharRegex.test(value);
   }),
   ownerPassword: struct.size(struct.string(), 4, 20),
+  ownerId:struct.optional(struct.integer())
 });
 
 export const patchGroup = struct.partial(createGroup);
@@ -62,8 +63,7 @@ export const validateCreateGroup = async (req, res, next) => {
 };
 
 export const validatePatchGroup = (req, res, next) => {
-  const masked = struct.mask(req.body, patchGroup);
-  const [error] = struct.validate(masked, patchGroup);
+  const [error] = struct.validate(req.body, patchGroup);
   
   if (error) {
     const field = error.path[0];
