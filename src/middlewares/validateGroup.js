@@ -16,7 +16,7 @@ const groupFields = {
     return !specialCharRegex.test(value);
   }),
   description: struct.optional(struct.size(struct.string(), 0, 500)),
-    photoUrl: struct.optional(NullableUrl),
+  photoUrl: struct.optional(NullableUrl),
   goalRep: struct.refine(struct.integer(), 'PositiveInt', (value) => value >= 0),
   discordWebhookUrl: struct.optional(Url),
   discordInviteUrl: struct.optional(Url),
