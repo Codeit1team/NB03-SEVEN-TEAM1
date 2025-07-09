@@ -29,7 +29,7 @@ const FRONT_ORIGIN = isProd
   : `${process.env.BASE_URL_DEV}:${FRONT_PORT}`;
 
 const allowedOrigins = [FRONT_ORIGIN];
-const currentImageHost = BASE_URL;
+const currentImageHost = `${BASE_URL}/api/files`;
 
 // 핸들러 및 라우터
 import errorHandler from '#middlewares/errorHandler.js';
@@ -75,7 +75,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS 설정 (업로드 이미지 접근 허용 위함)
-app.use('/api/uploads', cors({
+app.use('/api/files', cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -85,7 +85,7 @@ app.use('/api/uploads', cors({
 }));
 
 // 정적 파일 서빙
-app.use('/api/uploads', express.static('uploads'));
+app.use('/api/files', express.static('uploads'));
 
 // API 라우터 연결
 app.use('/api/uploads', uploadRoutes);
