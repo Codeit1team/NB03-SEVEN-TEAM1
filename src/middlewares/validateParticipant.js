@@ -1,5 +1,10 @@
 import * as struct from 'superstruct'
 
+const VALIDATION_PARTICIPANT_ERRORS = {
+  nickname: '닉네임이 너무 길거나 올바르지 않습니다',
+  password: '비밀번호는 4자 이상 20자 이하로 입력해주세요',
+}
+
 export const createParticipant = struct.object({
   nickname: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
     const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
@@ -13,7 +18,7 @@ const validateCreateParticipant = (req, res, next) => {
 
   if (error) {
     const field = error.path[0];
-    const message = field ? `${field} 해당 데이터가 유효하지 않습니다` : '데이터가 잘못되었습니다';
+    const message = field ? VALIDATION_PARTICIPANT_ERRORS[field] : '데이터가 잘못되었습니다';
     return res.status(400).json({ message });
   }
   next();
