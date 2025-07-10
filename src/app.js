@@ -33,6 +33,7 @@ const currentImageHost = `${BASE_URL}/api/files`;
 
 // 핸들러 및 라우터
 import errorHandler from '#middlewares/errorHandler.js';
+import { tempFileCleanerJob } from '#crons/cleanTempUploads.js';
 import uploadRoutes from '#routes/uploadRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
@@ -43,8 +44,11 @@ const app = express();
 
 app.locals.BASE_URL = BASE_URL;
 
- // proxy trust 설정. Cloudflare 1-hop 프록시 고려
-app.set('trust proxy', 1);
+ // proxy trust 설정. Cloudflare 프록시 고려
+app.set('trust proxy', true);
+
+// cron job 시작
+tempFileCleanerJob.start();
 
 // 보안 설정
 app.use(helmet({
