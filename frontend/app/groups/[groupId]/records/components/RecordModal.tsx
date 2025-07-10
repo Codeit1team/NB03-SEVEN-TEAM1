@@ -10,9 +10,11 @@ import styles from './RecordModal.module.css';
 
 const RecordModal = ({
   record,
+  order,
   confirmButton,
 }: {
   record: Record;
+  order: number;
   confirmButton: RecordItemClick;
 }) => {
   const cx = classNames.bind(styles);
@@ -27,7 +29,7 @@ const RecordModal = ({
           width={352}
           height={206}
         />
-        <div className={cx('distance')}>{record.distance}KM</div>
+        <div className={cx('distance')}>{record.distance}KM · {order}등</div>
         <div className={cx('footer')}>
           <div className={cx('info')}>
             {formatTime(record.time)} · {EXERCISE_TYPE_MAP[record.exerciseType]}

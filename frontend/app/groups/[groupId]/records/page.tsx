@@ -5,6 +5,8 @@ import RecordList from './components/RecordList';
 import RecordTabHeader from './components/RecordTabHeader';
 import { getGroupAction } from '../../actions';
 import { getRecordsAction } from './actions';
+import { getRanksAction } from '../rank/actions';
+import { RankDuration } from '@/types/entities';
 
 const GroupRecordsPage = async ({
   params,
@@ -23,6 +25,8 @@ const GroupRecordsPage = async ({
     paginationQuery
   );
 
+  const ranks = await getRanksAction(groupId, RankDuration.WEEKLY);
+
   return (
     <>
       <GroupDetail group={group} />
@@ -38,6 +42,7 @@ const GroupRecordsPage = async ({
         paginationQuery={paginationQuery}
         initialValues={records}
         total={recordsTotal}
+        ranks={ranks}
       />
     </>
   );

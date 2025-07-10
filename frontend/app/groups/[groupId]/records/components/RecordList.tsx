@@ -5,7 +5,7 @@ import Image from 'next/image';
 import classNames from 'classnames/bind';
 import { useInView } from 'react-intersection-observer';
 import Card from '@/lib/components/Card';
-import { EXERCISE_TYPE_MAP, Record, RecordItemClick } from '@/types/entities';
+import { EXERCISE_TYPE_MAP, Rank, Record, RecordItemClick } from '@/types/entities';
 import placeholderImage from '@/public/assets/placeholder.svg';
 import formatTime from '@/lib/formatTime';
 import { PaginationQuery } from '@/types/pagination';
@@ -41,11 +41,13 @@ const RecordList = ({
   paginationQuery,
   initialValues = [],
   total,
+  ranks,
 }: {
   groupId: number;
   paginationQuery: PaginationQuery;
   initialValues: Record[];
   total: number;
+  ranks: Rank[];
 }) => {
   const [records, setRecords] = useState(initialValues);
   const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
@@ -60,7 +62,7 @@ const RecordList = ({
     if (recordId) {
       record = await getRecordAction(recordId)
     }
-    
+
     setIsModal(!isModal)
     setSelectedRecord(record)
   }, [isModal])
@@ -86,6 +88,10 @@ const RecordList = ({
   }, [initialValues, paginationQuery]);
 
   const hasNext = records.length < total;
+  const getRankOrder = (authorid: number) => {
+    const index = ranks.findIndex((r) => r.participantId === authorid);
+    return index + 1;
+  }
 
   return (
     <div className={cx('recordList')}>
@@ -94,7 +100,7 @@ const RecordList = ({
       ))}
       {hasNext && <div ref={ref} />}
 
-      {isModal && selectedRecord && <RecordModal record={selectedRecord} confirmButton={clickRecordItem} />}
+      {isModal && selectedRecord && <RecordModal record={selectedRecord} order={getRankOrder(selectedRecord.author.id)} confirmButton={clickRecordItem} />}
     </div>
   );
 };
