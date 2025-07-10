@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword, isPasswordValid } from "#utils/passwordUtil.js";
-
+import { moveTempToPermanent, deleteUploadedFile } from '#utils/manageImageFiles.js';
 const prisma = new PrismaClient();
 
 const createGroup = async (data) => {
@@ -16,6 +16,11 @@ const createGroup = async (data) => {
     ownerPassword,
   } = data;
 
+  let finalPhotoUrl = photoUrl;
+  if (photoUrl?.includes('/api/files/temp/')) {
+    finalPhotoUrl = await moveTempToPermanent(photoUrl);
+  }
+
   const result = await prisma.$transaction(async (tx) => {
     const hashedPassword = await hashPassword(ownerPassword);
     const owner = await tx.participant.create({
@@ -29,7 +34,7 @@ const createGroup = async (data) => {
       data: {
         name,
         description,
-        photoUrl,
+        photoUrl: finalPhotoUrl,
         goalRep,
         discordWebhookUrl,
         discordInviteUrl,
@@ -107,7 +112,7 @@ const createGroup = async (data) => {
 const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'createdAt', search = '') => {
   const intPage = parseInt(page, 10);
   const intLimit = parseInt(limit, 10);
-  
+
   let where = {};
   if (search.trim()) {
     where = {
@@ -131,7 +136,7 @@ const getGroups = async (page = 1, limit = 10, order = 'desc', orderBy = 'create
       [orderBy]: order,
     };
   }
-  
+
   const [groupsWithRelationData, total] = await Promise.all([
     prisma.group.findMany({
       where,
@@ -248,10 +253,15 @@ const updateGroup = async (groupId, data) => {
       throw error;
     }
 
+    let finalPhotoUrl = data.photoUrl ?? null;
+    if (photoUrl?.includes('/api/files/temp/')) {
+      finalPhotoUrl = await moveTempToPermanent(finalPhotoUrl);
+    }
+
     const groupUpdateData = {
       name: data.name,
       description: data.description,
-      photoUrl: data.photoUrl ?? null,
+      photoUrl: finalPhotoUrl,
       goalRep: data.goalRep,
       discordWebhookUrl: data.discordWebhookUrl,
       discordInviteUrl: data.discordInviteUrl,
@@ -259,7 +269,7 @@ const updateGroup = async (groupId, data) => {
 
     if (data.tags !== undefined) {
       let tagRecords = [];
-      
+
       if (data.tags && data.tags.length > 0) {
         tagRecords = await Promise.all(
           data.tags.map(tagName =>
@@ -359,6 +369,19 @@ const deleteGroup = async (groupId, password) => {
       error.status = 401;
       throw error;
     }
+
+    const records = await tx.record.findMany({
+      where: { author: { groupId } },
+      select: { photos: true },
+    })
+
+    for (const record of records) {
+      for (const photoUrl of record.photos ?? []) {
+        await deleteUploadedFile(photoUrl);
+      }
+    }
+
+    await deleteUploadedFile(group.photoUrl);
 
     await tx.group.delete({
       where: { id: groupId },
