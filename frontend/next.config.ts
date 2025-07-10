@@ -20,7 +20,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'seven.mimu.live',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'example.com', //커밋이나 푸시 전 지울 것
+      },
     ],
   },
 };

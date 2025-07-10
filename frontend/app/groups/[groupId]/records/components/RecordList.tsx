@@ -11,12 +11,18 @@ import formatTime from '@/lib/formatTime';
 import { PaginationQuery } from '@/types/pagination';
 import { getRecordsAction } from '../actions';
 import styles from './RecordList.module.css';
+import { useRouter } from 'next/navigation';
 
 const cx = classNames.bind(styles);
 
 const RecordItem = ({ record }: { record: Record }) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/records/detail/${record.id}`);
+  };
+
   return (
-    <Card className={cx('recordItem')}>
+    <Card className={cx('recordItem')} onClick={handleClick}>
       <Image
         className={cx('image')}
         src={record.photos[0] ?? placeholderImage}

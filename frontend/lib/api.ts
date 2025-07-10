@@ -26,8 +26,7 @@ const logError = (error: unknown) => {
     const response = error.response;
     if (response) {
       console.error(
-        `[프론트] ${response.config.method?.toUpperCase()} ${
-          response.config.url
+        `[프론트] ${response.config.method?.toUpperCase()} ${response.config.url
         } ${response.status}`
       );
       console.error(response.data);
@@ -198,6 +197,16 @@ export const getRanks = async (
     });
     const ranks: Rank[] = response.data;
     return ranks;
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
+
+export const getRecordDetail = async (recordId: number) => {
+  try {
+    const response = await axios.get(`/records/detail/${recordId}`);
+    return response.data;
   } catch (error) {
     logError(error);
     throw error;
