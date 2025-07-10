@@ -50,7 +50,7 @@ const uploadImage = async (req, res) => {
   }
 
   const BASE_URL = req.app.locals.BASE_URL;
-  const urls = files.map(file => `${BASE_URL}/api/files/${file.filename}`);
+  const urls = files.map(file => `${BASE_URL}/api/files/temp/${file.filename}`);
 
   return res.json({ success: true, urls });
 };
