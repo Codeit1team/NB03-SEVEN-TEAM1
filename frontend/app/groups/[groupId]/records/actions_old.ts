@@ -1,6 +1,6 @@
 'use server';
 
-import { createRecord, getRecords, getRecord } from '@/lib/api';
+import { createRecord, getRecords } from '@/lib/api';
 import handleError from '@/lib/handleError';
 import { RecordCreate } from '@/types/entities';
 import { PaginationQuery } from '@/types/pagination';
@@ -19,7 +19,3 @@ export const createRecordAction = handleError(
     await revalidatePath(`/groups/${groupId}/records`);
   }
 );
-
-export const getRecordAction = async (recordId: number) => {
-  return getRecord(recordId);
-};

@@ -5,24 +5,19 @@ import Image from 'next/image';
 import classNames from 'classnames/bind';
 import { useInView } from 'react-intersection-observer';
 import Card from '@/lib/components/Card';
-import { EXERCISE_TYPE_MAP, Record } from '@/types/entities';
+import { EXERCISE_TYPE_MAP, Record, RecordItemClick } from '@/types/entities';
 import placeholderImage from '@/public/assets/placeholder.svg';
 import formatTime from '@/lib/formatTime';
 import { PaginationQuery } from '@/types/pagination';
-import { getRecordsAction } from '../actions';
+import { getRecordsAction, getRecordAction } from '../actions';
 import styles from './RecordList.module.css';
-import { useRouter } from 'next/navigation';
+import RecordModal from './RecordModal';
 
 const cx = classNames.bind(styles);
 
-const RecordItem = ({ record }: { record: Record }) => {
-  const router = useRouter();
-  const handleClick = () => {
-    router.push(`/records/detail/${record.id}`);
-  };
-
+const RecordItem = ({ record, onClick }: { record: Record, onClick?: RecordItemClick }) => {
   return (
-    <Card className={cx('recordItem')} onClick={handleClick}>
+    <Card className={cx('recordItem')} onClick={() => { onClick?.(record.id) }}>
       <Image
         className={cx('image')}
         src={record.photos[0] ?? placeholderImage}
@@ -53,10 +48,22 @@ const RecordList = ({
   total: number;
 }) => {
   const [records, setRecords] = useState(initialValues);
+  const [selectedRecord, setSelectedRecord] = useState<Record | null>(null);
+  const [isModal, setIsModal] = useState(false);
   const [page, setPage] = useState(paginationQuery?.page ?? 1);
   const { ref, inView } = useInView({
     threshold: 0.1,
   });
+
+  const clickRecordItem: RecordItemClick = useCallback(async (recordId) => {
+    let record = null
+    if (recordId) {
+      record = await getRecordAction(recordId)
+    }
+    
+    setIsModal(!isModal)
+    setSelectedRecord(record)
+  }, [isModal])
 
   const loadMore = useCallback(async () => {
     const { data: next } = await getRecordsAction(groupId, {
@@ -83,9 +90,11 @@ const RecordList = ({
   return (
     <div className={cx('recordList')}>
       {records.map((record) => (
-        <RecordItem key={record.id} record={record} />
+        <RecordItem key={record.id} record={record} onClick={clickRecordItem} />
       ))}
       {hasNext && <div ref={ref} />}
+
+      {isModal && selectedRecord && <RecordModal record={selectedRecord} confirmButton={clickRecordItem} />}
     </div>
   );
 };
