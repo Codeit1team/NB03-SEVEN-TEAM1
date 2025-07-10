@@ -72,3 +72,11 @@ Tree
 │       └── sendDiscordWebhook.js
 └── uploads
 ```
+
+
+## 구현 홈페이지  
+[SEVEN](https://seven.mimu.live/)  
+
+
+## 프로젝트 회고록
+[최종발표자료](https://docs.google.com/presentation/d/1qzsbEA9enE0oHnuUmQvsZSGckHp4L70ZbRnQZVFCXwc/edit?usp=sharing)
