@@ -1,0 +1,89 @@
+.recordItem {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 17 / 10;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.distance {
+  width: 100%;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.author {
+  border-radius: 8px;
+  background-color: var(--gray-100);
+  color: var(--black-100);
+  padding: 4px 8px;
+}
+
+.recordList {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+  /* 어두운 반투명 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.confirmButton {
+  display: block;
+  /* border-radius: 50%; */
+  width: 100%;
+  max-width: 320px;
+  /* 카드 너비 제한 */
+  margin: 32px auto 0 auto;
+  padding: 14px 0;
+  background-color: var(--black-100);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmButton:hover {
+  background-color: #333;
+}

@@ -84,6 +84,8 @@ export interface RecordCreate {
   authorPassword: string;
 }
 
+export type RecordItemClick = (recordId: number | null) => void
+
 export interface Rank {
   participantId: number;
   nickname: string;

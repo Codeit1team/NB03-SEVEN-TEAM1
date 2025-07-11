@@ -187,6 +187,17 @@ export const createRecord = async (
   }
 };
 
+export const getRecord = async (recordId: number): Promise<Record> => {
+  try {
+    const response = await axios.get(`/records/detail/${recordId}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
+
 // 기존: await axios.get(`/groups/${groupId}/rank`, { params: { duration } });
 export const getRanks = async (
   groupId: number,
