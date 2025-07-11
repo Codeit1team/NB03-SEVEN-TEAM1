@@ -1,6 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -8,34 +9,46 @@ const __dirname = path.dirname(__filename);
 /**
  * 이미지 업로드 미들웨어를 생성합니다.
  *
- * @param {Object} options - 업로드 옵션
- * @param {number} options.maxCount - 최대 업로드 이미지 수
- * @returns {Function[]} - Express용 미들웨어 배열
+ * @param {Object} options
+ * @param {number} [options.maxCount=5] - photos 필드의 최대 업로드 개수
+ * @returns {Function[]} Express 미들웨어 배열
  *
  * @example
- * import { uploadImages } from '../middlewares/upload.js';
+ * // 여러 장 업로드 (필드명: photos)
+ * import { uploadImages } from '#middlewares/upload.js';
  *
  * router.post(
  *   '/:groupId/records',
- *   uploadImages({ maxCount: 5 }), // 최대 5장 업로드 허용
+ *   uploadImages({ maxCount: 5 }),
  *   RecordController.createRecord
+ * );
+ *
+ * @example
+ * // 단일 업로드 (필드명: photoUrl)
+ * import { uploadImages } from '#middlewares/upload.js';
+ *
+ * router.post(
+ *   '/groups',
+ *   uploadImages({ maxCount: 1 }),
+ *   GroupController.createGroup
  * );
  */
 export const uploadImages = ({ maxCount = 5 } = {}) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '../../uploads'));
+      cb(null, path.join(__dirname, '../../uploads/temp'));
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
       const base = path.basename(file.originalname, ext);
-      const unique = Date.now();
-      cb(null, `${base}-${unique}${ext}`);
+      const safeBase = Buffer.from(base, 'utf8').toString('hex');
+      const uuid = crypto.randomUUID();
+      cb(null, `${safeBase}-${uuid}${ext}`);
     },
   });
 
   const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -47,13 +60,20 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     storage,
     fileFilter,
     limits: {
-      fileSize: 1 * 1024 * 1024, // 1MB 제한
-      files: maxCount,
+      fileSize: 1 * 1024 * 1024,
     },
-  }).array('photos', maxCount);
+  }).fields([
+    { name: 'photos', maxCount },
+    { name: 'photoUrl', maxCount: 1 },
+  ]);
 
   return [
     (req, res, next) => {
+      const contentType = req.headers['content-type'];
+      if (!contentType || !contentType.includes('multipart/form-data')) {
+        return next();
+      }
+
       upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
           let message = '파일 업로드 오류입니다.';
@@ -62,11 +82,13 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
             case 'LIMIT_FILE_SIZE':
               message = '파일 용량은 1MB 이하만 가능합니다.';
               break;
-            case 'LIMIT_FILE_COUNT':
-              message = '최대 업로드 개수를 초과했습니다.';
-              break;
             case 'LIMIT_UNEXPECTED_FILE':
-              message = '허용되지 않는 파일 형식입니다.';
+              const photoFiles = req.files?.photos ?? [];
+              if (photoFiles.length >= maxCount) {
+                message = '최대 업로드 개수를 초과했습니다.';
+              } else {
+                message = '허용되지 않는 파일이거나, 업로드 가능한 개수를 초과했습니다.';
+              }
               break;
           }
 

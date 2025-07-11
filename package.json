@@ -4,22 +4,37 @@
   "description": "",
   "main": "src/app.js",
   "type": "module",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
   "scripts": {
-    "dev": "nodemon src/app.js",
+    "dev": "concurrently \"npm run dev:be\" \"npm run dev:fe\"",
     "dev:migrate": "prisma migrate dev --schema=src/prisma/schema.prisma",
     "dev:studio": "prisma studio --schema=src/prisma/schema.prisma",
-    "dev:generate": "prisma generate --schema=src/prisma/schema.prisma"
+    "dev:generate": "prisma generate --schema=src/prisma/schema.prisma",
+    "dev:reset": "prisma migrate reset --schema=src/prisma/schema.prisma",
+    "seed": "node src/prisma/seed.js",
+    "dev:be": "cross-env NODE_ENV=development nodemon src/app.js",
+    "dev:fe": "cross-env NODE_ENV=development npm run dev --prefix frontend",
+    "start:be": "cross-env NODE_ENV=production pm2 start src/app.js --name backend",
+    "start:fe": "cross-env NODE_ENV=production pm2 start npm --name frontend -- run start --prefix frontend",
+    "start": "npm run start:be && npm run start:fe"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
-    "dayjs": "^1.11.13",
+    "cors": "^2.8.5",
+    "cron": "^4.3.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "file-type": "^20.5.0",
     "helmet": "^8.1.0",
     "multer": "^2.0.1",
-    "pg": "^8.16.2"
+    "pg": "^8.16.2",
+    "superstruct": "^2.0.2"
   },
   "imports": {
     "#controllers/*": "./src/controllers/*",
@@ -29,9 +44,11 @@
     "#routes/*": "./src/routes/*",
     "#services/*": "./src/services/*",
     "#utils/*": "./src/utils/*",
+    "#crons/*": "./src/crons/*",
     "#uploads/*": "./uploads/*"
   },
   "devDependencies": {
+    "concurrently": "^9.2.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.10.1"
   },
