@@ -26,6 +26,8 @@ export const cleanExpiredTempFiles = async () => {
   try {
     const files = await fs.readdir(TEMP_DIR);
     for (const file of files) {
+      if (file === '.gitkeep') continue;
+
       const filePath = path.join(TEMP_DIR, file);
       const stat = await fs.stat(filePath);
       if (now - stat.ctimeMs > TTL_MS) {

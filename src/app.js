@@ -44,9 +44,6 @@ const app = express();
 // 프록시 신뢰 설정 (Cloudflare 등)
 app.set('trust proxy', 1);
 
-// 앱 전역 변수 설정
-app.locals.BASE_URL = BASE_URL;
-
 // cron 작업 시작(임시 파일 정리)
 tempFileCleanerJob.start();
 
@@ -79,7 +76,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 정적 파일 접근용 CORS 설정
-app.use('/api/files', cors({
+app.use('/api', cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
