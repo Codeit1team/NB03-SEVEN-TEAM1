@@ -83,12 +83,7 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
               message = '파일 용량은 1MB 이하만 가능합니다.';
               break;
             case 'LIMIT_UNEXPECTED_FILE':
-              const photoFiles = req.files?.photos ?? [];
-              if (photoFiles.length >= maxCount) {
-                message = '최대 업로드 개수를 초과했습니다.';
-              } else {
-                message = '허용되지 않는 파일이거나, 업로드 가능한 개수를 초과했습니다.';
-              }
+              message = '허용되지 않는 파일 형식입니다.';
               break;
           }
 

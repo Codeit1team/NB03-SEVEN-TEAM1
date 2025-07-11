@@ -37,13 +37,12 @@ const FRONT_ORIGIN = isProd
 
 const allowedOrigins = [FRONT_ORIGIN];
 const currentImageHost = `${BASE_URL}/api/files`;
-const PROXY_OPTION = isProd ? true : 1;
 
 // 서버 초기화
 const app = express();
 
 // 프록시 신뢰 설정 (Cloudflare 등)
-app.set('trust proxy', PROXY_OPTION);
+app.set('trust proxy', 1);
 
 // 앱 전역 변수 설정
 app.locals.BASE_URL = BASE_URL;
