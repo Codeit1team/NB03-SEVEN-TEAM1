@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// 실행환경 분기 및 .env 로딩
+// 환경 변수 로드
 const envPath = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
 if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
@@ -12,29 +12,28 @@ if (fs.existsSync(envPath)) {
   dotenv.config();
 }
 
-// 실행환경 변수 분기
 const isProd = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3001;
-
-// BASE_URL 환경변수 처리
 const BASE_URL = isProd
   ? process.env.BASE_URL
   : `${process.env.BASE_URL_DEV}:${PORT}`;
 
-const testImages = Array.from({ length: 12 }, (_, i) => `${BASE_URL}/api/files/${i}.png`);
+// 이미지 경로 생성 (0~11.png)
+const testImages = Array.from({ length: 11 }, (_, i) => `${BASE_URL}/api/files/${i}.png`);
 
 const main = async () => {
+  // 기존 데이터 초기화 및 시퀀스 리셋
   await prisma.record.deleteMany({});
   await prisma.group.deleteMany({});
   await prisma.participant.deleteMany({});
   await prisma.tag.deleteMany({});
 
-  // id 리셋
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Participant_id_seq" RESTART WITH 1;');
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Group_id_seq" RESTART WITH 1;');
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Record_id_seq" RESTART WITH 1;');
   await prisma.$executeRawUnsafe('ALTER SEQUENCE "Tag_id_seq" RESTART WITH 1;');
 
+  // 테스트용 해시 배열
   const hashExample = [
     '$2a$10$SKxnFpbrTvpj4SCad/4vgeOksAzvskS/x0o09z.CO52ZcH3FaLW4m', // 1234 - 고양이좋아
     '$2a$10$ooYN9QFXzJz9vMMdgo1zJOa4QIE2at4WrJxHhI6cPMaynOgnsis9G', // 250709 - 김치찌개
@@ -44,7 +43,7 @@ const main = async () => {
     '$2a$10$zQnlzGtMbweWLATYckD80OIy6084Pzu.9lNDMaIdnoYUrvuV7Vcnm', // sktt1faker - 슈퍼노바
   ]
 
-  // 참가자 생성
+  // participant 생성(6)
   const user1 = await prisma.participant.create({
     data: {
       nickname: '고양이좋아',
@@ -87,23 +86,23 @@ const main = async () => {
     },
   })
 
-  // 태그 생성
+  // tag 생성(9)
   await prisma.tag.createMany({
     data: [
-      { name: '러닝' },      // id: 1
-      { name: '건강' },      // id: 2
-      { name: '아침' },      // id: 3
-      { name: '자전거' },    // id: 4
-      { name: '월루좋아' },  // id: 5
-      { name: '수영' },      // id: 6
-      { name: '시원해요' },  // id: 7
-      { name: '태그1' },     // id: 8
-      { name: '태그2' },     // id: 9
+      { name: '러닝' },
+      { name: '건강' },
+      { name: '아침' },
+      { name: '자전거' },
+      { name: '월루좋아' },
+      { name: '수영' },
+      { name: '시원해요' },
+      { name: '태그1' },
+      { name: '태그2' },
     ],
     skipDuplicates: true,
   });
 
-  // 그룹 생성 및 ownerId 매칭
+  // group 생성(5)
   const group1 = await prisma.group.create({
     data: {
       name: '얼리버드',
@@ -113,12 +112,12 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 10,
-      tags: { connect: [{ id: 1 }, { id: 2 }, { id: 3 }] }, // 러닝, 건강, 아침
+      tags: { connect: [{ id: 1 }, { id: 2 }, { id: 3 }] },
       ownerId: user1.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'RECORD_100'],
     },
-  })
+  });
 
   const group2 = await prisma.group.create({
     data: {
@@ -129,12 +128,12 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 5,
-      tags: { connect: [{ id: 4 }, { id: 5 }] }, // 자전거, 월루좋아
+      tags: { connect: [{ id: 4 }, { id: 5 }] },
       ownerId: user3.id,
       recordCount: 0,
       badges: [],
     },
-  })
+  });
 
   const group3 = await prisma.group.create({
     data: {
@@ -145,12 +144,12 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 15,
-      tags: { connect: [{ id: 6 }, { id: 7 }] }, // 수영, 시원해요
+      tags: { connect: [{ id: 6 }, { id: 7 }] },
       ownerId: user4.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10'],
     },
-  })
+  });
 
   const group4 = await prisma.group.create({
     data: {
@@ -161,12 +160,12 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 100,
-      tags: { connect: [{ id: 6 }, { id: 4 }] }, // 수영, 자전거
+      tags: { connect: [{ id: 6 }, { id: 4 }] },
       ownerId: user5.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'LIKE_100'],
     },
-  })
+  });
 
   const group5 = await prisma.group.create({
     data: {
@@ -177,59 +176,25 @@ const main = async () => {
       discordWebhookUrl: null,
       discordInviteUrl: null,
       likeCount: 150,
-      tags: { connect: [{ id: 8 }, { id: 9 }, { id: 1 }] }, // 태그1, 태그2, 러닝
+      tags: { connect: [{ id: 8 }, { id: 9 }, { id: 1 }] },
       ownerId: user6.id,
       recordCount: 0,
       badges: ['PARTICIPATION_10', 'RECORD_100', 'LIKE_100'],
     },
-  })
+  });
 
-  // 각 user의 ownedGroup 연결
-  await prisma.participant.update({
-    where: { id: user1.id },
-    data: { ownedGroup: { connect: { id: group1.id } } },
-  })
-
-  await prisma.participant.update({
-    where: { id: user3.id },
-    data: { ownedGroup: { connect: { id: group2.id } } },
-  })
-
-  await prisma.participant.update({
-    where: { id: user4.id },
-    data: { ownedGroup: { connect: { id: group3.id } } },
-  })
-
-  await prisma.participant.update({
-    where: { id: user5.id },
-    data: { ownedGroup: { connect: { id: group4.id } } },
-  })
-
-  await prisma.participant.update({
-    where: { id: user6.id },
-    data: { ownedGroup: { connect: { id: group5.id } } },
-  })
-
-  // 각 그룹에 참가자 추가
+  // 참가자 groupId 할당
   await Promise.all([
+    prisma.participant.update({ where: { id: user1.id }, data: { groupId: group1.id } }),
     prisma.participant.update({ where: { id: user2.id }, data: { groupId: group1.id } }),
-    prisma.participant.update({ where: { id: user3.id }, data: { groupId: group1.id } }),
-
-    prisma.participant.update({ where: { id: user1.id }, data: { groupId: group2.id } }),
-    prisma.participant.update({ where: { id: user4.id }, data: { groupId: group2.id } }),
-
-    prisma.participant.update({ where: { id: user2.id }, data: { groupId: group3.id } }),
-    prisma.participant.update({ where: { id: user5.id }, data: { groupId: group3.id } }),
-
-    prisma.participant.update({ where: { id: user3.id }, data: { groupId: group4.id } }),
-    prisma.participant.update({ where: { id: user6.id }, data: { groupId: group4.id } }),
-
-    prisma.participant.update({ where: { id: user1.id }, data: { groupId: group5.id } }),
-    prisma.participant.update({ where: { id: user4.id }, data: { groupId: group5.id } }),
+    prisma.participant.update({ where: { id: user3.id }, data: { groupId: group2.id } }),
+    prisma.participant.update({ where: { id: user4.id }, data: { groupId: group3.id } }),
+    prisma.participant.update({ where: { id: user5.id }, data: { groupId: group4.id } }),
+    prisma.participant.update({ where: { id: user6.id }, data: { groupId: group5.id } }),
   ]);
 
-  // Record 생성
-  await prisma.record.createMany({
+  // record 생성(6)
+    await prisma.record.createMany({
     data: [
       {
         exerciseType: 'run',
@@ -292,4 +257,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  })
+  });

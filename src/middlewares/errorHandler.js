@@ -1,16 +1,25 @@
 import { StructError } from 'superstruct';
 import getStructErrorMessage from '#utils/getStructErrorMessage.js';
 
-// Express 글로벌 에러 핸들러
+/**
+ * Express 글로벌 에러 핸들러
+ *
+ * @param {Error} err - 발생한 에러 객체
+ * @param {import('express').Request} req - 요청 객체
+ * @param {import('express').Response} res - 응답 객체
+ * @param {Function} next - 다음 미들웨어
+ */
 export default (err, req, res, next) => {
-  // 개발 환경일 때만 전체 로그 출력
-  if (process.env.NODE_ENV === 'development') {
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // 에러 로그 출력(환경에 따라 분기)
+  if (isDev) {
     console.error('🔴 Error:', err);
   } else {
     console.error('🔴', err.message);
   }
 
-  // 이미 한글화된 메시지가 err.message에 있으면 그대로 사용
+  // 이미 처리된 메시지는 그대로 반환
   if (typeof err.message === 'string' && err.message.endsWith('니다')) {
     return res.status(err.status || 400).json({
       success: false,
@@ -18,7 +27,7 @@ export default (err, req, res, next) => {
     });
   }
 
-  // superstruct StructError만 한글화해서 응답
+  // superstruct 유효성 검사 오류 처리
   if (err instanceof StructError) {
     return res.status(400).json({
       success: false,
@@ -27,39 +36,34 @@ export default (err, req, res, next) => {
     });
   }
 
-  // Prisma 제약조건 위반 처리
+  // Prisma 오류 처리
   if (err.name === 'PrismaClientKnownRequestError') {
-    // unique
-    if (err.code === 'P2002') {
-      return res.status(409).json({
-        success: false,
-        message: '이미 존재하는 값이 입력되었습니다.',
-        ...(process.env.NODE_ENV === 'development' && { target: err.meta?.target }),
-      });
+    switch (err.code) {
+      case 'P2002':
+        return res.status(409).json({
+          success: false,
+          message: '이미 존재하는 값입니다.',
+          ...(isDev ? { target: err.meta?.target } : {}),
+        });
+      case 'P2025':
+        return res.status(404).json({
+          success: false,
+          message: '존재하지 않는 항목입니다.',
+          ...(isDev ? { target: err.meta?.target } : {}),
+        });
+      default:
+        return res.status(400).json({
+          success: false,
+          message: '데이터베이스 처리 중 오류가 발생했습니다.',
+          ...(isDev ? { code: err.code, detail: err.meta } : {}),
+        });
     }
-    //P2025 에러 해당하는 ID값이 없을 떄 발생
-    if (err.code === 'P2025') {
-      return res.status(404).json({
-        success: false,
-        message: '해당하는 ID값이 없습니다.',
-        ...(process.env.NODE_ENV === 'development' && { target: err.meta?.target }),
-      });
-    }
-    // Prisma 기타 에러
-    return res.status(400).json({
-      success: false,
-      message: '데이터베이스 처리 중 오류가 발생했습니다.',
-      ...(process.env.NODE_ENV === 'development' && { code: err.code, detail: err.meta }),
-    });
   }
 
-  // 기타 에러
-  const status = err.status || 500;
-  const message = err.message || 'Internal Server Error';
-
-  res.status(status).json({
+  // 그 외 에러 처리
+  return res.status(err.status || 500).json({
     success: false,
-    message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    message: err.message || 'Internal Server Error',
+    ...(isDev && { stack: err.stack }),
   });
 };
