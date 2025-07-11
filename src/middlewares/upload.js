@@ -9,29 +9,27 @@ const __dirname = path.dirname(__filename);
 /**
  * 이미지 업로드 미들웨어를 생성합니다.
  *
- * @param {Object} options - 업로드 옵션
- * @param {number} options.maxCount - 최대 업로드 이미지 수
- * @returns {Function[]} - Express용 미들웨어 배열
+ * @param {Object} options
+ * @param {number} [options.maxCount=5] - photos 필드의 최대 업로드 개수
+ * @returns {Function[]} Express 미들웨어 배열
  *
  * @example
- * // [여러 장 업로드 예시]
- * // 운동 기록 작성 등 photos 필드로 여러 장 업로드할 때:
+ * // 여러 장 업로드 (필드명: photos)
  * import { uploadImages } from '#middlewares/upload.js';
  *
  * router.post(
  *   '/:groupId/records',
- *   uploadImages({ maxCount: 5 }), // photos: 최대 5장 업로드 허용
+ *   uploadImages({ maxCount: 5 }),
  *   RecordController.createRecord
  * );
  *
  * @example
- * // [단일 파일 업로드 예시]
- * // 그룹 대표 이미지 등 photoUrl 필드로 단일 업로드할 때:
+ * // 단일 업로드 (필드명: photoUrl)
  * import { uploadImages } from '#middlewares/upload.js';
  *
  * router.post(
  *   '/groups',
- *   uploadImages({ maxCount: 1 }), // photoUrl: 단일 업로드
+ *   uploadImages({ maxCount: 1 }),
  *   GroupController.createGroup
  * );
  */
@@ -39,14 +37,13 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, path.join(__dirname, '../../uploads/temp'));
-      const dest = path.join(__dirname, '../../uploads/temp');
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
       const base = path.basename(file.originalname, ext);
-      const safeBase = Buffer.from(base, 'utf8').toString('hex'); // 안전한 파일명으로 변경
-      const uuidUnique = crypto.randomUUID();
-      cb(null, `${safeBase}-${uuidUnique}${ext}`);
+      const safeBase = Buffer.from(base, 'utf8').toString('hex');
+      const uuid = crypto.randomUUID();
+      cb(null, `${safeBase}-${uuid}${ext}`);
     },
   });
 
@@ -63,17 +60,17 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     storage,
     fileFilter,
     limits: {
-      fileSize: 1 * 1024 * 1024, // 1MB 제한
+      fileSize: 1 * 1024 * 1024,
     },
   }).fields([
-    { name: 'photos', maxCount: maxCount },
+    { name: 'photos', maxCount },
     { name: 'photoUrl', maxCount: 1 },
   ]);
 
   return [
     (req, res, next) => {
-      // multipart/form-data가 아닌 경우 파일 업로드 처리 건너뛰기
-      if (!req.headers['content-type']?.includes('multipart/form-data')) {
+      const contentType = req.headers['content-type'];
+      if (!contentType || !contentType.includes('multipart/form-data')) {
         return next();
       }
 
@@ -87,10 +84,10 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
               break;
             case 'LIMIT_UNEXPECTED_FILE':
               const photoFiles = req.files?.photos ?? [];
-              if (photoFiles.length >= (maxCount ?? 5)) {
+              if (photoFiles.length >= maxCount) {
                 message = '최대 업로드 개수를 초과했습니다.';
               } else {
-                message = '허용되지 않는 파일이거나, 업로드 가능한 파일 개수를 초과했습니다.';
+                message = '허용되지 않는 파일이거나, 업로드 가능한 개수를 초과했습니다.';
               }
               break;
           }
