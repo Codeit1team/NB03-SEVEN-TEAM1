@@ -237,7 +237,7 @@ export const uploadImage = async (
       error instanceof AxiosError &&
       error.response?.status === 413
     ) {
-      throw new Error('파일 용량은 1MB 이하만 가능합니다.');
+      throw new Error('파일 용량은 총 5MB 이하만 가능합니다.');
     }
 
     throw error;
