@@ -1,8 +1,20 @@
 import { PrismaClient } from "@prisma/client";
+import { moveTempToPermanent } from '#utils/manageImageFiles.js';
 
 const prisma = new PrismaClient()
 
 const createRecord = async (groupId, data) => {
+  const movedPhotos = [];
+
+  for (const photoUrl of data.photos || []) {
+    if (photoUrl?.includes('/api/files/temp/')) {
+      const moved = await moveTempToPermanent(photoUrl);
+      movedPhotos.push(moved);
+    } else {
+      movedPhotos.push(photoUrl);
+    }
+  }
+
   return await prisma.$transaction(async (tx) => {
     const record = await tx.record.create({
       data: {
@@ -10,7 +22,7 @@ const createRecord = async (groupId, data) => {
         description: data.description,
         time: data.time,
         distance: data.distance,
-        photos: data.photos,
+        photos: movedPhotos,
         authorId: data.authorId,
       },
       select: {

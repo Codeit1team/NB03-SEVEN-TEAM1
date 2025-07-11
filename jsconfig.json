@@ -9,6 +9,7 @@
       "#routes/*": ["src/routes/*"],
       "#services/*": ["src/services/*"],
       "#utils/*": ["src/utils/*"],
+      "#crons/*": ["src/crons/*"],
       "#uploads/*": ["uploads/*"]
     }
   },
