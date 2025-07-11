@@ -10,8 +10,8 @@ const createParticipant = async (data) => {
       const checkDuplicateParticipant = await tx.participant.findUnique({
         where: {
           groupId_nickname: {
-            groupId: 6,
-            nickname: "아브라카다브라"
+            groupId: data.groupId,
+            nickname: data.nickname
           }
         }
       });
