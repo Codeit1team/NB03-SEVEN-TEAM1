@@ -45,7 +45,7 @@ const app = express();
 app.locals.BASE_URL = BASE_URL;
 
  // proxy trust 설정. Cloudflare 프록시 고려
-app.set('trust proxy', 1);
+app.set('trust proxy', true);
 
 // cron job 시작
 tempFileCleanerJob.start();
