@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import { uploadImage } from '@/lib/api';
 import styles from './ImageInput.module.css';
@@ -22,10 +22,20 @@ const ImageInput = ({
   onChange: (urls: string[]) => void;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleUpload = async (files: File[]) => {
-    const { urls } = await uploadImage(files);
-    onChange(urls);
+    try {
+      setErrorMessage(null);
+      const { urls } = await uploadImage(files);
+      onChange(urls);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('이미지 업로드 중 알 수 없는 오류가 발생했습니다.');
+      }
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +95,10 @@ const ImageInput = ({
           </Button>
         )}
       </div>
+
+      {errorMessage && (
+        <p className={cx('errorMessage')}>{errorMessage}</p>
+      )}
     </div>
   );
 };
