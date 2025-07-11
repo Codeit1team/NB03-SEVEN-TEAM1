@@ -15,7 +15,7 @@
 기술 스택   
 | 구분          | 사용 기술 및 도구                                                    |
 |---------------|---------------------------------------------------------------------|
-| Backend       | Express.js, PrismaORM, helmet, dotenv, multer, axios, bcrypt        |
+| Backend       | PrismaORM, axios, bcrypt, cors, cross-env, dotenv, express, express-rate-limit, file-type, helmet, multer, superstruct, nodemon
 | Database      | PostgreSQL                                                          |
 | Server        | Nginx                                                               |
 | 공통 Tool     | Git & Github, Discord, Google Sheet, Google Docs, Postman           |
@@ -27,7 +27,7 @@
 | **조영욱** | • 기록 정보 유효성 검사  <br> • 기록 등록  <br> • 기록 목록 조회  <br> • 기록 랭킹 조회  <br> • 그룹 추천(좋아요/취소) 
 | **박재성** | • 그룹 정보 유효성 검사 <br> • 그룹 등록  <br> • 그룹 목록 조회  <br> • 그룹 상세 조회  <br> • 그룹 수정  <br> • 그룹 삭제  <br> • 그룹 참여(유저 추가)  <br> • 그룹 참여 취소
 | **김나연** | • 태그 유효성 검사 <br> • 기록 상세 조회  <br> • 태그 목록 조회  <br> • 태그 상세 조회
-| **유진호** | • 프로젝트 환경 구축 및 관리(app.js, Prisma, alias, 환경변수, 배포/도메인)  <br> • 공통 함수/유틸/미들웨어/에러핸들러 작성  <br> • 그룹 배지 부여 함수  <br> • 프론트/배포 환경 연결  <br> • 목데이터 스크립트 추가  <br> • DB 연결  <br> • upload 미들웨어 작성/추가 처리 |
+| **유진호** | • 프로젝트 환경 구축 및 관리(app.js, Prisma, alias, 환경변수, 배포/도메인)  <br> • 공통 함수/유틸/미들웨어/에러핸들러 작성  <br> • 그룹 배지 부여 함수  <br> • 프론트/배포 환경 연결  <br> • 목데이터 스크립트 추가  <br> • DB 연결  <br> • upload 라우터/미들웨어/컨트롤러 작성/추가 처리 |
 
 
 Tree
