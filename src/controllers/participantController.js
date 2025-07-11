@@ -9,7 +9,6 @@ const createParticipant = async (req, res, next) => {
       ...req.body,
       groupId
     };
-    
     const participant = await ParticipantService.createParticipant(participantData);
     await grantParticipation10Badge(groupId);
     return res.status(201).json(participant);

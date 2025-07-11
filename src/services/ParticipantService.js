@@ -7,6 +7,21 @@ const createParticipant = async (data) => {
   try {
     const result = await prisma.$transaction(async (tx) => {
       const hashedPassword = await hashPassword(data.password);
+      const checkDuplicateParticipant = await tx.participant.findUnique({
+        where: {
+          groupId_nickname: {
+            groupId: data.groupId,
+            nickname: data.nickname
+          }
+        }
+      });
+
+      if (checkDuplicateParticipant) {
+        const error = new Error('그룹에 중복된 닉네임 입니다');
+        error.statusCode = 400;
+        throw error;
+      };
+
       const participant = await tx.participant.create({
         data: {
           nickname: data.nickname,
@@ -49,7 +64,7 @@ const createParticipant = async (data) => {
 
       return resultGroup;
     });
-    
+
     return result;
   } catch (error) {
     console.error('❌ ParticipantService 에러:', error);
