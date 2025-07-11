@@ -240,6 +240,21 @@ export const uploadImage = async (
     return { urls };
   } catch (error) {
     logError(error);
+
+    if (error instanceof AxiosError &&
+      error.response?.data?.message &&
+      typeof error.response.data.message === 'string'
+    ) {
+      throw new Error(error.response.data.message);
+    }
+
+    if (
+      error instanceof AxiosError &&
+      error.response?.status === 413
+    ) {
+      throw new Error('파일 용량은 1MB 이하만 가능합니다.');
+    }
+
     throw error;
   }
 };
