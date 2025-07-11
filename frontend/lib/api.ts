@@ -75,7 +75,7 @@ export const createGroup = async (group: GroupCreate): Promise<Group> => {
   }
 };
 
-export const updateGroup = async (//2025.07.07 13:07 기준 백엔드 미구현
+export const updateGroup = async (
   groupId: number,
   group: GroupUpdate
 ): Promise<Group> => {
@@ -89,14 +89,13 @@ export const updateGroup = async (//2025.07.07 13:07 기준 백엔드 미구현
   }
 };
 
-export const deleteGroup = (groupId: number, data: GroupDelete) => {//2025.07.07 13:07 기준 백엔드 미구현
+export const deleteGroup = (groupId: number, data: GroupDelete) => {
   return axios.delete(`/groups/${groupId}`, { data }).catch((error) => {
     logError(error);
     throw error;
   });
 };
 
-// 기존: await axios.post(`/groups/${groupId}/participants`, data);
 export const joinGroup = async (
   groupId: number,
   data: GroupJoin
@@ -109,7 +108,6 @@ export const joinGroup = async (
   }
 };
 
-// 기존: await axios.delete(`/groups/${groupId}/participants`, { data });
 export const leaveGroup = async (
   groupId: number,
   data: GroupJoin
@@ -124,7 +122,6 @@ export const leaveGroup = async (
   }
 };
 
-// 기존: await axios.post(`/groups/${groupId}/likes`);
 export const likeGroup = async (groupId: number): Promise<void> => {
   try {
     await axios.post(`/groups/like/${groupId}`);
@@ -134,7 +131,6 @@ export const likeGroup = async (groupId: number): Promise<void> => {
   }
 };
 
-// 기존: await axios.delete(`/groups/${groupId}/likes`);
 export const unlikeGroup = async (groupId: number): Promise<void> => {
   try {
     await axios.delete(`/groups/like/${groupId}`);
@@ -152,7 +148,6 @@ export const DEFAULT_RECORDS_PAGINATION_QUERY: PaginationQuery = {
   search: '',
 };
 
-// 기존: await axios.get(`/groups/${groupId}/records`, { params });
 export const getRecords = async (
   groupId: number,
   query: PaginationQuery
@@ -172,7 +167,6 @@ export const getRecords = async (
   }
 };
 
-// 기존: await axios.post(`/groups/${groupId}/records`, record);
 export const createRecord = async (
   groupId: number,
   record: RecordCreate
@@ -198,7 +192,6 @@ export const getRecord = async (recordId: number): Promise<Record> => {
   }
 };
 
-// 기존: await axios.get(`/groups/${groupId}/rank`, { params: { duration } });
 export const getRanks = async (
   groupId: number,
   duration: RankDuration
@@ -214,13 +207,6 @@ export const getRanks = async (
     throw error;
   }
 };
-
-// 기존 프론트에는 기록 상세 조회가 구현되어 있지 않음.
-// 구현된다면 아래와 같은 형태로 처리될 것.
-/* export const getRecordDetail = async (recordId: number) => {
-  const response = await axios.get(`/records/detail/${recordId}`);
-  return response.data;
-}; */
 
 export const uploadImage = async (
   files: File[],
