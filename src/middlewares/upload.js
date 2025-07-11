@@ -60,7 +60,7 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     storage,
     fileFilter,
     limits: {
-      fileSize: 1 * 1024 * 1024,
+      fileSize: 5 * 1024 * 1024,
     },
   }).fields([
     { name: 'photos', maxCount },
@@ -80,7 +80,7 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
 
           switch (err.code) {
             case 'LIMIT_FILE_SIZE':
-              message = '파일 용량은 1MB 이하만 가능합니다.';
+              message = '파일 용량은 총합 5MB 이하만 첨부 가능합니다.';
               break;
             case 'LIMIT_UNEXPECTED_FILE':
               message = '허용되지 않는 파일 형식입니다.';
