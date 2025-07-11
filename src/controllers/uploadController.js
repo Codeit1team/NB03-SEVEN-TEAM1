@@ -36,7 +36,7 @@ const uploadImage = async (req, res) => {
 
   if (invalidFiles.length > 0) {
     await Promise.all(
-      files.map(file => fs.unlink(file.path).catch(() => {}))
+      files.map(file => fs.unlink(file.path).catch(() => { }))
     );
     return res.status(400).json({
       success: false,
@@ -44,7 +44,10 @@ const uploadImage = async (req, res) => {
     });
   }
 
-  const BASE_URL = req.app.locals.BASE_URL;
+  const BASE_URL = process.env.NODE_ENV === 'production'
+    ? process.env.BASE_URL
+    : `${process.env.BASE_URL_DEV}:${process.env.PORT || 3001}`;
+
   const urls = files.map(file => `${BASE_URL}/api/files/temp/${file.filename}`);
 
   return res.json({ success: true, urls });
