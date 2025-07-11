@@ -42,7 +42,7 @@ const PROXY_OPTION = isProd ? true : 1;
 // 서버 초기화
 const app = express();
 
-// 프록시 신뢰 설정 (예: Cloudflare)
+// 프록시 신뢰 설정 (Cloudflare 등)
 app.set('trust proxy', PROXY_OPTION);
 
 // 앱 전역 변수 설정
@@ -68,7 +68,7 @@ app.use(helmet({
 
 // 요청 속도 제한
 app.use(rateLimit({
-  windowMs: 10 * 60 * 1000,
+  windowMs: 10 * 60 * 1_000,
   max: 1000,
   standardHeaders: true,
   legacyHeaders: false,
