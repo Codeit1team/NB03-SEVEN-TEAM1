@@ -86,10 +86,10 @@ const RecordForm = ({
           <Label htmlFor="photos">사진</Label>
           <ImageInput
             className={cx('photosInput')}
-            maxCount={3}
-            values={watch('photos')?.map(encodeImageUrl) ?? []} // 인코딩 적용
+            maxCount={5}
+            values={watch('photos')?.map(encodeImageUrl) ?? []}
             onChange={(urls) => {
-              setValue('photos', urls); // 저장은 원본 URL로
+              setValue('photos', urls);
             }}
           />
         </div>

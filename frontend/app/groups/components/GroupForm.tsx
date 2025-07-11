@@ -126,7 +126,7 @@ const GroupForm = ({
             </Label>
             <ImageInput
               className={cx('thumbnailInput')}
-              values={values.photoUrl ? [encodeImageUrl(values.photoUrl)] : []} // 인코딩 추가
+              values={values.photoUrl ? [encodeImageUrl(values.photoUrl)] : []}
               onChange={(values: string[]) => {
                 setValue('photoUrl', values[0]);
               }}

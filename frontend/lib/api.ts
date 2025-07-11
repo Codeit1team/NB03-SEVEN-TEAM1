@@ -26,8 +26,7 @@ const logError = (error: unknown) => {
     const response = error.response;
     if (response) {
       console.error(
-        `[프론트] ${response.config.method?.toUpperCase()} ${
-          response.config.url
+        `[프론트] ${response.config.method?.toUpperCase()} ${response.config.url
         } ${response.status}`
       );
       console.error(response.data);
