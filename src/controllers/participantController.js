@@ -9,7 +9,7 @@ const createParticipant = async (req, res, next) => {
       ...req.body,
       groupId
     };
-    
+    console.log('여기까지옴')
     const participant = await ParticipantService.createParticipant(participantData);
     await grantParticipation10Badge(groupId);
     return res.status(201).json(participant);
