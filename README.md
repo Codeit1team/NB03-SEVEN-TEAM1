@@ -32,45 +32,54 @@
 
 Tree
 ```
-┌── .env
+┌── frontend
 ├── .env.example
 ├── .gitignore
 ├── jsconfig.json
-├── package-lock.json
 ├── package.json
 ├── README.md
 ├── src
 │   ├── app.js
 │   ├── controllers
 │   │   ├── groupController.js
-│   │   ├── rankingController.js
-│   │   └── recordController.js
+│   │   ├── participantController.js
+│   │   ├── recordController.js
+│   │   ├── tagController.js
+│   │   └── uploadController.js
+│   ├── crons
+│   │   └── cleanTempUploads.js
 │   ├── middlewares
 │   │   ├── errorHandler.js
 │   │   ├── getUser.js
 │   │   ├── upload.js
 │   │   ├── validateGroup.js
 │   │   ├── validateParticipant.js
-│   │   ├── validatePassword.js
-│   │   └── validateRecord.js
+│   │   ├── validateRecord.js
+│   │   └── validateTag.js
 │   ├── prisma
+│   │   ├── migrations
 │   │   ├── schema.prisma
 │   │   └── seed.js
 │   ├── routes
 │   │   ├── groupRoutes.js
-│   │   ├── rankingRoutes.js
+│   │   ├── participantRoutes.js
 │   │   ├── recordRoutes.js
-│   │   └── tagRoutes.js
+│   │   ├── tagRoutes.js
+│   │   └── uploadRoutes.js
 │   ├── services
 │   │   ├── GroupService.js
-│   │   ├── RankingService.js
-│   │   └── RecordService.js
+│   │   ├── ParticipantService.js
+│   │   ├── RecordService.js
+│   │   └── tagService.js
 │   └── utils
-│       ├── deleteUploadedFiles.js
+│       ├── getStructErrorMessage.js
 │       ├── grantGroupBadge.js
+│       ├── handleServerError.js
+│       ├── manageImageFiles.js
 │       ├── passwordUtil.js
 │       └── sendDiscordWebhook.js
 └── uploads
+    └── temp
 ```
 
 
