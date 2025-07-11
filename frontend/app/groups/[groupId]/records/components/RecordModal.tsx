@@ -22,13 +22,29 @@ const RecordModal = ({
   return (<div className={cx('modal-backdrop')} onClick={() => confirmButton(null)}>
     <div className={cx('modal-content')} onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
       <Card className={cx('recordItem')}>
-        <Image
-          className={cx('image')}
-          src={record.photos[0] ?? placeholderImage}
-          alt="record image"
-          width={352}
-          height={206}
-        />
+        {Array.isArray(record.photos) && record.photos.length > 0 ? (
+          record.photos
+            .filter((photo): photo is string => typeof photo === 'string')
+            .slice(0, 5) // 최대 5개까지 표시
+            .map((photo, index) => (
+              <Image
+                key={index}
+                className={cx('image')}
+                src={photo}
+                alt={`record image ${index}`}
+                width={352}
+                height={206}
+              />
+            ))
+        ) : (
+          <Image
+            className={cx('image')}
+            src={placeholderImage}
+            alt="placeholder image"
+            width={352}
+            height={206}
+          />
+        )}
         <div className={cx('distance')}>{record.distance}KM · {order}등</div>
         <div className={cx('footer')}>
           <div className={cx('info')}>
