@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
  *
  * @example
  * // 여러 장 업로드 (필드명: photos)
- * import { uploadImages } from '#middlewares/upload.js';
+ * import uploadImages from '#middlewares/upload.js';
  *
  * router.post(
  *   '/:groupId/records',
@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
  *
  * @example
  * // 단일 업로드 (필드명: photoUrl)
- * import { uploadImages } from '#middlewares/upload.js';
+ * import uploadImages from '#middlewares/upload.js';
  *
  * router.post(
  *   '/groups',
@@ -33,7 +33,7 @@ const __dirname = path.dirname(__filename);
  *   GroupController.createGroup
  * );
  */
-export const uploadImages = ({ maxCount = 5 } = {}) => {
+const uploadImages = ({ maxCount = 5 } = {}) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, path.join(__dirname, '../../uploads/temp'));
@@ -102,3 +102,5 @@ export const uploadImages = ({ maxCount = 5 } = {}) => {
     },
   ];
 };
+
+export default uploadImages;
