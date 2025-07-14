@@ -20,7 +20,7 @@ const TTL_MS = 60 * 60 * 1_000;
  * import { tempFileCleanerJob } from '#crons/cleanTempUploads.js';
  * tempFileCleanerJob.start();
  */
-export const cleanExpiredTempFiles = async () => {
+const cleanExpiredTempFiles = async () => {
   const now = Date.now();
 
   try {
@@ -42,7 +42,7 @@ export const cleanExpiredTempFiles = async () => {
   }
 };
 
-export const tempFileCleanerJob = new CronJob(
+const tempFileCleanerJob = new CronJob(
   '0 * * * *',
   cleanExpiredTempFiles,
   null,
@@ -53,3 +53,5 @@ export const tempFileCleanerJob = new CronJob(
 );
 
 console.log('[cron] tempFileCleanerJob registered');
+
+export default tempFileCleanerJob;

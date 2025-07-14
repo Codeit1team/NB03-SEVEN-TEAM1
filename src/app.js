@@ -15,7 +15,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 
 import errorHandler from '#middlewares/errorHandler.js';
-import { tempFileCleanerJob } from '#crons/cleanTempUploads.js';
+import tempFileCleanerJob from '#crons/cleanTempUploads.js';
 import uploadRoutes from '#routes/uploadRoutes.js';
 import groupRoutes from '#routes/groupRoutes.js';
 import recordRoutes from '#routes/recordRoutes.js';
