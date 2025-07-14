@@ -5,7 +5,7 @@ const VALIDATION_PARTICIPANT_ERRORS = {
   password: '비밀번호는 4자 이상 20자 이하로 입력해주세요',
 }
 
-export const createParticipant = struct.object({
+const createParticipant = struct.object({
   nickname: struct.refine(struct.size(struct.string(), 1, 20), 'NoSpecialChars', (value) => {
     const specialCharRegex = /[^가-힣a-zA-Z0-9\s]/;
     return !specialCharRegex.test(value);
