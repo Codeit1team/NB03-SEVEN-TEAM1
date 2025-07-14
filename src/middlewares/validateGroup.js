@@ -41,16 +41,16 @@ const groupFields = {
   }),
   ownerPassword: struct.size(struct.string(), 4, 20),
 }
-export const createGroup = struct.object({
+const createGroup = struct.object({
   ...groupFields
 });
 
-export const patchGroup = struct.object({
+const patchGroup = struct.object({
   ...groupFields,
   ownerId: struct.number(),
 });
 
-export const validateCreateGroup = async (req, res, next) => {
+const validateCreateGroup = async (req, res, next) => {
     // multipart/form-data에서 tags, goalRep 필드가 문자열로 전송된 경우 JSON 파싱
     if (req.body.tags && typeof req.body.tags === 'string') {
       req.body.tags = JSON.parse(req.body.tags);
@@ -70,7 +70,7 @@ export const validateCreateGroup = async (req, res, next) => {
     next();
 };
 
-export const validatePatchGroup = (req, res, next) => {
+const validatePatchGroup = (req, res, next) => {
   const [error] = struct.validate(req.body, patchGroup);
 
   if (error) {
